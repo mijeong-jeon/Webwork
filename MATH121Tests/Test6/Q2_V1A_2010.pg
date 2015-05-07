@@ -1,0 +1,111 @@
+
+## DESCRIPTION
+## Calculus: Functions and models
+## ENDDESCRIPTION
+
+## KEYWORDS('calculus', 'differential')
+
+## DBsubject('Calculus')
+## Date('01/22/2011')
+## Author('Alan Ableson')
+## Institution('Queens University')
+
+
+## TitleText1('Calculus')
+## EditionText1('X')
+## AuthorText1('Hughes-Hallett')
+## Section1('XXX')
+## Problem1('XX')
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros("PG.pl",
+           "PGbasicmacros.pl",
+           "PGanswermacros.pl",
+"MathObjects.pl",
+"PGauxiliaryFunctions.pl");
+
+TEXT(beginproblem());
+
+$showPartialCorrectAnswers = 1;
+
+Context("Numeric");
+Context()->variables->add( y => 'Real' );
+
+# functions can be f = sine or cos, with nx + my, 
+# n,m = integers
+
+$n = random(2, 5);
+$m = random(2, 5);
+while ($n == $m) {$m = random(2, 5); };
+$inside = Compute("$n x + $m y");
+
+$use_sine = random(0, 1);
+if ($use_sine) {
+$f = Compute("sin($inside)");
+}
+else {
+$f = Compute("cos($inside)");
+}
+$f_latex = $f->TeX();
+
+# derivative functions
+$df_dx = $f->D('x');
+$df_dy = $f->D('y');
+$df_d2x = $df_dx->D('x');
+$df_d2y = $df_dy->D('y');
+$df_dxdy = $df_dx->D('y');
+
+# coefficients for Taylor polynomial
+$f0 = $f->eval(x => 0, y => 0);
+$df_dx_0 = $df_dx->eval(x => 0, y => 0); 
+$df_dy_0 = $df_dy->eval(x => 0, y => 0); 
+$df_d2x_0 = (1/2) * $df_d2x->eval(x => 0, y => 0); 
+$df_d2y_0 = (1/2) * $df_d2y->eval(x => 0, y => 0); 
+$df_dxdy_0 = $df_dxdy->eval(x => 0, y => 0); 
+
+# Construct the Taylor polynomial
+$T2 = Compute("$f0 + $df_dx_0 x + $df_dy_0 y + $df_d2x_0 x^2 + $df_dxdy_0 x y + $df_d2y_0  y^2");
+BEGIN_TEXT 
+
+You are going to construct the quadratic Taylor polynomial, centered at (0,0), for the function 
+\[ f(x,y) = $f_latex \]
+
+$PAR
+a)  First, to help you get started, find the following derivatives:
+$BR
+\(f_x = \) \{ans_rule(25)\} 
+$BR
+\(f_y = \) \{ans_rule(25)\} 
+$BR
+\(f_{xx} = \) \{ans_rule(25)\} 
+$BR
+\(f_{xy} = \) \{ans_rule(25)\} 
+$BR
+\(f_{yy} = \) \{ans_rule(25)\} 
+
+$PAR
+b)  Write out the quadratic Taylor polynomial for \(f(x,y) = $f_latex\), centered at (0,0).
+
+\{ans_rule(80)\} 
+
+
+END_TEXT
+
+#Part a)
+ANS($df_dx->cmp());
+
+ANS($df_dy->cmp());
+
+ANS($df_d2x->cmp());
+
+ANS($df_dxdy->cmp());
+
+ANS($df_d2y->cmp());
+
+# Part b)
+
+
+ANS($T2->cmp());
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

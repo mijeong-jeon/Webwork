@@ -1,0 +1,76 @@
+## DESCRIPTION
+##  Exponential Distribution
+## ENDDESCRIPTION
+
+## KEYWORDS('probability', 'continuous', 'exponential', 'distribution')
+## naw tagged this problem.
+
+## DBsubject('Probability')
+## DBchapter('Distributions')
+## DBsection('Exponential Distribution')
+## Date('6/27/2005')
+## Author('Jeff Holt')
+## Institution('UVA')
+## TitleText1('Statistics for Management and Economics')
+## EditionText1('6')
+## AuthorText1('Keller, Warrack')
+## Section1()
+## Problem1()
+
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"MathObjects.pl",
+"parserRadioButtons.pl",
+);
+
+$radio = RadioButtons(
+[ "If you start in this state, you must stay in the state forever.",
+"If you start in this state, you are guaranteed to return in a finite amount of time.", 
+"You are guaranteed to reach this state in the long run."
+],# correct answer
+"If you start in this state, you are guaranteed to return in a finite amount of time.", 
+);
+
+BEGIN_TEXT 
+
+Which of the following statements is equivalent (if-and-only-if) to saying a state is recurrent?
+
+$PAR
+
+\{ $radio->buttons() \}
+
+
+END_TEXT
+
+ANS($radio->cmp());
+
+
+BEGIN_SOLUTION
+$PAR
+$BBOLD Solution: $EBOLD
+
+$PAR 
+"If you start in this state, you must stay in the state forever"
+is too restrictive for the general case of recurrent states.  You may
+start in a class of 2 or more recurrent states, and cycle between them.
+
+$PAR "You are guaranteed to reach this state in the long run" is
+incorrect because there may be different classes of recurrent states,
+and if you do not start in them you may not end up in them.
+The definition of recurrent requires that you consider the probability of a return
+$BITALIC given that you begin in that state$EITALIC.
+
+
+
+END_SOLUTION
+
+
+
+
+ENDDOCUMENT();       # This should be the last executable line in the problem.

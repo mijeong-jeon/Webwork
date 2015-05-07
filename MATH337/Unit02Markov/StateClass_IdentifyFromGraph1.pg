@@ -1,0 +1,91 @@
+## DESCRIPTION
+##  Exponential Distribution
+## ENDDESCRIPTION
+
+## KEYWORDS('probability', 'continuous', 'exponential', 'distribution')
+## naw tagged this problem.
+
+## DBsubject('Probability')
+## DBchapter('Distributions')
+## DBsection('Exponential Distribution')
+## Date('6/27/2005')
+## Author('Jeff Holt')
+## Institution('UVA')
+## TitleText1('Statistics for Management and Economics')
+## EditionText1('6')
+## AuthorText1('Keller, Warrack')
+## Section1()
+## Problem1()
+
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"MathObjects.pl",
+"parserRadioButtons.pl",
+);
+
+$image = "State1.png";
+
+%state_class = (
+"a" => "Recurrent", 
+"b" => "Recurrent", 
+"c" => "Recurrent", 
+"d" => "Transient");
+
+@states = qw(a b c d);
+
+@r = ();
+foreach $state (@states) {
+  push (@r, RadioButtons( [ "Recurrent", "Transient"], $state_class{$state}));
+}
+
+$showPartialCorrectAnswers = 0;
+BEGIN_TEXT 
+
+\{ image( $image, 
+extra_html_tags=>'alt="Graph of a function."' ) \}
+$BR
+Click on the graph for a zoomed in view.
+
+$PAR
+For each state, indicate whether it is recurrent or transient.
+$PAR
+\{begintable(1) \} 
+\{ row($states[0], $r[0]->buttons()) \}
+\{ row($states[1], $r[1]->buttons()) \}
+\{ row($states[2], $r[2]->buttons()) \}
+\{ row($states[3], $r[3]->buttons()) \}
+\{endtable() \}
+
+END_TEXT
+
+BEGIN_SOLUTION
+
+$BBOLD Solution:$EBOLD
+$PAR
+States \(a\) and \(b\) communicate, so belong to the same class.  There are no 
+out-arrows from the \( (a,b)\) pair, so they are recurrent. 
+$PAR
+State \(c\) is in its own single-state class, and because starting in \(c\) means you cannot
+leave \(c\), it is recurrent.
+$PAR
+State \(d\) has some arrows to the recurrent state classes \( (a, b)\) and \(c\), so
+it is possible to leave \(d\) and never return; this
+indicates that \(d\) is transient. 
+$PAR 
+
+END_SOLUTION
+
+ANS($r[0]->cmp());
+ANS($r[1]->cmp());
+ANS($r[2]->cmp());
+ANS($r[3]->cmp());
+
+
+
+ENDDOCUMENT();       # This should be the last executable line in the problem.

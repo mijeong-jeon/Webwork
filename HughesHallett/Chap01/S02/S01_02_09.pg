@@ -1,0 +1,71 @@
+#DESCRIPTION
+# Domain and range given a graph
+#ENDDESCRIPTION
+
+#KEYWORDS('exponential growth', 'exponential decay')
+## tagged by GH
+
+## DBsubject('Calculus')
+## DBchapter('1 A Library of Functions')
+## DBsection('1.2 Exponential Functions')
+## Problem('09')
+## Date('28/03/2012')
+## Author('Gina Hochban')
+## Institution('Queen's University')
+## TitleText1('Calculus')
+## EditionText1('5th Edition')
+## AuthorText1('Hughes-Hallett')
+
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PGstandard.pl",
+"MathObjects.pl",
+"PGchoicemacros.pl",
+"parserPopUp.pl",
+"parserNumberWithUnits.pl",
+"hhAdditionalMacros.pl",
+"PG.pl",
+"PGbasicmacros.pl",,
+"PGanswermacros.pl",
+"PGauxiliaryFunctions.pl",
+"extraAnswerEvaluators.pl"
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+
+#Define parameters
+$P_0 = random(2,15,1.2);
+$a1 = non_zero_random(-0.9,0.9,0.1);
+$a = exp($a1);
+
+if($a1 > 0){
+$GrowthDecay = Growth;
+}
+else
+{
+$GrowthDecay = Decay;
+}
+
+#Drop-down menu setup
+$popupGrowthDecay = PopUp([("Growth", "Decay")], "$GrowthDecay");
+
+BEGIN_TEXT
+
+\(a)\) Transform the function \(P = $P_0 e^{$a1 t}\) into the form \(P = P_0 a^t\). 
+$BR \(P_0 =\) \{ans_rule(10)\} , \(a =\) \{ans_rule(10)\}, \(t =\) \{ans_rule(10)\}.
+$PAR
+\(b)\) Does the function represent exponential growth or exponential decay?   
+   \{$popupGrowthDecay->menu() \}.
+
+
+$BR$BR
+
+END_TEXT
+
+#ANSWERS
+ANS(fun_cmp("$P_0"), fun_cmp("$a"), fun_cmp("t", vars=>('t')), $popupGrowthDecay->cmp);
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

@@ -1,0 +1,66 @@
+                                                                     
+                                                                     
+                                                                     
+                                             
+##DESCRIPTION
+##Calculus: Limits and Derivatives
+##ENDDESCRIPTION
+
+##KEYWORDS('calculus', 'derivatives', '121Test1_V2A')
+##Tagged by GH
+
+## DBsubject('Calculus')
+## DBchapter('Limits and Derivatives')
+## DBsection('The Derivative as a Function')
+## Date('6/12/2011')
+## Author('Gina Hochban')
+## Institution('Queen\'s University')
+## TitleText1('Calculus')
+## EditionText1('')
+## AuthorText1('')
+## Section1('')
+## Problem1('')
+
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros("PG.pl",
+           "PGbasicmacros.pl",
+           "PGchoicemacros.pl",
+           "PGanswermacros.pl",
+           "PGauxiliaryFunctions.pl",
+           "extraAnswerEvaluators.pl");
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+
+$a = non_zero_random(2,9,1);
+$b = non_zero_random(2,9,1);
+$c = non_zero_random(2,9,1);
+$d = non_zero_random(2,9,1);
+$e = non_zero_random(2,9,1);
+$f = non_zero_random(2,9,1);
+$g = non_zero_random(2,9,1);
+
+TEXT(EV2(<<EOT));
+Evaluate the following derivatives. You do not need to simplify the result.
+
+$BR
+$BR
+(a) \( \displaystyle {\frac{d}{dx} (x^$a + $b \cdot $c^x) }\) = \{ans_rule(25) \}
+$BR
+$BR
+(b) \( \displaystyle {\frac{d}{dx} \sin($d x^$e) }\) = \{ans_rule(25) \}
+$BR
+$BR
+(c) \( \displaystyle {\frac{d}{dx} \frac{e^{$f x}}{x^{1/$g}} }\) = \{ans_rule(25) \}
+$BR
+EOT
+
+@ans = (fun_cmp("$a x^($a-1) + $b*ln($c)*$c^x"),fun_cmp("$d $e x^($e-1) cos($d x^$e)"),fun_cmp("$f e^($f x)x^(-1/$g) + e^($f x)(-1/$g)x^((-1/$g) - 1)"));
+ANS(@ans);
+##need to change this exponent  in (c) to radical form
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.                                                                     
+                                                                     
+                                                                     

@@ -1,0 +1,127 @@
+
+## DESCRIPTION
+## Operations Research / Linear Algebra
+## ENDDESCRIPTION
+
+## KEYWORDS('steady state', 'eigenvalues' 'eigenvectors')
+## Tagged by aableson
+
+## DBsubject('Linear Algebra')
+## DBchapter('Matrices')
+## DBsection('Eigenvalues')
+## Date('')
+## Author('')
+## Institution('Queens')
+## TitleText1('')
+## EditionText1('')
+## AuthorText1('')
+## Section1('')
+## Problem1('')
+
+DOCUMENT();        # This should be the first executable line in the problem.
+loadMacros(
+        "PGstandard.pl",
+        "PGanswermacros.pl",
+	"parserRadioButtons.pl",
+	"parserMultiAnswer.pl",
+	"MathObjects.pl",
+	"PGauxiliaryFunctions.pl",
+        );
+ 
+TEXT(beginproblem());    
+Context("Numeric");
+Context()->flags->set(tolerance=>.01);
+$showPartialCorrectAnswers = 1;
+
+# One step stock pricing study
+$S0 = random(12, 68);
+$Su = random($S0 + 4, 100);
+$Su = 10 * ceil($Su/10); # round to nearest 10
+$Sd = random(1, $S0-4);
+$Sd = 10 * floor($Sd/10); # round to nearest 10
+
+# Strike price; between Su and Sd, close
+# to S0
+$R = $S0 + random(-10, 10);
+$R = 5 * floor($R / 5);  # round to nearest 5
+while (($R > $Su) & ($R < $Sd)) {
+$R = $S0 + random(-10, 10);
+$R = 5 * floor($R / 5);  # round to nearest 5
+}
+
+# time span and interest
+@Tlist = ('1 month', '2 months', '3 months', '6 months', '1 year', '2 years');
+@tlist = (1/12, 2/12, 3/12, 6/12, 1, 2);
+$p = random(0, scalar(@Tlist) - 1);
+$T = $Tlist[$p]; # text version
+$t = $tlist[$p]; # number of years
+
+$r = random(2, 8);   # interest rate
+
+# Compute solution-related values
+$Du = $Su - $R;
+$Dd = 0;
+$del = ($Du - $Dd)/($Su - $Sd);
+$q = (exp($r/100*$t) * $S0 - $Sd)/($Su - $Sd);
+$D0 = exp(-$r/100*$t)* (  $q*$Du + (1-$q)*$Dd);
+
+# Market price
+$D0market = random( floor($D0 - 2), ceil($D0 + 2));
+
+# Selection of 
+@opts = ("Buy shares, and sell call options","Sell shares short, and buy call options",
+"Buy shares, and buy call options", 
+"Sell shares short, and sell call options");
+if ($D0market > $D0) {
+  $radio = RadioButtons([$opts[0], $opts[1], $opts[2], $opts[3]], $opts[0]); # correct answer
+} else { #  should buy all options
+  $radio = RadioButtons([$opts[0], $opts[1], $opts[2], $opts[3]], $opts[1]); # correct answer
+}
+Context()->texStrings;
+BEGIN_TEXT 
+$BR
+$PAR
+
+The stock in company X is currently worth $DOLLAR$S0.  Based on expert
+analysis, it is believed that $T from now, the same stock will be
+worth either $DOLLAR$Su or $DOLLAR$Sd.
+
+$PAR
+Banks are currently offering risk-free savings at $r per cent interest, compounded
+continuously.
+
+$PAR
+A) Find the fair price of a call option on this stock, with a strike price of
+$DOLLAR$R, expiring $T from now.   Give your answer to the nearest penny.
+$BR
+Call option price: \{ ans_rule(6)\} 
+
+$PAR 
+
+B) You notice that the options are currently trading on the market at $DOLLAR$D0market.
+
+Which of the following investment strategies could be arranged to
+guarantee you a profit, regardless of how the stock moves?  $BR \{
+$radio->buttons() \}
+
+END_TEXT
+Context()->normalStrings;
+# Check answers
+
+ANS(num_cmp(Real($D0), tol=>0.02));
+
+ANS( $radio->cmp() );
+
+BEGIN_SOLUTION
+
+$PAR
+$BBOLD Solutions $EBOLD
+$PAR
+
+The value of the option, using the formulas derived in class, is
+\{sprintf("$DOLLAR%.2f", $D0)\}.
+
+END_SOLUTION
+
+
+ENDDOCUMENT();       # This should be the last executable line in the problem.

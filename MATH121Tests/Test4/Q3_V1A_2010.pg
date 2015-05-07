@@ -1,0 +1,66 @@
+
+## DESCRIPTION
+## Calculus: Functions and models
+## ENDDESCRIPTION
+
+## KEYWORDS('calculus', 'integration')
+## Tagged by LD
+
+## DBsubject('Calculus')
+## Date('12/05/2011')
+## Author('Alan Ableson')
+## Institution('Queen's University')
+
+
+## TitleText1('Calculus')
+## EditionText1('X')
+## AuthorText1('Hughes-Hallett')
+## Section1('XXX')
+## Problem1('XX')
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros("PG.pl",
+           "PGbasicmacros.pl",
+           "PGanswermacros.pl",
+"MathObjects.pl",
+"PGauxiliaryFunctions.pl");
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+Context("Numeric");
+Context()->variables->add(t=>'Real');
+
+$value1 = Compute("DNE");
+
+$k = list_random(0.2, 0.4, 0.5, 2, 4, 5);
+$F2 = Formula("e^(-$k*t)/(-$k)");
+$value2 = Real(-1 * $F2->eval(t=>1));
+
+# Evaluate improper integrals
+
+BEGIN_TEXT
+
+$PAR
+Determine whether the following integrals converge or diverge.  
+$BR
+- If they converge, find the value of the integral.
+$BR
+- If they diverge, show why in your solutions, and enter "DNE" (for "does not exist") as their value in Webwork.
+
+$PAR
+A)\( \displaystyle \int_1^\infty \frac{x}{1+x^2} ~dx\)
+$BR
+Value: \{ans_rule(10)\}
+
+$PAR
+B) \( \displaystyle \int_1^\infty \frac{1}{e^{$k t}}~dt\)
+$BR
+Value: \{ans_rule(10)\}
+
+END_TEXT
+ANS($value1->cmp());
+ANS($value2->cmp());
+
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

@@ -1,0 +1,56 @@
+
+## DESCRIPTION
+## Calculus: Functions and models
+## ENDDESCRIPTION
+
+## KEYWORDS('calculus', 'functions','implicit', 'differentiation', 'tangent line');
+## Tagged by LD
+
+## DBsubject('Calculus')
+## DBchapter('Differentiation')
+## DBsection('Implicit Differentation')
+## Date('05/23/2012')
+## Author('Alan Ableson')
+## Institution('Queen's University')
+
+
+## TitleText1('Calculus')
+## EditionText1('5')
+## AuthorText1('Hughes-Hallett')
+## Section1('3.7')
+## Problem1('23')
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros("PG.pl",
+           "PGbasicmacros.pl",
+           "PGanswermacros.pl",
+	   "MathObjects.pl",
+        "contextFraction.pl",
+	   "PGauxiliaryFunctions.pl");
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+
+Context("Numeric");
+
+# Function options
+
+
+BEGIN_TEXT
+
+$PAR
+Consider the function \(y = ax e^{-bx}\), where \(a\) and \(b\) are 
+positive constants.
+$PAR
+  A) Each member of this 
+family has 1 critical point.  What is the (x,y) location of this critical point? 
+$BR
+       \(x, y\) = (\{ans_rule(6)\}, \{ans_rule(6)\}
+
+$PAR
+
+END_TEXT
+ANS( $sol_f->cmp() );
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

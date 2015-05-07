@@ -1,0 +1,113 @@
+##DESCRIPTION
+##Calculus: Limits and Derivatives
+##ENDDESCRIPTION
+
+##KEYWORDS('calculus', 'derivatives', '121Test3')
+##Tagged by GH
+
+## DBsubject('')
+## DBchapter('')
+## DBsection('')
+## Date('7/03/2012')
+## Author('Alan Ableson')
+## Institution('Queen\'s University')
+## TitleText1('Calculus')
+## EditionText1('5')
+## AuthorText1('Hughes-Hallett')
+## Chapter1('2')
+## Section1('4')
+## Problem1('1')
+
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros("PG.pl",
+	   "PGstandard.pl",
+	   "MathObjects.pl",
+           "parserRadioButtons.pl");
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+
+# Random order to the variables
+if (random(0, 1, 1)) {
+  $strA = "600 = f(200)";
+} else {
+  $strA = "f(200) = 600";
+}
+if (random(0, 1, 1)) {
+  $strB = "2 = f'(200)";
+} else {
+  $strB = "f'(200) = 2";
+}
+
+$radioA_x = RadioButtons(
+["dollars","quarts","dollars/quart", "quarts/dollar"],
+  "quarts", # correct answer
+);
+$radioA_y = RadioButtons(
+["dollars","quarts","dollars/quart", "quarts/dollar"],
+  "dollars", # correct answer
+);
+$radioB_x = RadioButtons(
+["dollars","quarts","dollars/quart", "quarts/dollar"],
+  "quarts", # correct answer
+);
+$radioB_y = RadioButtons(
+["dollars","quarts","dollars/quart", "quarts/dollar"],
+  "dollars/quart", # correct answer
+);
+
+BEGIN_TEXT
+
+
+The cost, \(C\) (in dollars), to produce \(q\) quarts of ice cream is \(C = f(q)\).  
+
+In each of the following statements, identify the units of the  
+stated quantities.
+
+$BR
+  (a) \($strA\)
+$BR '200' is in 
+$BR
+\{ $radioA_x->buttons() \}
+$BR
+
+$BR '600' is in 
+$BR
+\{ $radioA_y->buttons() \}
+$BR
+
+$BR
+  (b) \($strB\)
+$BR '200' is in 
+$BR
+\{ $radioB_x->buttons() \}
+$BR
+
+$BR '2' is in 
+$BR
+\{ $radioB_y->buttons() \}
+$BR
+
+END_TEXT
+
+ANS( $radioA_x->cmp() );
+ANS( $radioA_y->cmp() );
+ANS( $radioB_x->cmp() );
+ANS( $radioB_y->cmp() );
+
+Context()->texStrings;
+BEGIN_SOLUTION
+${PAR}SOLUTION:$PAR
+
+(a) the input to \(f\) is in \{ $radioA_x->correct_ans() \}, 
+while the output of \(f\) is in  \{ $radioA_y->correct_ans() \}. 
+$PAR
+(b) the input to \(f'\) is still in \{ $radioB_x->correct_ans() \}, 
+while the output of \(f\) is a rate of change of \(f(x)\)
+with respect to \(x\), which must be in \{ $radioB_y->correct_ans() \}.
+
+END_SOLUTION
+Context()->normalStrings;
+ENDDOCUMENT();        # This should be the last executable line in the problem.

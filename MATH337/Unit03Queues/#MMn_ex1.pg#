@@ -1,0 +1,139 @@
+## DESCRIPTION
+## Transition probability formalism 
+## ENDDESCRIPTION
+
+## DBsubject('Probability')
+## DBchapter('Distributions')
+## DBsection('Markov Chains')
+## Date('1/21/2012')
+## Author('Alan Ableson')
+## Institution('Queens University')
+## Section1()
+## Problem1()
+
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGbasicmacros.pl",
+"PGauxiliaryFunctions.pl",
+"MathObjects.pl",
+"PGanswermacros.pl",
+"parserRadioButtons.pl",
+);
+
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+
+Context("Numeric");
+Context()->flags->set(tolerance=>.01);
+
+$lam = list_random(5, 6, 7, 9, 10, 11);  # cars per day
+$mu = $lam + random(2, 5);  # cars per day
+$service_time = floor((1/$mu)*8*10)/10; # 8 hours/day, round to nearest .1 hrs
+$mu = 8/$service_time; # recompute based on rounded service time
+
+$rho = $lam/$mu;
+while ($rho > 1)  { # just in case
+  $mu = $lam + random(2, 4);
+  $service_time = floor((1/$mu)*8*10)/10; # 8 hours/day, round to nearest .1 hrs
+  $mu = 8/$service_time; # recompute based on rounded service time
+  $rho = $lam/$mu;
+}
+
+# MM1
+$P0 = 1- $rho;
+$P1 = $P0 * $rho;
+$P2 = $P0 * $rho * $rho;
+
+$max_arrival_rate = floor($mu); 
+
+# MM2
+$lam2 = floor(2*$mu - random(2, 6));
+$rho = $lam2/(2*$mu);
+$P0_MM2 = (1- $rho)/(1 + $rho);
+$P1_MM2 = $P0_MM2 * $lam2/$mu;
+$P2_MM2 = $P0_MM2 * ($lam2/$mu) * $rho;
+
+
+BEGIN_TEXT
+
+$PAR A small car repair shop, with one mechanic, is being modeled as
+an M/M/1 queue.  
+
+$PAR Cars are dropped off at the shop at a rate of $lam cars per day
+(over an 8 hour open day), and it takes the mechanic on average
+$service_time hours to service a car.  The mechanic also works 8 hours
+per day.
+
+$PAR A. Complete the following table of probabilities.  (Assume that
+the shop is essentially in steady state, and that in principle the
+queue would be allowed to be infinitely long.)
+
+\{ begintable(2) \}
+\{ row("Number of cars at the shop", "Probability") \}
+\{ row("0", ans_rule(15) )\}
+\{ row("1", ans_rule(15) )\}
+\{ row("2", ans_rule(15) )\}
+\{ endtable() \}
+
+$PAR B.  The owner is considering advertising to increase his business
+(i.e. promote more cars arriving at the shop for service). What is the
+theoretical maximum average number of cars that his current mechanic
+can support, without the queue going out to infinity?  $BR Round your
+answer $BBOLD down $EBOLD to the nearest integer.
+
+$BR Maximum avg arrival rate: \{ans_rule(5)\} cars per day.
+
+$PAR C.  Assume the owner advertises, and increases the arrival rate
+of customers to $lam2 cars per day.  The owner also opens a second
+repair bay and hires a second mechanic, with the same service
+abilities as the first (i.e both service a car in $service_time hours
+on average). With this change, the shop could be considered an $BBOLD
+M/M/2 $EBOLD queue.
+
+$BR
+Complete the following table, assuming that a second mechanic were hired. 
+	 
+$BR
+$BBOLD Note:$EBOLD you will have to look up or derive the steady-state
+distribution for an M/M/2 queue.
+
+\{ begintable(2) \}
+\{ row("Number of cars at the shop", "Probability") \}
+\{ row("0", ans_rule(15) )\}
+\{ row("1", ans_rule(15) )\}
+\{ row("2", ans_rule(15) )\}
+\{ endtable() \}
+
+$PAR
+
+D. Under the M/M/2 model, out of an 8 hour day, how long on average is
+exactly one of the mechanics idle?  
+
+$BR Hours exactly one mechanic is idle: \{ans_rule(10)\}.
+
+ END_TEXT
+ANS(num_cmp($P0, tol=>0.001, tolType => "absolute"));
+ANS(num_cmp($P1, tol=>0.001, tolType => "absolute"));
+ANS(num_cmp($P2, tol=>0.001, tolType => "absolute"));
+
+ANS(num_cmp($max_arrival_rate));
+
+ANS(num_cmp($P0_MM2, tol=>0.001, tolType => "absolute"));
+ANS(num_cmp($P1_MM2, tol=>0.001, tolType => "absolute"));
+ANS(num_cmp($P2_MM2, tol=>0.001, tolType => "absolute"));
+
+ANS(num_cmp($P1_MM2*8, tol => 0.1, tolType => "absolute"));
+
+BEGIN_SOLUTION
+${PAR}SOLUTION:$PAR
+
+
+$PAR
+
+END_SOLUTION
+
+ENDDOCUMENT();       # This should be the last executable line in the problem.

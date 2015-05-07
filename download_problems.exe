@@ -1,0 +1,8 @@
+# The problems are currently being developed in 
+# /opt/webwork/courses/MATH121_test/templates/MATH121Tests
+export TARGET_DIR="/opt/webwork/courses/MATH121_test/templates/MATH121Tests";
+export SERVER="InWebworkTest"
+#export SERVER="InWebwork"
+
+rsync -arv --perms -e ssh $SERVER:$TARGET_DIR .
+

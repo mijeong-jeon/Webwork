@@ -1,0 +1,101 @@
+
+## DESCRIPTION
+## Calculus: Functions and models
+## ENDDESCRIPTION
+
+## KEYWORDS('calculus', 'differential')
+
+## DBsubject('Calculus')
+## Date('01/22/2011')
+## Author('Alan Ableson')
+## Institution('Queens University')
+
+
+## TitleText1('Calculus')
+## EditionText1('X')
+## AuthorText1('Hughes-Hallett')
+## Section1('XXX')
+## Problem1('XX')
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros("PG.pl",
+           "PGbasicmacros.pl",
+           "PGanswermacros.pl",
+"MathObjects.pl",
+"parserNumberWithUnits.pl",
+"parserFormulaWithUnits.pl",
+"PGauxiliaryFunctions.pl");
+
+TEXT(beginproblem());
+
+$showPartialCorrectAnswers = 1;
+
+# Approximation of an integral 
+Context("Numeric");
+
+$rV = -1 * random(0.1, 0.9, 0.03);
+$rT = random(10, 40, 5);
+
+$dT = random(1.5, 3, 0.5);
+$dV = random(0.02, 0.07, 0.01);
+
+$dvPositive = random(0, 1);
+if ($dvPositive) {  # signs of dV and dT must be opposite
+$dvDirection = "expanded";
+$dTDirection = "decreased";
+$dV = $dV;
+$dT = -1 * $dT;
+} else {
+$dvDirection = "compressed";
+$dTDirection = "increased";
+$dV = -1 * $dV;
+$dT = $dT;
+}
+# for printing on the screen, with the adjectives, we need the abs values as well.
+$absdV = abs($dV);
+$absdT = abs($dT);
+
+# Answers:
+# temp rate = rT J/deg K
+$temp_rate = NumberWithUnits("$rT","J/degK");
+$vol_rate = NumberWithUnits("$rV","J/L");
+$energy_change = NumberWithUnits("$dV * $rV * 1000 + $dT * $rT", "J");
+
+BEGIN_TEXT 
+
+One mole of ammonia gas is contained in a vessel which is capable of
+changing its volume (a compartment sealed by a piston, for
+example). The total energy \(U\) (in joules) of the ammonia is a
+function of the volume \(V\) (in liters) of the container, and the
+temperature \(T\) (in deg. K) of the gas. A linear approximation of
+\(\Delta U\) is given by
+
+\[ \Delta U = $rV \Delta V + $rT \Delta T \]
+
+
+$PAR
+a)  At what rate does the energy change if the volume is held constant and the temperature is increased slightly?  Include units in your answer.
+\{ans_rule(25)\} 
+$BR Help on how to express 
+\{ helpLink("units") \}
+$PAR
+b)  At what rate does the energy change if the $BBOLD temperature $EBOLD is held constant and the $BBOLD volume $EBOLD is increased slightly?  Include units in your answer.
+\{ans_rule(25)\} 
+$PAR
+
+c) Find the approximate change in energy if the gas is $dvDirection by
+$absdV m\(^3\) and its temperature is $dTDirection by $absdT degrees K.  Include units in your answer.  Recall that 1 \(m^3\) = 1000 L.
+
+\{ans_rule(25)\} 
+
+END_TEXT
+
+ANS( $temp_rate->cmp() );
+
+ANS( $vol_rate->cmp() );
+
+ANS( $energy_change->cmp() );
+
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

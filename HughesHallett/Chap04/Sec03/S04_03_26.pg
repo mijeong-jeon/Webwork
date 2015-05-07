@@ -1,0 +1,79 @@
+
+## DESCRIPTION
+## Calculus: Functions and models
+## ENDDESCRIPTION
+
+## KEYWORDS('calculus', 'functions','implicit', 'differentiation', 'tangent line');
+## Tagged by LD
+
+## DBsubject('Calculus')
+## DBchapter('Differentiation')
+## DBsection('Implicit Differentation')
+## Date('05/23/2012')
+## Author('Alan Ableson')
+## Institution('Queen's University')
+
+
+## TitleText1('Calculus')
+## EditionText1('5')
+## AuthorText1('Hughes-Hallett')
+## Section1('3.7')
+## Problem1('23')
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros("PG.pl",
+           "PGbasicmacros.pl",
+           "PGanswermacros.pl",
+	   "MathObjects.pl",
+        "contextFraction.pl",
+	   "PGauxiliaryFunctions.pl");
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+
+Context("Numeric");
+
+# Function options
+$x = random(-4, 4);
+while ($x == 0) {
+  $x = random(-4, 4);
+}
+$y = random(2, 6);
+while ($x == $y) {
+  $y = random(2, 6);
+}
+
+$a = Compute("$x");
+$b = Compute("$y");
+
+
+BEGIN_TEXT
+
+$PAR
+A function of the form \(y = b e^{-(x-a)^2}\) has a local maximum 
+at \(($x, $y) \).
+$PAR
+What are the values of \(a\) and \(b\)? 
+$BR
+\(a \) = \{ans_rule(6)\} 
+$BR
+\(b \) = \{ans_rule(6)\} 
+$PAR
+
+END_TEXT
+ANS( $a->cmp() );
+ANS( $b->cmp() );
+
+SOLUTION(EV3(<<'END_SOLUTION'));
+$BR$BBOLD Solution:$EBOLD
+$BR
+The derivative will equal zero when \(x = a\), so \(a\) must equal $x.
+$BR
+  If we have selected \(a = $x\), then at the point \(x = $a\), we get \(y = b e^{($x - $x)} = b\), so \(b \) must
+equal $y.
+
+
+END_SOLUTION
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

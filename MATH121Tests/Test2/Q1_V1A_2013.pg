@@ -1,0 +1,93 @@
+
+## DESCRIPTION
+## Calculus: Functions and models
+## ENDDESCRIPTION
+
+## KEYWORDS('calculus', 'differential')
+
+## DBsubject('Calculus')
+## Date('01/22/2011')
+## Author('Alan Ableson')
+## Institution('Queens University')
+
+
+## TitleText1('Calculus')
+## EditionText1('X')
+## AuthorText1('Hughes-Hallett')
+## Section1('XXX')
+## Problem1('XX')
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros("PG.pl",
+           "PGbasicmacros.pl",
+           "PGanswermacros.pl",
+"MathObjects.pl",
+"parserImplicitEquation.pl",
+"PGauxiliaryFunctions.pl");
+
+TEXT(beginproblem());
+
+$showPartialCorrectAnswers = 1;
+# Implicit differentiation
+Context("ImplicitEquation");
+
+Context()->variables->set(
+  x=>{limits=>[-11,11]},
+  y=>{limits=>[-11,11]},
+);
+
+#x^2 + y^2 − 2 x − 4 y = − 1 
+
+$a = random(-4, 4);
+$b = random(-4, 4);
+while ($b == $a) {
+  $b = random(-4, 4);
+}
+$r = random(2, 5);
+
+$rhs = $r*$r - ($a*$a + $b*$b);
+
+$eq = ImplicitEquation("x^2 + y^2 + 2*$a*x  + 2*$b*y  = $rhs")->reduce();
+$eq_tex = $eq->TeX;
+
+Context("Point");
+$hor1 = Point(-$a, -$b-$r);
+$hor2 = Point(-$a, -$b+$r);
+$ver1 = Point(-$a-$r, -$b);
+$ver2 = Point(-$a+$r, -$b);
+
+
+BEGIN_TEXT 
+
+$PAR
+Consider the equation of a circle: 
+
+\[$eq_tex \]
+
+(a) Find the \( (x,y) \) coordinates of both points on the circle where the tangent lines are $BBOLD horizontal $EBOLD. 
+$BR Format: $BR - include parentheses aroung your \( (x,y) \) coordinates, and
+$BR
+- put the point with the smallest \(x,y\) coordinates first.
+$BR
+Point 1: \{ans_rule(20)\} 
+$BR
+Point 2: \{ans_rule(20)\}  
+
+$PAR
+(b) Find all points on the circle where the tangent lines are $BBOLD vertical $EBOLD.
+$BR
+Point 1: \{ans_rule(20)\}  
+$BR
+Point 2: \{ans_rule(20)\}  
+
+
+END_TEXT
+
+ANS( $hor1->cmp() );
+ANS( $hor2->cmp() );
+ANS( $ver1->cmp() );
+ANS( $ver2->cmp() );
+
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

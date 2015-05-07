@@ -1,0 +1,187 @@
+
+## DESCRIPTION
+## Operations Research / Linear Algebra
+## ENDDESCRIPTION
+
+## KEYWORDS('steady state', 'eigenvalues' 'eigenvectors')
+## Tagged by aableson
+
+## DBsubject('Linear Algebra')
+## DBchapter('Matrices')
+## DBsection('Eigenvalues')
+## Date('')
+## Author('')
+## Institution('Queens')
+## TitleText1('')
+## EditionText1('')
+## AuthorText1('')
+## Section1('')
+## Problem1('')
+
+DOCUMENT();        # This should be the first executable line in the problem.
+loadMacros(
+        "PGstandard.pl",
+        "PGanswermacros.pl",
+	"parserRadioButtons.pl",
+	"parserMultiAnswer.pl",
+	"MathObjects.pl",
+	"PGauxiliaryFunctions.pl",
+        );
+ 
+TEXT(beginproblem());    
+Context("Numeric");
+Context()->flags->set(tolerance=>.01);
+$showPartialCorrectAnswers = 1;
+
+# One step stock pricing study
+$S0 = random(12, 68);
+$Su = random($S0 + 4, 100);
+$Su = 10 * ceil($Su/10); # round to nearest 10
+$Sd = random(1, $S0-4);
+$Sd = 10 * floor($Sd/10); # round to nearest 10
+
+# Strike price; between Su and Sd, close
+# to S0
+$R = $S0 + random(-10, 10);
+$R = 5 * floor($R / 5);  # round to nearest 5
+while (($R > $Su) & ($R < $Sd)) {
+$R = $S0 + random(-10, 10);
+$R = 5 * floor($R / 5);  # round to nearest 5
+}
+
+# time span and interest
+@Tlist = ('6 months', '1 year', '2 years');
+@tlist = (6/12, 1, 2);
+$p = random(0, scalar(@Tlist) - 1);
+$T = $Tlist[$p]; # text version
+$t = $tlist[$p]; # number of years
+
+$r = random(5, 8);   # interest rate
+
+# Compute solution-related values
+$Du = $Su - $R;
+$Dd = 0;
+$del = ($Du - $Dd)/($Su - $Sd);
+$q = (exp($r/100*$t) * $S0 - $Sd)/($Su - $Sd);
+$D0 = exp(-$r/100*$t)* (  $q*$Du + (1-$q)*$Dd);
+
+# Round $D0 to nearest penny
+$D0 = (1/100)* floor( $D0 * 100 + 0.5);
+
+# Number of call options
+$N = random(100, 500, 100);
+
+$Ns = floor($del * $N +.5);  # rounded number of shares to buy
+
+# Portfolio value
+$P0 = $N * $D0 - ($Ns * $S0);
+
+# Investment value
+$Iend = $P0 * exp($r/100 * $t); 
+$Iend = (1/100)* floor( $Iend * 100 + 0.5); # round to penny
+
+BEGIN_TEXT 
+$BR
+$PAR
+
+The stock in company X is currently worth $DOLLAR$S0.  Based on expert
+analysis, it is believed that $T from now, the same stock will be
+worth either $DOLLAR$Su or $DOLLAR$Sd.
+
+$PAR
+Banks are currently offering risk-free savings at $r percent interest, compounded
+continuously.
+
+$PAR 
+
+At a strike price of $DOLLAR$R, the arbitrage-free price on a call
+option for this stock is \{sprintf("$DOLLAR%.2f", $D0)\}.
+
+$PAR $BBOLD Hedging: $EBOLD
+
+If you were to buy $N call options, how many shares should you sell
+short to produce a risk-free portfolio?  (Round to the nearest integer.)
+$BR
+Number of shares: \{ans_rule(8)\}
+
+$PAR To demonstrate that $DOLLAR $D0 is a fair price for the call options, we
+will evaluate a portfolio made up of $N call options and the number of
+short-sold stocks that produces a no-risk portfolio (hopefully what you entered above!).
+
+$PAR $BBOLD Present Value $EBOLD 
+$BR
+What is the value of the portfolio (short sold stocks, and call
+options) today?  Remember that you $BBOLD owe $EBOLD short-sold stocks.
+$BR
+Short stock value: $DOLLAR\{ans_rule(8)\}  (should be negative, as this amount is owed)
+$BR Option value: $DOLLAR\{ans_rule(8)\}
+$BR Total value: $DOLLAR\{ans_rule(8)\}
+
+
+$PAR $BBOLD Stock Up: $EBOLD 
+
+What is the final value of the portfolio (short sold stocks, and call
+options) if the stock $BBOLD increased $EBOLD in price?  
+$BR
+Short Stock: $DOLLAR\{ans_rule(8)\}
+$BR Options: $DOLLAR\{ans_rule(8)\}
+$BR Total : $DOLLAR\{ans_rule(8)\}
+
+$PAR $BBOLD Stock Down: $EBOLD 
+
+What is the final value of the portfolio (short sold stocks, and call
+options) if the stock $BBOLD decreased $EBOLD in price?  
+$BR
+Short Stock: $DOLLAR\{ans_rule(8)\}
+$BR Options: $DOLLAR\{ans_rule(8)\}
+$BR Total : $DOLLAR\{ans_rule(8)\}
+
+$PAR $BBOLD Bank Investment: $EBOLD 
+
+If you were to have sold your portfolio at the beginning, and invested
+the amount (or borrowed that amount, if the present value was
+negative), the value would increase due to compounding at the current
+interest rate.
+
+$BR To the nearest penny, how much would your portfolio be worth if
+you had invested it in (or borrowed it from) a bank for $T?
+
+$BR Total : $DOLLAR\{ans_rule(8)\}
+
+$PAR 
+
+In principle, the total values in all three scenarios (stock up, stock
+down, and bank investment) should be identical.  Think about what the
+source of any discrepancy between the three values might be.
+
+END_TEXT
+
+# Check answers
+ANS(num_cmp(Real($Ns), tol=>1));
+
+ANS(num_cmp(Real(-$Ns * $S0), tol=>0.01));# Stock up; stocks
+ANS(num_cmp(Real($N*$D0), tol=>0.01));# options 
+ANS(num_cmp(Real($N*$D0 - $Ns * $S0), tol=>0.01));# total 
+
+ANS(num_cmp(Real(-$Ns * $Su), tol=>0.01));# Stock up; stocks
+ANS(num_cmp(Real($N*$Du), tol=>0.01));# options 
+ANS(num_cmp(Real($N*$Du - $Ns * $Su), tol=>0.01));# total 
+
+ANS(num_cmp(Real(-$Ns * $Sd), tol=>0.01));# Stock down; stocks
+ANS(num_cmp(Real($N*$Dd), tol=>0.01));# options 
+ANS(num_cmp(Real($N*$Dd - $Ns * $Sd), tol=>0.01));# total 
+
+ANS(num_cmp(Real($Iend), tol=>0.01));# total 
+
+BEGIN_SOLUTION
+
+$PAR
+$BBOLD Solutions $EBOLD
+$PAR
+The present value of the portfolio is \($N D_0  - $Ns P_0\).
+
+
+END_SOLUTION
+
+
+ENDDOCUMENT();       # This should be the last executable line in the problem.

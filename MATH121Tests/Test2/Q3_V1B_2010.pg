@@ -1,0 +1,68 @@
+## DESCRIPTION
+## Calculus: Functions and models
+## ENDDESCRIPTION
+
+## KEYWORDS('calculus', 'differential')
+
+## DBsubject('Calculus')
+## Date('01/22/2011')
+## Author('Alan Ableson')
+## Institution('Queens University')
+
+
+## TitleText1('Calculus')
+## EditionText1('X')
+## AuthorText1('Hughes-Hallett')
+## Section1('XXX')
+## Problem1('XX')
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros("PG.pl",
+           "PGbasicmacros.pl",
+           "PGanswermacros.pl",
+"MathObjects.pl",
+"PGauxiliaryFunctions.pl");
+
+TEXT(beginproblem());
+
+$showPartialCorrectAnswers = 1;
+
+# Family of functions
+Context("Numeric");
+Context()->variables->add( r => 'Real' );
+
+$area_const = list_random(10, 30, 50, 80);
+
+# optimal r = sqrt(20/3);
+$r = Compute("sqrt($area_const/3)");
+$h = Compute("($area_const-$r^2)/(2 $r)");
+$V = Compute("pi $r^2 $h");
+
+BEGIN_TEXT 
+
+$PAR
+You want to build a cylinder, open at one end (i.e. one end with a lid, the other without a lid).  Your cylinder will have a total surface area of $area_const \(\pi~\mbox{cm}^2\).  The radius of the cylinder will be \(r \) cm, and the height \( h \) cm. 
+$PAR
+  a) Find the dimensions of such a cylinder for which the $BBOLD volume is maximized $EBOLD.  
+$BR
+\(r = \) \{ans_rule(15)\}  cm
+$BR
+\(h = \) \{ans_rule(15)\}  cm
+$BR
+			     Resulting volume = \{ans_rule(15)\} \(\mbox{cm}^3\)
+$BR
+Give all your answers to at least 4 digits of accuracy.
+$PAR
+b) On your answer sheet, show that the dimensions you found produce a $BBOLD local $EBOLD maximum for the cylinder volume; you do $BBOLD not $EBOLD need to argue that your answer is a global maximum. 
+
+END_TEXT
+
+ANS( $r->cmp() );
+
+ANS( $h->cmp() );
+
+ANS( $V->cmp() );
+
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

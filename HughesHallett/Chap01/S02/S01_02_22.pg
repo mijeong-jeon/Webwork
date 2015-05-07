@@ -1,0 +1,97 @@
+#DESCRIPTION
+# Domain and range given a graph
+#ENDDESCRIPTION
+
+#KEYWORDS('exponential growth','exponential decay')
+## tagged by GH
+
+## DBsubject('Calculus')
+## DBchapter('1 A Library of Functions')
+## DBsection('1.2 Exponential Functions')
+## Problem('22, 23, 24')
+## Date('30/03/2012')
+## Author('Gina Hochban')
+## Institution('Queen's University')
+## TitleText1('Calculus')
+## EditionText1('5th Edition')
+## AuthorText1('Hughes-Hallett')
+
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"PGauxiliaryFunctions.pl",
+"PGgraphmacros.pl"
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+
+# assign point coordinates
+$x1=random(-1,1,1);
+$x2=random(1,2,1);
+ if ($x1 == $x2){
+     $x2 = $x2+1;
+ }
+
+$y1=random(2,8,1);
+$y2=random(2,18,1);
+ if ($y1 == $y2){
+     $y2 = $y2+1;
+ }
+
+$b=($y1/$y2)**(1/($x1-$x2));
+$a=($y1)/($b**($x1));
+
+$bk="black";
+
+# FEQ (Format EQuations) cleans up the writing of the functions (see FEQ in PGbasicmacros)
+# Otherwise we would need to worry about the signs of $a, $b and so forth.
+
+$i = $x2+1;
+$g = FEQ("$a*$b^x for x in <-3,$i> using color:$bk and weight:2");
+
+$j = $y2+1;
+$graphg = init_graph(-3,-1,$i,$j,'axes'=>[0,0]);
+
+($fRef) = plot_functions( $graphg,$g);
+
+# $k = $y2-1;
+# $label_g = new Label ( 1,$k,'B',$bk,'left');
+# $graphg->lb($label_g);
+
+# add points
+$graphg->stamps( closed_circle($x1,$y1,'black'),closed_circle($x2,$y2,'black'));
+
+#label axes
+$graphg->lb(new Label($x2 +0.25,0,'x','black','left','bottom'),
+            new Label(-0.25,$y2 +0.25,'y','black','left','bottom'));
+
+# add coord labels
+$graphg->lb( new Label($x1,$y1+1,"($x1,$y1)",'black','center','middle'),
+             new Label($x2-0.5,$y2+0.5,"($x2,$y2)",'black','center','middle'));
+
+BEGIN_TEXT
+
+\{ image(insertGraph($graphg), width=>200, height=>200) \} 
+
+END_TEXT
+
+TEXT(EV2(<<EOT));
+$BR
+Give a possible formula for the function shown in the graph. 
+$BR
+\( y=\)\{ans_rule(15)\}.
+$BR
+$BR
+**You may click on a graph to enlarge it.
+
+EOT
+
+ANS(fun_cmp("$a $b^x"));
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

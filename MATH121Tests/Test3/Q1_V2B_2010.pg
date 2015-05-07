@@ -1,0 +1,172 @@
+## DESCRIPTION
+## Calculus: Functions and models
+## ENDDESCRIPTION
+
+## KEYWORDS('calculus', 'integration')
+## Tagged by LD
+
+## DBsubject('Calculus')
+## Date('12/06/2011')
+## Author('Alan Ableson')
+## Institution("Queen's University")
+
+
+## TitleText1('Calculus')
+## EditionText1('X')
+## AuthorText1('Hughes-Hallett')
+## Section1('XXX')
+## Problem1('XX')
+DOCUMENT();
+
+
+loadMacros(
+"PGstandard.pl",
+"MathObjects.pl",
+"PGgraphmacros.pl",
+"PGnumericalmacros.pl",
+);
+TEXT(beginproblem());
+
+# Graph 
+# - starts at y = 0
+# - ends at y = 0
+# - has one low point at integer t
+# - has one high point at integer t
+# - has one zero value in between
+# Split is away from the middle and longer interval has equal OR HIGHER value
+# i.e. the area difference between positive and negative should be obvious
+
+$domain_x_length = 10;
+$x_cross = non_zero_random(-2, 2, 1) + ($domain_x_length/2); 
+if ($x_cross < ($domain_x_length/2)) {
+  $first_interval_higher = 0;
+} else {
+  $first_interval_higher = 1;
+}
+if ($first_interval_higher) {
+  $max_v2 = random(30, 50, 5);
+  $max_v1 = random($max_v2, $max_v2 + 20, 5);  # must be larger, but negative
+} else {
+  $max_v1 = random(30, 50, 5);
+  $max_v2 = random($max_v1, $max_v1 + 20, 5);  # must be larger, but negative
+}
+
+# Determine max v which will be negative
+$peak_first = random(0, 1);
+if ($peak_first ) {
+  $max_v2 = -1 * $max_v2;
+} else {
+  $max_v1 = -1 * $max_v1;
+}
+
+$low_v = min($max_v1, $max_v2);
+$high_v = max($max_v1, $max_v2);
+$domain_v_length = $high_v - $low_v;
+
+# Build the Hermite interpolant
+# Slopes at points are built individually
+@vp = (0,0,0,0,0);
+@delta_x = (  ($x_cross/2), ($x_cross/2),
+	      (($domain_x_length - $x_cross)/2),
+	      (($domain_x_length - $x_cross)/2));
+@pos_x = (0,0,0,0,0);
+for ($i = 1; $i < 5; $i++) {
+  $pos_x[$i] = $pos_x[$i-1] + $delta_x[$i-1];
+}
+@pos_v = (0, $max_v1, 0, $max_v2, 0);
+$vp[0] = $max_v1/$delta_x[0];
+$vp[2] = ($max_v2-$max_v1)/($delta_x[1] + $delta_x[2]);
+$vp[4] = $max_v2/$delta_x[3];
+# ERROR: can't get hermitian splines to work; perl error gets 
+# triggered
+$spline = hermite(~~@pos_x, ~~@pos_v, ~~@vp);
+#$spline = cubic_spline(~~@pos_x, ~~@pos_v);
+
+# *** Build the graph 
+# Size of the graph in pixels.
+$xsize = $domain_x_length*100;
+$ysize = $domain_v_length*100;
+
+$low_x = 0;
+$high_x = $domain_x_length;
+
+
+# init_graph returns a graph object that we can then add functions to.
+$graph = init_graph(
+    $low_x, $low_v,
+    $high_x, $high_v,
+    grid => [$domain_x_length,$domain_v_length], 
+    axes => [0,0],
+    size => [$xsize,$ysize]
+);
+
+# Add two functions to the graph. The language used in specifying plots is
+# described in the PGgraphmacros.pl docs. When a MathObject is used in double-
+# quotes, it is stringified into the quasi-TI notation that WeBWorK uses.        
+#plot_functions($graph,
+#    "$diag_line for x in [$low_x,$split_x] using color:red and weight:2",
+#    "$horiz_line for x in [$split_x, $high_x] using color:red and weight:2");
+#$f = Formula("$diag_line if x <= $split_x else $y_horiz");
+#} else { # diagonal first
+#  plot_functions($graph,
+#    "$horiz_line for x in [$low_x,$split_x] using color:red and weight:2",
+#    "$diag_line for x in [$split_x, $high_x] using color:red and weight:2" );
+#$f = Formula("$diag_line if x >= $split_x else $y_horiz");
+#}
+
+Context()->texStrings;
+
+
+
+# image(insertGraph($graph) inserts the graph that we generated before. insertGraph() actually generates
+# the image, and it returns the pathname of the image. image() takes that image
+# and actually generates code needed to place the image in the output. These
+# macros are in dangerousMacros.pl, which is always loaded. Documentation at:
+# <http://devel.webwork.rochester.edu/doc/cvs/pg_HEAD/macros/dangerousMacros.pl.html>
+
+BEGIN_TEXT
+$PAR
+  \{ join(", ", @pos_x) \}
+$BR
+  \{ join(", ", @pos_v) \}
+$BR
+  \{ join(", ", @vp) \}
+$BR
+$PAR
+  The graph below shows the $BBOLD derivative $EBOLD of  the function \( f(x) \) 
+     on the interval \( x \in [$low_x, $high_x]\).
+
+
+$PAR
+\{ image(insertGraph($graph)) \}
+$PAR
+
+
+$PAR
+a) Given the single value already given in the table, complete
+the entries for the rest of the table.
+$BCENTER
+\{ 
+begintable(5) .
+  row( "\(x = \)", @x_seq).
+  row( "\(f(x) = \)", $f_at_low_x, ans_rule(5), ans_rule(5), ans_rule(5), ans_rule(5) ) .
+endtable(); 
+\}
+$ECENTER
+
+$PAR
+b) Based on the values you found in part (a), sketch the graph of the original function, \(f(x)\). $BR 
+Clearly label and scale the axes.
+
+END_TEXT
+Context()->normalStrings;
+
+$showPartialCorrectAnswers = 1;
+
+#foreach $i (1..$domain_x_length) {
+#  ANS( $f_seq[$i]->cmp() );
+#}
+
+#COMMENT('MathObject version.');
+
+ENDDOCUMENT();

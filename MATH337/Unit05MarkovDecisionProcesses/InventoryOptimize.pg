@@ -1,0 +1,236 @@
+## DESCRIPTION
+## Operations Research / Linear Algebra
+## ENDDESCRIPTION
+
+## KEYWORDS('steady state', 'eigenvalues' 'eigenvectors')
+## Tagged by aableson
+
+## DBsubject('Linear Algebra')
+## DBchapter('Matrices')
+## DBsection('Eigenvalues')
+## Date('')
+## Author('')
+## Institution('Queens')
+## TitleText1('')
+## EditionText1('')
+## AuthorText1('')
+## Section1('')
+## Problem1('')
+
+DOCUMENT();        # This should be the first executable line in the problem.
+loadMacros(
+        "PGbasicmacros.pl",
+        "PGanswermacros.pl",
+        "PGmatrixmacros.pl",
+	"parserPopUp.pl",
+	"parserMultiAnswer.pl",
+	"MathObjects.pl",
+	"unionLists.pl",
+	"PGauxiliaryFunctions.pl",
+	"QUpolynomialmacros.pl",
+        );
+
+TEXT(beginproblem());    
+Context("Numeric");
+$showPartialCorrectAnswers = 1;
+
+# Add the "NA" string as an option
+Context()->strings->add(NA=>{}, na=>{});
+
+$ver = random(1, 8);
+if ($ver == 1) {
+  $max_state = 8;
+  $mean_demand = 3.1;
+  $unmet_demand = 100;
+  $order_fixed = 30;
+  $order_per_unit = 25;
+  $inventory = 10;
+  @A = (6, 5, 4, 0, 0, 0, 0, 0, 0);
+  $opt_cost = 162.55;
+  $opt_s = 3;
+  $opt_S = 6;  
+}
+elsif ($ver == 2) {
+  $max_state = 9;
+  $mean_demand = 2.8;
+  $unmet_demand = 100;
+  $order_fixed = 30;
+  $order_per_unit = 25;
+  $inventory = 5;
+  @A = (8, 7, 6, 5, 0, 0, 0, 0, 0, 0);
+  $opt_cost = 120.60;
+  $opt_s = 4;
+  $opt_S = 8;
+}
+elsif ($ver == 3) {
+  $max_state = 9;
+  $mean_demand = 4.5;
+  $unmet_demand = 40;
+  $order_fixed = 40;
+  $order_per_unit = 10;
+  $inventory = 10;
+  @A = (7, 6, 0, 0, 0, 0, 0, 0, 0, 0);
+  $opt_cost = 144.68;
+  $opt_s = 2;
+  $opt_S = 7;
+
+}
+elsif ($ver == 4) {
+  $max_state = 8;
+  $mean_demand = 4.1;
+  $unmet_demand = 60;
+  $order_fixed = 50;
+  $order_per_unit = 10;
+  $inventory = 20;
+  @A = (5, 4, 0, 0, 0, 0, 0, 0, 0);
+  $opt_cost = 202.84;
+  $opt_s = 2;
+  $opt_S = 5;
+
+}
+elsif ($ver == 5) {
+  $max_state = 9;
+  $mean_demand = 5.1;
+  $unmet_demand = 70;
+  $order_fixed = 40;
+  $order_per_unit = 40;
+  $inventory = 10;
+  @A = (8, 7, 6, 0, 0, 0, 0, 0, 0, 0);
+  $opt_cost = 313.03;
+  $opt_s = 3;
+  $opt_S = 8;
+
+}
+elsif ($ver == 6) {
+  $max_state = 9;
+  $mean_demand = 3.7;
+  $unmet_demand = 80;
+  $order_fixed = 10;
+  $order_per_unit = 40;
+  $inventory = 5;
+  @A = (6, 5, 4, 3, 2, 0, 0, 0, 0, 0);
+  $opt_cost = 192.58;
+  $opt_s = 5;
+  $opt_S = 6;
+
+}
+elsif ($ver == 7) {
+  $max_state = 10;
+  $mean_demand = 4.4;
+  $unmet_demand = 140;
+  $order_fixed = 100;
+  $order_per_unit = 25;
+  $inventory = 20;
+  @A = (9, 8, 7, 6, 0, 0, 0, 0, 0, 0, 0);
+  $opt_cost = 341.13;
+  $opt_s = 4;
+  $opt_S = 9;
+}
+else {   # ($ver == 8) {
+  $max_state = 8;
+  $mean_demand = 3.5;
+  $unmet_demand = 110;
+  $order_fixed = 10;
+  $order_per_unit = 25;
+  $inventory = 30;
+  @A = (4, 3, 2, 0, 0, 0, 0, 0, 0);
+  $opt_cost = 261.67;
+  $opt_s = 3;
+  $opt_S = 4;
+
+}
+  
+$Policy_ans = MultiAnswer(@A)->with(
+  singleResult => 1,
+  checker => sub {
+    my ($correct, $student, $self) = @_;
+      my @correct = @{$correct};
+      my @student = @{$student};
+my $i;
+for ($i = 0; $i < @student; $i++) {
+  if (!defined($student[$i]) || abs($student[$i] - $correct[$i]) > 1e-3) {
+return 0
+}
+}
+return 1;});
+
+@policy_row_ans = ();
+for ($s = 0; $s <= $max_state; $s++) {
+  push(@policy_row_ans, $Policy_ans->ans_rule(3));
+}
+
+$sS_ans = MultiAnswer($opt_s, $opt_S)->with(
+  singleResult => 1,
+  checker => sub {
+    my ($correct, $student, $self) = @_;
+      my @correct = @{$correct};
+      my @student = @{$student};
+my $i;
+for ($i = 0; $i < @student; $i++) {
+  if (!defined($student[$i]) || abs($student[$i] - $correct[$i]) > 1e-3) {
+return 0
+}
+}
+return 1;});
+
+
+BEGIN_TEXT
+
+Consider the CN rail repair centre problem, where train axles are
+stocked in case replacements are needed for damaged rail cars. A handout summary of the scenario is available on Moodle or at $BR
+http://www.mast.queensu.ca/~math337/Handouts/Unit05_CNRailInventory.pdf
+
+$PAR
+For your particular scenario: 
+
+\{BeginList("UL") \}
+$ITEM A maximum of \{$max_state\} axles can be stored in the yard at any point during the day. 
+$ITEM The mean demand is \{$mean_demand\} axles per day; actual demand will stochastic, with a Poisson distribution. 
+$ITEM It costs $DOLLAR$order_fixed to place an order, and $DOLLAR$order_per_unit more per axle ordered. 
+$ITEM Storage costs are $DOLLAR$inventory per day per axle (based on number of axles present $BITALIC after$EITALIC the day's order arrives).
+$ITEM Each axle requested but without sufficient inventory to fulfill demand that day (unmet demand) costs $DOLLAR$unmet_demand.
+\{EndList("UL") \}
+
+$PAR 
+A) Find the optimal re-ordering policy for this cost scenario.
+
+\{begintable(5)\}
+\{ row( "\(s\)", 0..$max_state ) \} 
+\{ row( "optimal \(a(s)\)", @policy_row_ans) \}
+\{endtable \}
+
+Expected average daily cost using this optimal policy: $\{ans_rule(10)\}
+
+$PAR 
+
+B) Is the optimal policy an \( (\sigma, \Sigma) \) policy?   
+
+\{BeginList("UL") \}
+$ITEM If yes, then put in the values of \(\sigma\) and \(\Sigma\) for
+your optimal model.
+$ITEM If no, then put "NA" in both entries.
+\{EndList("UL") \}
+\{begintable(2)\}
+\{ row( "\(\sigma\)",  "\(\Sigma\)") \}
+\{ row( $sS_ans->ans_rule(3), $sS_ans->ans_rule(3)) \}
+\{endtable \}
+
+
+END_TEXT
+
+# Check answers
+ANS( $Policy_ans->cmp() );
+
+ANS( num_cmp($opt_cost) );
+
+ANS( $sS_ans->cmp() );
+
+BEGIN_SOLUTION
+$BR $BBOLD SOLUTION:$EBOLD
+$BR
+
+
+END_SOLUTION
+
+
+ENDDOCUMENT();       # This should be the last executable line in the problem.

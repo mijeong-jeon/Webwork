@@ -1,0 +1,56 @@
+#DESCRIPTION
+# Logarithmic functions
+#ENDDESCRIPTION
+
+#KEYWORDS('logarithmic', 'functions')
+## tagged by GH
+
+## DBsubject('Calculus')
+## DBchapter('1 A Library of Functions')
+## DBsection('1.4 Logarithmic Functions')
+## Problem('36')
+## Date('01/05/2012')
+## Author('Gina Hochban')
+## Institution('Queen's University')
+## TitleText1('Calculus')
+## EditionText1('5th Edition')
+## AuthorText1('Hughes-Hallett')
+
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PGstandard.pl",
+"MathObjects.pl",
+"PGchoicemacros.pl",
+"parserPopUp.pl",
+"parserNumberWithUnits.pl",
+"hhAdditionalMacros.pl",
+"PG.pl",
+"PGbasicmacros.pl",,
+"PGanswermacros.pl",
+"PGauxiliaryFunctions.pl",
+"extraAnswerEvaluators.pl"
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+
+$popupEffect1 = PopUp([("Increases", "Decreases", "No effect")], "No effect");
+
+$popupEffect2 = PopUp([("Moves to the right", "Moves to the left", "No effect")], "Moves to the right");
+
+
+BEGIN_TEXT
+
+If \(g(x) = \ln(ax+2)\), where \(a\neq 0\), what is the effect of increasing \(a\) on:
+$PAR
+\(a)\) The \(y\)-intercept? \{ $popupEffect1->menu() \} $BR
+\(b)\) The \(x\)-intercept? \{ $popupEffect2->menu() \}
+
+END_TEXT
+
+#ANSWERS
+ANS($popupEffect1->cmp, $popupEffect2->cmp);
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

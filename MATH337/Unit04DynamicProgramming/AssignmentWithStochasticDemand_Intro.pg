@@ -1,0 +1,188 @@
+
+## DESCRIPTION
+## Operations Research / Linear Algebra
+## ENDDESCRIPTION
+
+## KEYWORDS('steady state', 'eigenvalues' 'eigenvectors')
+## Tagged by aableson
+
+## DBsubject('Linear Algebra')
+## DBchapter('Matrices')
+## DBsection('Eigenvalues')
+## Date('')
+## Author('')
+## Institution('Queens')
+## TitleText1('')
+## EditionText1('')
+## AuthorText1('')
+## Section1('')
+## Problem1('')
+
+DOCUMENT();        # This should be the first executable line in the problem.
+loadMacros(
+        "PGbasicmacros.pl",
+        "PGanswermacros.pl",
+        "PGmatrixmacros.pl",
+	"parserPopUp.pl",
+	"parserMultiAnswer.pl",
+	"MathObjects.pl",
+	"unionLists.pl",
+	"PGauxiliaryFunctions.pl",
+        );
+
+
+ 
+TEXT(beginproblem());    
+Context("Numeric");
+# Answers within 3 cents
+Context()->flags->set(tolerance=>.03, tolType => "absolute");
+$showPartialCorrectAnswers = 1;
+
+# Parameters for the profit/loss
+$sales_profit = random(18, 22);
+$waste_loss = random(4, 7);
+$irr_cust_loss = random(3, 8);
+while($irr_cust_loss == $waste_loss) { # costs should be different
+  $irr_cust_loss = random(3, 8);
+}
+
+# Problem values
+$cases_assigned = random(10, 30, 5);
+$under_demand = random(2, 6);
+$over_demand = random(2, 6);
+while ($over_demand == $under_demand) {
+  $over_demand = random(2, 6);
+}
+$mean_demand = $cases_assigned + non_zero_random(-6, 6);
+
+# Compute the answers
+# Profit/loss given underdemand
+$num_sold = $cases_assigned - $under_demand;
+$num_unsold = $under_demand;
+$under_demand_profit = ($sales_profit * $num_sold) - ($waste_loss * $num_unsold);
+
+
+# Profit/loss given overdemand
+$num_sold = $cases_assigned;
+$unmet_demand = $over_demand;
+$over_demand_profit = ($sales_profit * $num_sold) - ($irr_cust_loss * $unmet_demand);
+
+
+# Expected profit over all demands
+$expected_profit = 0;
+for ($d = 0; $d <= 100; $d++) {  # awful, having the powers and factorial fight; ick.
+  $p = (exp(-$mean_demand)*$mean_demand**$d)/fact($d);
+  if ($d <= $cases_assigned) {
+    $num_sold = $d;
+    $num_unsold = $cases_assigned - $d;
+    $unmet_demand = 0;
+  }
+  else {
+    $num_sold = $cases_assigned;
+    $unmet_demand = $d - $cases_assigned;
+    $num_unsold = 0;
+  }
+  $expected_profit = $expected_profit + $p * ($num_sold*$sales_profit - ($num_unsold * $waste_loss) - ($unmet_demand * $irr_cust_loss));
+}
+
+BEGIN_TEXT
+$PAR
+
+A chain of grocery stores has several stores served by a single warehouse.
+\{BeginList("UL") \}
+$ITEM A shipment of strawberries arrives at the warehouse,
+and will be distributed to the stores.  
+$ITEM The strawberries will be on
+sale for 4 days, after which they will go bad and be thrown out. 
+\{EndList("UL")\}
+
+$PAR
+
+Our goal will be to find the way to distribute the strawberries to the
+stores that will $BBOLD maximize the expected profit$EBOLD at the end
+of the 4 days.
+
+\{BeginList("UL") \}
+$ITEM Each $BBOLD sold$EBOLD case yields $\{$sales_profit\} profit.
+$ITEM Each $BBOLD unsold$EBOLD case costs $\{$waste_loss\} (loss).
+$ITEM Each case which was wanted by customers, but which couldn't be met
+with the assigned supply, costs $\{$irr_cust_loss\} (estimated penalty for associated/future lost sales).
+\{EndList("UL")\}
+
+$PAR 
+
+A) If you were to assign \{ $cases_assigned\} cases to one store,
+and \{ ($cases_assigned) - $under_demand\} cases were demanded by customers,
+what would the profit (or loss, negative) for the store be?
+$BR
+Profit for assigning \{ $cases_assigned\} cases, and having demand for \{ ($cases_assigned - $under_demand) \} cases: $\{ans_rule(15)\}
+
+$PAR
+
+B) If you were to assign \{ $cases_assigned\} cases to one store,
+and \{ ($cases_assigned) + $over_demand\} cases were demanded by customers,
+what would the profit (or loss, negative) for the store be?
+$BR 
+Profit for assigning \{ $cases_assigned\} cases, and having demand for \{ ($cases_assigned + $over_demand) \} cases: $\{ans_rule(15)\}
+
+$PAR
+C) If you were to assign \{ $cases_assigned\} cases to one store,
+and the demand were Poisson distributed with mean \{$mean_demand\}, 
+what would the $BBOLD expected $EBOLD profit be?
+$BR
+Expected profit for assigning \{ $cases_assigned\} cases: $\{ans_rule(15)\}
+
+END_TEXT
+
+# Check answers
+ANS(num_cmp($under_demand_profit, tol=>0.05));
+ANS(num_cmp($over_demand_profit, tol=>0.05));
+ANS(num_cmp($expected_profit, tol=>0.05));
+
+
+BEGIN_SOLUTION
+$BR $BBOLD SOLUTION: $EBOLD
+$PAR
+A) You over-supplied the store, so the only contributors to the profit/loss
+are sold and unsold cases.  
+\{BeginList("UL") \}
+$ITEM \{ $cases_assigned - $under_demand\} cases sold, each at $\{$sales_profit\} profit, gives
+ $\{ $sales_profit * ($cases_assigned - $under_demand)\} total profit from sold cases.
+$ITEM \{ $under_demand \} cases weren't sold, at  $\{$waste_loss\} loss each, or $\{ $waste_loss * ($under_demand)\} total loss from unsold cases.
+\{EndList("UL")\}
+Total profit/loss is therefore $\{ $under_demand_profit\}.
+
+$PAR
+B) You under-supplied the store, so the contributors to the profit/loss
+are sold cases, and the penalty for unmet demand.  
+\{BeginList("UL") \}
+$ITEM \{ $cases_assigned \} cases sold, each at $\{$sales_profit\} profit, gives
+ $\{ $sales_profit * ($cases_assigned)\} total profit from sold cases.
+$ITEM \{ $over_demand \} cases were asked for, but weren't provided, at  $\{$irr_cust_loss\} loss each, or $\{ $irr_cust_loss * ($over_demand)\} total loss from unmet demand .
+\{EndList("UL")\}
+Total profit/loss is therefore $\{ $over_demand_profit\}.
+
+$PAR
+
+C) To compute the expected value, you need to compute the sum over the
+possible demand levels, 
+
+\[ E(\mbox{profit}) = \sum_{d=0}^{\infty} \mbox{profit(d)} \cdot P(d) \]
+
+For each demand value, you need to identify the number sold, number
+unsold, and any unmet demand (as in parts (A) and (B)).  Multiplying
+each of those values by their associated profit or loss, and scaling
+by the probability of that demand (using the Poisson distribution),
+will produce the expected profit over all possible demands.
+
+$PAR
+To avoid the sum to infinity, usually a large reasonable stopping
+value is used for an upper bound on the demand; 4 or 5 times the mean 
+is usually sufficient.
+
+\[ E(\mbox{profit}) \approx \sum_{d=0}^{\mbox{large value}} \mbox{profit(d)} \cdot P(d) \]
+
+END_SOLUTION
+
+
+ENDDOCUMENT();       # This should be the last executable line in the problem.

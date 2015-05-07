@@ -1,0 +1,64 @@
+
+## DESCRIPTION
+## Calculus: Functions and models
+## ENDDESCRIPTION
+
+## KEYWORDS('calculus', 'integration')
+## Tagged by LD
+
+## DBsubject('Calculus')
+## Date('12/05/2011')
+## Author('Alan Ableson')
+## Institution('Queen's University')
+
+
+## TitleText1('Calculus')
+## EditionText1('X')
+## AuthorText1('Hughes-Hallett')
+## Section1('XXX')
+## Problem1('XX')
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros("PG.pl",
+           "PGbasicmacros.pl",
+           "PGanswermacros.pl",
+"MathObjects.pl",
+"PGauxiliaryFunctions.pl");
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+
+# Evaluation of a volume of rotation
+$f1 = "\sqrt{x}";
+@xlist = (1, 4, 9, 16, 25, 36);
+$i1 = random(0, 3); 
+$i2 = random($i1+1, scalar(@xlist)-1);
+$x1 = $xlist[$i1];
+$x2 = $xlist[$i2];
+
+# Compute the volume
+$F = Formula("pi  * x^2/2");
+$V = Real($F->eval(x=>$x2) - $F->eval(x=>$x1));
+
+BEGIN_TEXT
+
+Consider the region bounded by \(y = $f1\), \(y = 0\), \(x = $x1\) and \( x = $x2\).
+
+
+$PAR 
+
+A) On your solution sheet, sketch these functions and shade in the
+resulting region.  Clearly indicate any boundary points or curves.
+
+$PAR
+B) Find the volume obtained when this region is rotated around the \(x\) axis.
+
+$BR
+Total volume: \{ans_rule(10)\}
+
+END_TEXT
+
+ANS($V->cmp);
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

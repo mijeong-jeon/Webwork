@@ -1,0 +1,50 @@
+## DESCRIPTION
+##  Exponential Distribution
+## ENDDESCRIPTION
+
+## KEYWORDS('probability', 'continuous', 'exponential', 'distribution')
+## naw tagged this problem.
+
+## DBsubject('Probability')
+## DBchapter('Distributions')
+## DBsection('Exponential Distribution')
+## Date('6/27/2005')
+## Author('Jeff Holt')
+## Institution('UVA')
+## TitleText1('Statistics for Management and Economics')
+## EditionText1('6')
+## AuthorText1('Keller, Warrack')
+## Section1()
+## Problem1()
+
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"PGnumericalmacros.pl",
+"PGstatisticsmacros.pl",
+"MathObjects.pl",
+"PGauxiliaryFunctions.pl"
+);
+
+@images = ("State1.png", "State2.png", "State3.png"); 
+$image = $images[random(0, 2)];
+
+
+BEGIN_TEXT 
+$showPartialCorrectAnswers = 1;
+
+\{ image( $image, 
+extra_html_tags=>'alt="Graph of a function."' ) \}
+
+From the 
+
+END_TEXT
+
+
+
+ENDDOCUMENT();       # This should be the last executable line in the problem.

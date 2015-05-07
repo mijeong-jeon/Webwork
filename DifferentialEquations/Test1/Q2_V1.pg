@@ -1,0 +1,39 @@
+DOCUMENT();
+
+loadMacros(
+"PG.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"PGauxiliaryFunctions.pl"
+);
+
+$showPartialCorrectAnswers = 1;
+
+$aa = random(2,8,1);
+$bb = random(2,9,1);
+while($bb == $aa) {
+  $bb = random(2,9,1);
+}
+
+TEXT(beginproblem());
+BEGIN_TEXT
+Consider the differential equation
+\[\frac{dy}{dx} = (x-$aa)e^{-$bb y}\]
+satisfying the initial condition \(y($aa)=\ln($aa)\).
+$PAR
+(a) Find the particular solution that satisfies the  differential equation.
+$BR
+\(y\)=  \{ ans_rule(45)\}
+$PAR
+
+(b) In your written answers, verify your answer is correct by showing
+that your solution satisfies the original differential equation.
+
+END_TEXT
+
+ANS(fun_cmp("(1/$bb)*ln(($bb/2)*(x-$aa)^2+$aa^$bb)"));
+
+
+
+ENDDOCUMENT();

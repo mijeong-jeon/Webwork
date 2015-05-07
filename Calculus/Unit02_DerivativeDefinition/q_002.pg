@@ -1,0 +1,81 @@
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"PGauxiliaryFunctions.pl",
+"MathObjects.pl",
+"parserPopUp.pl",
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+
+@graph_filenames = (
+"q_002_1.png",
+"q_002_2.png",
+"q_002_3.png",
+"q_002_4.png",
+);
+
+$ap = "Positive";
+$an = "Negative";
+$az = "Zero";
+
+$vers = random(4,4);  # Choose one of the pictures
+if ($vers == 1) {
+  @a = ('D', 'F', 'C', 'B', 'E', 'A');
+}
+elsif ($vers == 2) {
+  @a = ('A', 'E', 'B', 'C', 'F', 'D');
+}
+elsif ($vers == 3) {
+  @a = ('D', 'F', 'C', 'B', 'E', 'A');
+}
+elsif ($vers == 4) {
+  @a = ('A', 'E', 'B', 'C', 'F', 'D');
+}
+
+@pointlist = ('A', 'B', 'C', 'D', 'E', 'F');
+
+$popup1 = PopUp([@pointlist], $a[0]);
+$popup2 = PopUp([@pointlist], $a[1]);
+$popup3 = PopUp([@pointlist], $a[2]);
+$popup4 = PopUp([@pointlist], $a[3]);
+$popup5 = PopUp([@pointlist], $a[4]);
+$popup6 = PopUp([@pointlist], $a[5]);
+BEGIN_TEXT
+
+Consider the $BBOLD distance vs time $EBOLD graph shown below.
+$PAR
+\{ image( $graph_filenames[$vers-1] , width=>300, height => 300, tex_size=>700) \}
+$PAR
+Rank the following quantities as if along the real line (i.e. largest negative, through zero, up to largest positive).
+$BR 
+A - Instananeous velocity at \(t=1\). $BR
+B - Instananeous velocity at \(t=3\). $BR
+C - Instananeous velocity at \(t=4\). $BR
+D - Instananeous velocity at \(t=5\). $BR
+E - Average velocity over \(t=1 \ldots 3\). $BR
+F - Average velocity over \(t=4 \ldots 5\).
+
+\{ begintable(8) \}
+\{ row( "Largest Negative", "", "", "", "", "", "", "Largest Positive" ) \}
+\{ row( "", $popup1->menu(), $popup2->menu(), $popup3->menu(), $popup4->menu(), $popup5->menu(), $popup6->menu(), )  \}
+\{ endtable() \}
+$ECENTER
+
+
+END_TEXT
+
+ANS( $popup1->cmp() );
+ANS( $popup2->cmp() );
+ANS( $popup3->cmp() );
+ANS( $popup4->cmp() );
+ANS( $popup5->cmp() );
+ANS( $popup6->cmp() );
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.
+

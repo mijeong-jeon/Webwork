@@ -1,0 +1,78 @@
+#DESCRIPTION
+# Domain and range given a graph
+#ENDDESCRIPTION
+
+#KEYWORDS('graphs', 'domain', 'range', 'functions')
+## tagged by GH
+
+## DBsubject('Calculus')
+## DBchapter('1 A Library of Functions')
+## DBsection('1.1 Functions and Change')
+## Problem('46')
+## Date('27/03/2012')
+## Author('Gina Hochban')
+## Institution('Queen's University')
+## TitleText1('Calculus')
+## EditionText1('5th Edition')
+## AuthorText1('Hughes-Hallett')
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros("PG.pl",
+           "PGbasicmacros.pl",
+           "PGchoicemacros.pl",
+           "PGanswermacros.pl",
+"MathObjects.pl",
+"parserPopUp.pl",
+"PGauxiliaryFunctions.pl");
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+
+#Define the drop-down lists.
+@function_list= ("f(x)", "g(x)", "h(x)");
+$popupOptions1 = PopUp([("correct", 
+	    "incorrect")], "incorrect");
+$popupOptions2 = PopUp([("inversely proportional to the distance it has fallen",
+            "proportional to the distance it has fallen", 
+            "inversely proportional to the time in free fall",
+	    "proportional to the time in free fall")], 
+            "proportional to the time in free fall");
+
+BEGIN_TEXT
+
+When Galileo was formulating the laws of motion, he considered the motion of a body starting from rest and falling under gravity. He originally thought that the velocity of such a falling body was proportional to the distance it had fallen.  
+
+$PAR
+
+$BCENTER
+\{ begintable(6) \}
+\{ row("Table A")\}
+\{ row( "Distance (ft)", "0", "1", "2", "3", "4" ) \}
+\{ row( "Velocity (ft/sec)", "0", "8", "11.3", "13.9", "16" ) \}
+\{ endtable() \}
+
+$PAR
+
+\{ begintable(6) \}
+\{ row("Table B")\}
+\{ row("Time (sec)", "0", "1", "2", "3", "4")\}
+\{ row("Velocity (ft/sec)","0","32","64","96","128")\}
+\{ endtable() \}
+$ECENTER
+
+$PAR
+
+\(a)\) What does the experimental data in $BBOLD Table A$EBOLD tell you about Galileo's hypothesis?  His hypothesis was likely: \{ $popupOptions1->menu() \}
+
+$PAR
+
+\(b)\) What alternative hypothesis is suggested by the two sets of data in $BBOLD Table A $EBOLD and $BBOLD Table B$EBOLD? $BR
+The velocity of such a falling body is \{ $popupOptions2->menu() \}
+
+
+
+END_TEXT
+ANS( $popupOptions1->cmp(), $popupOptions2->cmp() );
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

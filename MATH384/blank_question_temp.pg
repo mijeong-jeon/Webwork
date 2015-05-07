@@ -1,0 +1,51 @@
+##DESCRIPTION
+##  MATH 384: Theory of Interest 
+##ENDDESCRIPTION
+
+##KEYWORDS('force of interest')
+
+## DBsubject('MATH384')
+## DBchapter('Chapter 1: Interest Rate Measurement')
+## DBsection('Force of Interest')
+## Date('8/1/2014')
+## Author('Ping Li')
+## Institution('QUEENS UNIVERSITY')
+## TitleText1('MATH 384')
+## EditionText1()
+## Section1('1.6')
+## Problem1('8')
+
+########################################################################
+
+DOCUMENT();      
+
+loadMacros(
+   "PGstandard.pl",     # Standard macros for PG language
+   "MathObjects.pl",
+   #"source.pl",        # allows code to be displayed on certain sites.
+   #"PGcourse.pl",      # Customization file for the course
+);
+
+
+TEXT(&beginproblem);
+
+$a = random(900,1500,100);
+$n = random(1,5,1);
+$m = $n+1;
+
+$ans = (-2*$a+sqrt(4*$a^2-4*$a*($a+54)))/(2*$a)-1;
+&ANS(num_cmp($ans));
+
+
+TEXT(EV2(<<EOT));
+
+The force of interest is given by \(\delta_t=\frac{1}{2t-1}\) for \(1\leq t\leq 5\). Find the equivalent annual effective interest rate for a one  year period from t=$n to t=$m.
+
+$BR
+r = \{ans_rule(20)\}
+$BR
+
+EOT
+
+ENDDOCUMENT();
+

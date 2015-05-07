@@ -1,0 +1,73 @@
+# Modified from problem library
+##DESCRIPTION
+##KEYWORDS('integrals', 'exponentials', 'substitution', 'substitution rule')
+##Use the substitution rule to evaluate the integral
+##ENDDESCRIPTION
+
+## DBsubject('Calculus')
+## DBchapter('Integrals')
+## DBsection('Antiderivatives')
+## Date('6/3/2002')
+## Author('')
+## Institution('')
+## TitleText1('Calculus: Early Transcendentals')
+## EditionText1('6')
+## AuthorText1('Stewart')
+## Section1('')
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"PGauxiliaryFunctions.pl",
+"parserFormulaUpToConstant.pl"
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+Context("Numeric");
+
+# Formula is $k x^$c
+# Interval is x=$a..($a+$len)
+$k = random(2,6,1);
+$c = random(2,4,1);
+
+$a = random(0, 1.1, 1);
+$len = random(2, 3, 1);
+$b = $a + $len;
+$c_p_1 = $c + 1;
+$f = Formula("$k x^($c_p_1)/$c_p_1");
+$answer1 = Formula($f->substitute(x=>$b) - $f->substitute(x=>$a));
+
+# By Parts integral: x e^(ax + c)
+$a2 = random(2, 5,1);
+$c2 = random(1, 4, 1);
+# Integrand is  (x e^(a2x + c2))
+# Integral is (x/a) e^(a2x + c2) - (1/a^2) e^(ax + c)
+$answer2 = FormulaUpToConstant("(x/$a2)* e^($a2 x + $c2)- (1/$a2)^2 e^($a2 x + $c2)");
+TEXT(EV2(<<EOT));
+
+$PAR
+a) Evaluate the definite integral below.
+$BR \[ \int_{$a}^{$b} $k x^{$c} dx \]
+$BR $BR \{ans_rule( 30) \}
+$BR
+
+$PAR
+b) Evaluate the indefinite integral below.
+$BR \[ \int x  e^{$a2  x + $c2} dx \]
+$BR $BR \{ans_rule( 30) \}
+$BR
+$BITALIC Note:$EITALIC you can enter base \(e\) exponentials like \(e^{3x + 1}\) using the syntax "e^(3x+1)".
+
+EOT
+
+ANS($answer1->cmp());
+
+ANS($answer2->cmp());
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.
+

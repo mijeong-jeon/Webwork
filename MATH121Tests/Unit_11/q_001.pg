@@ -1,0 +1,144 @@
+##DESCRIPTION
+##  Average of a function
+##ENDDESCRIPTION
+
+##KEYWORDS('algebra', 'inequality', 'fraction')
+
+## DBsubject('Algebra')
+## DBchapter('Fundamentals')
+## DBsection('Real Numbers')
+## Date('6/3/2002')
+## Author('')
+## Institution('')
+## TitleText1('Precalculus')
+## EditionText1('3')
+## AuthorText1('Stewart, Redlin, Watson')
+## Section1('1.1')
+## Problem1('22')
+
+########################################################################
+
+DOCUMENT();      
+
+loadMacros(
+   "PGstandard.pl",     # Standard macros for PG language
+   "PGgraphmacros.pl",
+    "MathObjects.pl",
+   #"source.pl",        # allows code to be displayed on certain sites.
+   "PGcourse.pl",      # Customization file for the course
+);
+
+# Print problem number and point value (weight) for the problem
+TEXT(beginproblem());
+
+# Show which answers are correct and which ones are incorrect
+$showPartialCorrectAnswers = 1;
+# Force new images - critical during debugging
+$refreshCachedImages=1;
+
+##############################################################
+#
+#  Setup
+#
+#
+Context("Numeric");
+Context()->variables->add(t => "Real");
+$num_days = 3;
+$base = random(1, 3);
+$mult = $base;
+
+$total_consumption = Compute($base * $num_days);
+$average_rate = Compute($base);
+$rate_function = Compute("$base + $mult * cos(2*pi*t)")->reduce;
+
+
+##############################################################
+#
+#  Text
+#
+#
+
+Context()->texStrings;
+BEGIN_TEXT
+
+Carly consumes a lot of coffee.  Sometimes she will drink so much
+coffee that she can feel her heartbeat in her face. This has got Carly
+concerned (althrough not enough to stop drinking coffee) and she has
+started tracking her coffee intake.  
+$PAR 
+Over the past three days, Carly has plotted her coffee intake rate and has found it follows the function
+\(c(t) = $rate_function\), where \(c\) is in cups per day, and
+\(t\) is in days.
+
+$PAR (a) $BBOLD On your solution sheet$EBOLD, sketch a graph of
+Carly's consumption rate over the time interval \(t=0 \ldots
+3\). Clearly show the scale on the vertical and horizontal axes.
+$BR
+(There is nothing to submit for this part in Webwork.)
+
+$PAR 
+(b) What is the total amount of coffee Carly consumed over the three day period 
+\(t=0 \ldots 3\)?
+$BR
+Total coffee consumption: \{ $total_consumption->ans_rule(8) \} cup(s)
+
+$PAR
+(c)  Use the formula for the average value of a function to compute Carly's average
+consumption rate over \(t=0 \ldots 3\). Show all your work on your worksheet.
+$BR
+Average consumption rate: \{ $average_rate->ans_rule(8) \} cups/day
+
+
+END_TEXT
+Context()->normalStrings;
+
+##############################################################
+#
+#  Answers
+#
+#
+
+ANS($total_consumption->cmp);
+ANS($average_rate->cmp);
+
+##############################################################
+#
+#  Solutions
+#
+#
+Context()->texStrings;
+
+# Solution graph
+$gr = init_graph(0,0,3,2*$base,
+axes=>[0,0],
+grid=>[3,$base],
+size=>[400,400]
+);
+
+add_functions($gr, "$base + $mult*cos(2*pi*x) for x in <0,3>" . 
+  " using color:blue and weight:2");
+
+BEGIN_SOLUTION
+(a) The graph is a shifted and scaled cosine graph.
+$BCENTER
+\{ image( insertGraph($gr), 
+width=>200,height=>200,tex_size=>800 ) \}
+$ECENTER
+$BR
+(Click on graph to enlarge)
+$PAR
+(b) The total consumption is the integral of the rate, so
+$BR
+\[\mbox{Total consumption } = \int_0^3 $rate_function ~dt \\
+= \left($base t + \frac{$mult}{2 \pi} \sin(2 \pi t)\right) \Big|_0^3 \\
+= $total_consumption  \mbox{ cups} \]
+$PAR
+(c) The average consumption is the total consumption over the whole time period ($total_consumption cups), 
+divided by the total time (3 days), or 
+$BR
+Average consumption rate = $average_rate cup(s)/day.  
+$BCENTER
+END_SOLUTION
+Context()->normalStrings;
+
+ENDDOCUMENT();        

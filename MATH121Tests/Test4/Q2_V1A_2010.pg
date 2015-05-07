@@ -1,0 +1,72 @@
+
+## DESCRIPTION
+## Calculus: Functions and models
+## ENDDESCRIPTION
+
+## KEYWORDS('calculus', 'integration')
+## Tagged by LD
+
+## DBsubject('Calculus')
+## Date('12/05/2011')
+## Author('Alan Ableson')
+## Institution('Queen's University')
+
+
+## TitleText1('Calculus')
+## EditionText1('X')
+## AuthorText1('Hughes-Hallett')
+## Section1('XXX')
+## Problem1('XX')
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros("PG.pl",
+           "PGbasicmacros.pl",
+           "PGanswermacros.pl",
+"MathObjects.pl",
+"PGauxiliaryFunctions.pl");
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+Context("Numeric");
+Context()->variables->add(r=>'Real');
+Context()->flags->set(
+  tolerance=>0.001,
+  tolType=>"relative"
+);
+
+# Evaluation of a circle city density/total
+$k = list_random(1000, 2000, 3000, 4000, 5000);
+$rmax = Real(list_random(8, 10, 12, 20));
+$f = "$k ($rmax - r)";
+
+# Evaluate the integral of
+# dA * rho 
+# = (2 * pi * r dr) * $k ($rmax - r)
+# 2 $k pi * ($rmax * r - r^2) 
+# Integral is
+$F = Formula("2 $k pi ($rmax*r^2/2 - r^3/3)");
+$TotalPop = Real($F->eval(r=>$rmax) - $F->eval(r=>0));
+
+BEGIN_TEXT
+
+The population of Circle City is more dense towards its center, and the density gradually thins out towards the city limits.
+$BR
+The population density is given by \(r = $f\) people/\(\mbox{km}^2\), where \(r\) is the distance in km from the center of the city.
+$PAR
+A) Assuming that the population density is zero at the city limits, find the radius of the city.
+$BR
+Radius of city: \{ans_rule(10)\} km
+
+$PAR
+B) Find the total population of the city.
+
+$BR
+Total population: \{ans_rule(10)\} people
+
+END_TEXT
+
+ANS($rmax->cmp);
+ANS($TotalPop->cmp);
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

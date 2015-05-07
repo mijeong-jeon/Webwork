@@ -1,0 +1,111 @@
+#DESCRIPTION
+# Domain and range given a graph
+#ENDDESCRIPTION
+
+#KEYWORDS('graphs', 'domain', 'range', 'functions')
+## tagged by GH
+
+## DBsubject('Calculus')
+## DBchapter('1 A Library of Functions')
+## DBsection('1.1 Functions and Change')
+## Problem('34')
+## Date('26/03/2012')
+## Author('Gina Hochban')
+## Institution('Queen's University')
+## TitleText1('Calculus')
+## EditionText1('5th Edition')
+## AuthorText1('Hughes-Hallett')
+
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PGstandard.pl",
+"MathObjects.pl",
+"PGchoicemacros.pl",
+"parserPopUp.pl",
+"parserNumberWithUnits.pl",
+"hhAdditionalMacros.pl",
+"PG.pl",
+"PGbasicmacros.pl",,
+"PGanswermacros.pl",
+"PGauxiliaryFunctions.pl",
+"PGgraphmacros.pl",
+"extraAnswerEvaluators.pl"
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+
+$popupStory1 = PopUp([("(I)", "(II)", "(III)", "(IV)")], "(IV)");
+$popupStory2 = PopUp([("(I)", "(II)", "(III)", "(IV)")],  "(II)");
+$popupStory3 = PopUp([("(I)", "(II)", "(III)", "(IV)")],  "(III)");
+
+$bk="black";
+
+# FEQ (Format EQuations) cleans up the writing of the functions (see FEQ in PGbasicmacros)
+
+# define function and domain
+$I = FEQ("2*ln(x+1) for x in <0,12> using color:$bk and weight:2");
+$II = FEQ("x for x in <0,4> using color:$bk and weight:2", 
+          "4 for x in <4,8> using color:$bk and weight:2", 
+          "x-4 for x in <8,12> using color:$bk and weight:2");
+$III = FEQ("0.1*2**(x)-0.1 for x in <0,5> using color:$bk and weight:2");
+$IV = FEQ("2*x for x in <0,2> using color:$bk and weight:2", 
+          "4 for x in <2,2.5> using color:$bk and weight:2", 
+          "-2*(x - 4.5) for x in <2.5,4.5> using color:$bk and weight:2",
+          "0 for x in <4.5,7> using color:$bk and weight:2", 
+          "2*x for x in <7,12> using color:$bk and weight:2");
+
+#set graph dimensions, axes 
+$graphI = init_graph(-2,-2,12,12,'axes'=>[0,0]);
+$graphII = init_graph(-2,-2,12,12,'axes'=>[0,0]);
+$graphIII = init_graph(-2,-2,5,5,'axes'=>[0,0]);
+$graphIV = init_graph(-2,-2,12,12,'axes'=>[0,0]);
+
+($IRef) = plot_functions( $graphI,$I);
+($IIRef) = plot_functions( $graphII,$II);
+($IIIRef) = plot_functions( $graphIII,$III);
+($IVRef) = plot_functions( $graphIV,$IV);
+
+#label axes
+$graphI->lb(new Label(10.5,0.25,'time','black','left','bottom'),
+            new Label(0.25,11,'distance from home','black','left','bottom'),
+            new Label ( 3,8,'(I)',$bk,'left'),);
+$graphII->lb(new Label(10.5,0.25,'time','black','left','bottom'),
+            new Label(0.25,11,'distance from home','black','left','bottom'),
+            new Label ( 2,8,'(II)',$bk,'left'),);
+$graphIII->lb(new Label(4.5,0.25,'time','black','left','bottom'),
+            new Label(0.25,4,'distance from home','black','left','bottom'),
+            new Label ( 1,3,'(III)',$bk,'left'),);
+$graphIV->lb(new Label(10.5,0.25,'time','black','left','bottom'),
+            new Label(0.25,11,'distance from home','black','left','bottom'),
+            new Label ( 2,8,'(IV)',$bk,'left'),);
+
+BEGIN_TEXT
+
+$BR
+Which graph best matches each of the following stories? Write a story for the remaining graph.  
+$BR$BR
+\(a)\) I had just left home when I realized I had forgotten my books, and so I went back to pick them up. \{ $popupStory1->menu() \} $BR
+\(b)\) Things went fine until I had a flat tire. \{ $popupStory2->menu() \} $BR
+\(c)\) I started out calmly but sped up when I realized I was going to be late. \{ $popupStory3->menu() \} $PAR
+
+**You may click a graph to enlarge it
+
+$PAR
+
+\(I)\) \{ image(insertGraph($graphI), width=>200, height=>200) \}
+\(II)\) \{ image(insertGraph($graphII), width=>200, height=>200) \}
+\(III)\) \{ image(insertGraph($graphIII), width=>200, height=>200) \}
+\(IV)\) \{ image(insertGraph($graphIV), width=>200, height=>200) \}
+
+$BR$BR*****
+FIX PIECEWISE GRAPHS
+
+END_TEXT
+
+#ANSWERS
+ANS($popupStory1->cmp,$popupStory2->cmp,$popupStory3->cmp);
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

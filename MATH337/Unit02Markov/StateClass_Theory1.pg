@@ -1,0 +1,77 @@
+## DESCRIPTION
+##  Exponential Distribution
+## ENDDESCRIPTION
+
+## KEYWORDS('probability', 'continuous', 'exponential', 'distribution')
+## naw tagged this problem.
+
+## DBsubject('Probability')
+## DBchapter('Distributions')
+## DBsection('Exponential Distribution')
+## Date('6/27/2005')
+## Author('Jeff Holt')
+## Institution('UVA')
+## TitleText1('Statistics for Management and Economics')
+## EditionText1('6')
+## AuthorText1('Keller, Warrack')
+## Section1()
+## Problem1()
+
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"MathObjects.pl",
+"parserRadioButtons.pl",
+);
+
+$radio = RadioButtons(
+[ "The state will not be visited again.",
+"If you start in this state, there is a non-zero chance that you may not return.",
+"The state could be revisited an infinite number of times, but it is not guaranteed."
+],# correct answer
+"If you start in this state, there is a non-zero chance that you may not return.",
+);
+
+BEGIN_TEXT 
+
+Which of the following statements is equivalent (if-and-only-if) to saying a state is transient?
+$PAR
+
+\{ $radio->buttons() \}
+
+
+
+
+END_TEXT
+
+ANS($radio->cmp());
+
+BEGIN_SOLUTION
+$PAR
+$BBOLD Solution: $EBOLD
+
+$PAR 
+
+"The state will not be visited again" is tempting, but it is actually more restrictive
+than the real classification of 'transient', because you can return to
+transient states in the general case.  I.e. A state to which you never
+return is transient, but not all transient state require never
+returning.
+
+$PAR
+"The state could be revisited an infinite number of times, but it is not guaranteed" is incorrect because with the infinte limit implied,
+there will be an event where you leave the class of transient states
+you started in, so returning an infinite number of times is impossible
+if the state is transient.
+
+END_SOLUTION
+
+
+
+
+ENDDOCUMENT();       # This should be the last executable line in the problem.

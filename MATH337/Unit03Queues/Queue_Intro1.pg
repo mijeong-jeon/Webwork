@@ -1,0 +1,137 @@
+## DESCRIPTION
+## Transition probability formalism 
+## ENDDESCRIPTION
+
+## DBsubject('Probability')
+## DBchapter('Distributions')
+## DBsection('Markov Chains')
+## Date('1/21/2012')
+## Author('Alan Ableson')
+## Institution('Queens University')
+## Section1()
+## Problem1()
+
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGbasicmacros.pl",
+"PGauxiliaryFunctions.pl",
+"MathObjects.pl",
+"PGanswermacros.pl",
+"parserRadioButtons.pl",
+"contextFraction.pl",
+);
+
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+
+Context("Numeric");
+
+$s = 2; # number of servers
+$n_max = 4;  # max system state
+@P = "0" x ($n_max + 1) ; #state 0, then to n_max
+$denom = list_random( (9, 16, 25));
+
+$rem = $denom;
+$alloc = 0;
+for ($n = 0; $n < $n_max ; $n++ ) {
+    $max_num = $rem - ($n_max - $n); 
+    $P[$n] = random(1, $max_num);
+    $alloc = $alloc + $P[$n]; # current sum
+    $rem = $denom - $alloc;
+}
+$P[$n_max] = $rem; 
+
+@table_P_rows = (begintable(2));
+push(@table_P_rows, row("\(n\)", "\(P(n)\)"));
+Context("Fraction");
+for ($n = 0;  $n <= $n_max; $n++) {
+    $f = Fraction($P[$n], $denom);
+    push(@table_P_rows, row($n, $f));
+}
+push(@table_P_rows, endtable());
+
+# Compute L and Lq
+$L = 0; 
+$L_q = 0;
+$prob_wait = 0;
+for ($n = 0; $n <= $n_max; $n++) {
+    $L = $L + $n * $P[$n]/$denom;  
+    if ($n > $s) {
+       $L_q = $L_q + ($n - $s) * $P[$n]/$denom;  
+    }
+    if ($n >= $s) {
+       $prob_wait = $prob_wait + $P[$n]/$denom;
+    }
+}
+$L = Compute($L);
+$L_q = Compute($L_q);
+$prob_wait = Compute($prob_wait);
+
+
+BEGIN_TEXT
+
+$PAR 
+
+A hair salon is staffed by two stylists, Anne and Bertrand.  The salon
+has seating for customers being served, and for 2 other customers
+while they are waiting.
+
+With \(n\) defined as the number of customers in the salon, the
+probability distribution over the  states is given below.
+
+\{ $table_P_rows[0] \}
+\{ $table_P_rows[1] \}
+\{ $table_P_rows[2] \}
+\{ $table_P_rows[3] \}
+\{ $table_P_rows[4] \}
+\{ $table_P_rows[5] \}
+\{ $table_P_rows[6] \}
+\{ $table_P_rows[7] \}
+
+$PAR
+
+A.  Use the expected value definition to find \(L\) for this system.
+
+$BR 
+
+\(L\) = \{ans_rule(10)\}
+
+$PAR 
+
+B. Use the expected value definition  to find \(L_q\) for this system.
+
+$BR 
+
+\(L_q\) = \{ans_rule(10)\}
+
+$PAR
+
+C. What fraction of the time does a new customer arrive and have to
+wait before being served?
+
+$BR 
+
+Prob. of waiting before service: \{ans_rule(10)\}
+
+END_TEXT
+
+ANS($L->cmp());
+ANS($L_q->cmp());
+ANS($prob_wait->cmp());
+
+
+
+
+BEGIN_SOLUTION
+${PAR}SOLUTION:$PAR
+
+
+$PAR
+
+END_SOLUTION
+
+ENDDOCUMENT();       # This should be the last executable line in the problem.

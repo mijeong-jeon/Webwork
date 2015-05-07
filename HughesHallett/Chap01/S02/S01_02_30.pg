@@ -1,0 +1,48 @@
+#DESCRIPTION
+# Domain and range given a graph
+#ENDDESCRIPTION
+
+#KEYWORDS('exponential growth','exponential decay')
+## tagged by GH
+
+## DBsubject('Calculus')
+## DBchapter('1 A Library of Functions')
+## DBsection('1.2 Exponential Functions')
+## Problem('30')
+## Date('11/04/2012')
+## Author('Gina Hochban')
+## Institution('Queen's University')
+## TitleText1('Calculus')
+## EditionText1('5th Edition')
+## AuthorText1('Hughes-Hallett')
+
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"PGauxiliaryFunctions.pl",
+"PGgraphmacros.pl"
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+
+# assign number of years
+$year = random(1990, 2010, 2);
+
+TEXT(EV2(<<EOT));
+In the early 1960s, radioactive strontium-90 was released during atmospheric testing of nuclear weapons and got into the bones of people alive at the time. If the half-life of strontium-90 is 29 years, what fraction of the strontium-90 absorbed in 1960 remained in people's bones in $year? 
+$BR
+\{ans_rule(15)\}
+(Write answer as a fraction or as a decimal rounded to 4 decimal places). $BR
+
+EOT
+
+# answers
+ANS(fun_cmp("(1/2)^(($year-1960)/29)"));
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

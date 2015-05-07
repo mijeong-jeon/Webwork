@@ -1,0 +1,130 @@
+
+## DESCRIPTION
+## Calculus: Functions and models
+## ENDDESCRIPTION
+
+## KEYWORDS('calculus', 'differential')
+
+## DBsubject('Calculus')
+## Date('01/22/2011')
+## Author('Alan Ableson')
+## Institution('Queens University')
+
+
+## TitleText1('Calculus')
+## EditionText1('X')
+## AuthorText1('Hughes-Hallett')
+## Section1('XXX')
+## Problem1('XX')
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros("PG.pl",
+           "PGbasicmacros.pl",
+           "PGanswermacros.pl",
+"MathObjects.pl",
+"PGauxiliaryFunctions.pl");
+
+TEXT(beginproblem());
+
+$showPartialCorrectAnswers = 1;
+
+Context("Point");
+
+# function will be -y^2 - x^2, or x^2 + y^2 
+
+# define size of region
+$region_square_size = random(1, 4);
+$rss = $region_square_size;  # for short, easier use later on
+
+# Critical points
+$cp_loc = Compute("(0, 0)");
+
+# Location of global min determined by choice
+$f_choice = random(0, 1);
+if ($f_choice) {
+  $f = Compute("x^2 + y^2");
+  $global_min_loc = Compute("(0, 0)");;
+  $global_min_value = Compute("0");
+  $global_max_loc = Compute("($rss, $rss)");
+  $global_max_value = Compute("2 * $rss^2");
+} 
+else {
+  $f = Compute("-x^2 - y^2");
+  $global_max_loc = Compute("(0, 0)");;
+  $global_max_value = Compute("0");
+  $global_min_loc = Compute("($rss, $rss)");
+  $global_min_value = Compute("-2 * $rss^2");
+}
+$f_latex = $f->TeX();
+
+BEGIN_TEXT 
+
+$PAR 
+Consider the function 
+\[ f(x, y) = $f_latex \]
+$BR
+  restricted to the square \( -$rss \le x \le $rss, -$rss \le y \le $rss\).
+$PAR
+a) Find one critical point of the function \(f(x,y)\).
+$BR 
+Critical point at \((x,y)\) =  \{ans_rule(10)\}  
+$BR Note: include parentheses in your answer, e.g. (5, 7). 
+
+$PAR
+b) Identify the location and value of the global $BBOLD maximum $EBOLD of \(f(x, y)\) on the given region.  
+$BR(If there are multiple global maxima, just give one point.)
+$BR
+  \((x,y)\) location of global max: \{ans_rule(10)\}
+$BR
+Value of \(f(x,y)\) at the maximum:
+\{ans_rule(5)\}
+
+$PAR
+c) Identify the location and value of the global $BBOLD minimum $EBOLD of \(f(x, y)\) on the given region.  
+$BR(If there are multiple global minima, just give one point.)
+$BR
+  \((x,y)\) location of global minimum: \{ans_rule(10)\}
+$BR
+Value of \(f(x,y)\) at the minimum:
+\{ans_rule(5)\}
+
+$PAR
+$BBOLD ON YOUR SOLUTION SHEET $EBOLD explain clearly how you arrived at your answers.
+
+END_TEXT
+
+  #Part a) - critical point location, x and y
+ANS($cp_loc->cmp());
+
+# Part b) - global max 
+# complication is we need to check for abs(student answer), because
+# both + and - $rss will be locations of point.
+ANS( $global_max_loc->cmp(checker => sub {
+  my ( $correct, $student, $self ) = @_;
+  @student_coords = $student->value; # get coords in array
+  for ($i = 0; $i < @student_coords; $i++) {
+    $student_coords[$i] = abs($student_coords[$i]);
+  } 
+  $student = Point( "(". join(", ", @student_coords). ")");
+  return $correct == $student;
+}
+) );
+ANS($global_max_value->cmp());
+
+# Part c) - global min 
+# complication is we need to check for abs(student answer), because
+# both + and - $rss will be locations of point.
+ANS( $global_min_loc->cmp(checker => sub {
+  my ( $correct, $student, $self ) = @_;
+  @student_coords = $student->value; # get coords in array
+  for ($i = 0; $i < @student_coords; $i++) {
+    $student_coords[$i] = abs($student_coords[$i]);
+  } 
+  $student = Point( "(". join(", ", @student_coords). ")");
+  return $correct == $student;
+}
+) );
+ANS($global_min_value->cmp());
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

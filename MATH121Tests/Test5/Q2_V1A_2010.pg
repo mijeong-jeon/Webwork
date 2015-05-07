@@ -1,0 +1,139 @@
+
+## DESCRIPTION
+## Calculus: Functions and models
+## ENDDESCRIPTION
+
+## KEYWORDS('calculus', 'integration')
+## Tagged by LD
+
+## DBsubject('Calculus')
+## Date('12/05/2011')
+## Author('Alan Ableson')
+## Institution('Queen's University')
+
+
+## TitleText1('Calculus')
+## EditionText1('X')
+## AuthorText1('Hughes-Hallett')
+## Section1('XXX')
+## Problem1('XX')
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros("PG.pl",
+           "PGbasicmacros.pl",
+           "PGanswermacros.pl",
+	   "parserImplicitEquation.pl",
+	   "unorderedAnswer.pl",
+"MathObjects.pl",
+"PGauxiliaryFunctions.pl");
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+
+# Formulas for spheres
+
+Context("ImplicitEquation");
+
+$a = random(-3, 3);
+$b = random(-3, 3);
+$c = random(-3, 3);
+$R = random(1, 5);
+$R_sq = $R*$R;
+
+$i = random(0, 2); # selection of plane
+if ($i == 0) { # x = .. plane
+   $plane_txt = "yz";
+   $plane_var = "x";
+   Context()->variables->set( x=>{limits=>[-10,10]} );
+   $low = -$a - $R;
+   $high = -$a + $R;
+   $plane1 = ImplicitEquation("x = $low");
+   $plane2 = ImplicitEquation("x = $high");
+
+}
+elsif ($i == 1) { # y = .. plane
+   $plane_txt = "xz";
+   $plane_var = "y";
+   Context()->variables->are(x=>'Real', y=>'Real', z=>'Real');
+   Context()->variables->set( y=>{limits=>[-10,10]} );
+
+   $low = -$b - $R;
+   $high = -$b + $R;
+   $plane1 = ImplicitEquation("y = $low");
+   $plane2 = ImplicitEquation("y = $high");
+}
+else { # z = ... plane
+   $plane_txt = "xy";
+   $plane_var = "z";
+   Context()->variables->are(x=>'Real', y=>'Real', z=>'Real');
+   Context()->variables->set( z=>{limits=>[-10,10]} );
+
+   $low = -$c - $R;
+   $high = -$c + $R;
+   $plane1 = ImplicitEquation("z = $low");
+   $plane2 = ImplicitEquation("z = $high");
+}
+
+# Cube definition
+Context("Point");
+$xl = random(-3, 3);
+$yl = random(-3, 3);
+$zl = random(-3, 3);
+$s = 2*random(2, 4); # even numbers for simplicity
+
+$i = random(0, 1);  # choice of location of cube points
+if ($i == 0) {
+$location = "left-most";
+$p1 = Point($xl, $yl, $zl);
+$p2 = Point($xl + $s, $yl, $zl);
+$p3 = Point($xl + $s, $yl, $zl + $s);
+$p4 = Point($xl, $yl, $zl + $s);
+}
+else {
+$location = "top";
+$p1 = Point($xl, $yl+$s, $zl+$s);
+$p2 = Point($xl + $s, $yl, $zl+$s);
+$p3 = Point($xl + $s, $yl+$s, $zl + $s);
+$p4 = Point($xl, $yl, $zl + $s);
+};
+
+$center = Point($xl + $s/2, $yl + $s/2, $zl + $s/2);
+
+$ans = Compute("1");
+
+BEGIN_TEXT
+
+$PAR
+A) Consider the equation of the sphere
+\[ (x + $a)^2 + (y + $b)^2 + (z + $c)^2 = $R_sq \]
+
+Find the equations of the two planes that just touch the sphere and
+which are parallel to the \($plane_txt\)-plane.  
+
+$BR
+Plane 1:  \{ans_rule(20)\}
+$BR
+Plane 2:  \{ans_rule(20)\}
+
+$PAR 
+
+B) A cube is located such that its $location four corners have the
+coordinates $BR
+
+ \($p1\), \($p2\), \($p3\),  and \($p4\). 
+$BR Give
+the coordinates of the center of the cube.  
+$BR
+Assume the standard axes: positive x out of the page, positive y to the right, and positive z upwards.
+
+$BR Center at \( (x,y,z) \) = \{ans_rule(15)\}.
+$BR (Enter the point as "(x, y, z)", with the parentheses and commas.) 
+
+END_TEXT
+
+ANS($plane1->cmp());
+ANS($plane2->cmp());
+ANS($center->cmp);
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

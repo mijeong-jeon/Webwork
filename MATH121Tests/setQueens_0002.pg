@@ -1,0 +1,115 @@
+## DESCRIPTION
+## Calculus: Functions and models
+## ENDDESCRIPTION
+
+## KEYWORDS('limits', 'infinite', '121Test1')
+## Tagged by LD
+
+## DBsubject('Calculus')
+## DBchapter('Functions and Models')
+## DBsection('Exponential Functions')
+## Date('10/30/2011')
+## Author('Alan Ableson')
+## Institution("Queen\'s University")
+
+## TitleText1("Calculus")
+## EditionText1("5")
+## AuthorText1("Hughes-Hallett")
+## Section1("1.8")
+## Problem1("37")
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros("PG.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"MathObjects.pl",
+"Parser.pl",
+"parserPopUp.pl",
+"PGauxiliaryFunctions.pl",
+"QUpolynomialmacros.pl"
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+
+Context("Numeric");
+
+# Generate a permutation of 3 possibilities:
+# 1) higher power in numerator
+# 2) same power in numerator
+# 3) smaller power in numerator
+@perm= NchooseK(3,3);
+
+# 1st function
+## Create numerator and denominator
+$num_leading_coeff = random(2, 6, 1);
+$den_leading_coeff = random(2, 6, 1);
+$pow_den = random(2, 4, 1);
+if ($perm[0] == 0) {
+$pow_num = $pow_den + 1;
+ $ans1 = Compute("Infinity");
+}
+elsif ($perm[0] == 1) {
+$pow_num = $pow_den;
+  $ans1 = Compute("$num_leading_coeff / $den_leading_coeff");
+}
+else {
+$pow_num = $pow_den - 1;
+ $ans1 = Compute("0");
+
+}
+$num1 = Queens::CreateRandomPolynomial($pow_num, $num_leading_coeff, -5, 5);
+$den1 = Queens::CreateRandomPolynomial($pow_den, $den_leading_coeff, -5, 5);
+$func1 = Compute( $num1/$den1 );
+$func_str1 = $func1->TeX;
+
+
+# 2nd function
+## Create numerator and denominator
+$num_leading_coeff = random(2, 6, 1);
+$den_leading_coeff = random(2, 6, 1);
+$pow_den = random(2, 4, 1);
+
+if ($perm[1] == 0) {
+$pow_num = $pow_den + 1;
+ $ans2 = Compute("Infinity");
+}
+elsif ($perm[1] == 1) {
+$pow_num = $pow_den;
+  $ans2 = Compute("$num_leading_coeff / $den_leading_coeff");
+
+}
+else {
+$pow_num = $pow_den - 1;
+ $ans2 = Compute("0");
+}
+$num2 = Queens::CreateRandomPolynomial($pow_num, $num_leading_coeff, -5, 5);
+$den2 = Queens::CreateRandomPolynomial($pow_den, $den_leading_coeff, -5, 5);
+$func2 = Compute( $num2/$den2 );
+$func_str2 = $func2->TeX;
+
+BEGIN_TEXT
+
+a) Evaluate the limit
+
+\[ \lim_{ x \rightarrow \infty } $func_str1 \] 
+The limit is \{ans_rule(15) \}
+$BR
+(The answer 'inf' or 'infinity' should be used for infinite limits.)
+
+<p>
+
+b) Evaluate the limit
+
+\[ \lim_{ x \rightarrow \infty } $func_str2 \] 
+The limit is \{ans_rule(15) \}
+$BR
+(The answer 'inf' or 'infinity' should be used for infinite limits.)
+
+END_TEXT
+ANS($ans1->cmp);
+ANS($ans2->cmp);
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

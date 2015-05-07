@@ -1,0 +1,119 @@
+#DESCRIPTION
+# Logarithmic functions
+#ENDDESCRIPTION
+
+#KEYWORDS('logarithmic functions')
+## tagged by Alan Ableson
+
+## DBsubject('Calculus')
+## DBchapter('2 Key Concept - The Derivative')
+## DBsection('2.3 The Derivative Function');
+## Problem('32')
+## Date('24/09/2013')
+## Author('Alan Ableson')
+## Institution('Queen's University')
+## TitleText1('Calculus')
+## EditionText1('5th Edition')
+## AuthorText1('Hughes-Hallett')
+
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"MathObjects.pl",
+"PG.pl",
+"PGstandard.pl",
+"PGbasicmacros.pl",,
+"PGanswermacros.pl",
+"PGchoicemacros.pl",
+"PGauxiliaryFunctions.pl",
+"PGgraphmacros.pl",
+"parserPopUp.pl",
+"unionTables.pl",
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+
+$bk="black";
+
+# FEQ (Format EQuations) cleans up the writing of the functions (see FEQ in PGbasicmacros)
+# Using graphs in tables, from http://webwork.maa.org/wiki/GraphsInTables
+# define function and domain
+# Quadratic with roots at $r1 and $r2
+$r1 = random(-2, 4);
+$r2 = random(-2, 4);
+while ($r2 == $r1) { $r2 = random(-2, 4);}
+if ($r2 < $r1) { $tmp = $r2; $r2 = $r1; $r1 = $tmp; } # swap
+$p1_x = $r1-2;
+$p2_x = $r2+2;
+$w = $p2_x - $p1_x;
+
+$p1_y = 6;
+$p2_y = -6;
+
+$m = list_random(-0.25, -0.5, -0.75, 0.25, 0.5, 0.75);
+
+$A = FEQ("$m * (x-$r1)*(x-$r2) for x in <$p1_x,$p2_x> using color:$bk and weight:3");
+
+$D[0] = FEQ("$m * (2*x -($r1 + $r2))  for x in <$p1_x,$p2_x> using color:$bk and weight:3");
+$D[1] = FEQ("-$m * (x-$r1)*(x-$r2)  for x in <$p1_x,$p2_x> using color:$bk and weight:3");
+$D[2] = FEQ("-$m * (2*x -($r1 + $r2)) for x in <$p1_x,$p2_x> using color:$bk and weight:3");
+$D[3] = FEQ("2*$m  for x in <$p1_x,$p2_x> using color:$bk and weight:3");
+
+#set graph dimensions, axes 
+$graphA = init_graph($p1_x,-3,$p2_x,3,'axes'=>[0,0], grid=>[$w,6]);
+$graphD[0] = init_graph($p1_x,-3,$p2_x,3,'axes'=>[0,0], grid=>[$w,6]); 
+$graphD[1] = init_graph($p1_x,-3,$p2_x,3,'axes'=>[0,0], grid=>[$w,6]); 
+$graphD[2] = init_graph($p1_x,-3,$p2_x,3,'axes'=>[0,0], grid=>[$w,6]); 
+$graphD[3] = init_graph($p1_x,-3,$p2_x,3,'axes'=>[0,0], grid=>[$w,6]); 
+
+($RefA) = plot_functions( $graphA,$A);
+for ($i = 0; $i < 4; $i++ ) {
+  plot_functions( $graphD[$i],$D[$i]);
+  $fig[$i]=image(insertGraph($graphD[$i]),
+  width=>200,height=>200,tex_size=>450);
+}
+
+@perm = shuffle(4);
+@fig = @fig[@perm];
+@inv = invert(@perm);
+
+@letter = ("A", "B", "C", "D");
+
+$popup = PopUp(["?","A","B","C","D"], $letter[$inv[0]]);
+
+BEGIN_TEXT
+
+$BR
+Below is the graph of \(f(x)\)
+$BR
+\{ image(insertGraph($graphA), width=>200, height=>200) \}
+
+$PAR
+Now consider the following four graphs:
+$BR
+$BCENTER
+\{
+BeginTable().
+  AlignedRow([$fig[0],$fig[1]]).
+  TableSpace(5,0).
+  AlignedRow(["A","B"]).
+  TableSpace(25,6).
+  AlignedRow([$fig[2],$fig[3]]).
+  TableSpace(5,0).
+  AlignedRow(["C","D"]).
+EndTable();
+\}
+Which graph most closely matches the graph of the derivative, \(f'(x)\)?
+\{ $popup->menu() \}
+END_TEXT
+
+#ANSWERS
+
+install_problem_grader(~~&std_problem_grader);
+$showPartialCorrectAnswers = 0;
+
+ANS( $popup->cmp() );
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

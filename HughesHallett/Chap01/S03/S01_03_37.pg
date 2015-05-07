@@ -1,0 +1,85 @@
+#DESCRIPTION
+# Graph transformations and inverses
+#ENDDESCRIPTION
+
+#KEYWORDS('graphs', 'transformations', 'inverses')
+## tagged by GH
+
+## DBsubject('Calculus')
+## DBchapter('1 A Library of Functions')
+## DBsection('1.3 New Functions from Old')
+## Problem('37')
+## Date('30/04/2012')
+## Author('Gina Hochban')
+## Institution('Queen's University')
+## TitleText1('Calculus')
+## EditionText1('5th Edition')
+## AuthorText1('Hughes-Hallett')
+
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"PGauxiliaryFunctions.pl",
+"PGgraphmacros.pl"
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+
+# assign point coordinates
+$x1=random(-3,3,1);
+$y1=random(-3,3,1);
+$sign=list_random(-1,1);
+
+$bk="black";
+
+# FEQ (Format EQuations) cleans up the writing of the functions (see FEQ in PGbasicmacros)
+
+$g = FEQ("$sign*(x - ($x1))**3 + $y1 for x in <-7,7> using color:$bk and weight:2");
+
+#to set size of axes based on coordinate given
+$i1 = $x1-4;
+$i2 = $x1+4;
+$j1 = $y1-4;
+$j2 = $y1+4;
+$graphg = init_graph($i1,$j1,$i2,$j2,'axes'=>[0,0]);
+
+($fRef) = plot_functions( $graphg,$g);
+
+# add points
+$graphg->stamps( closed_circle($x1,$y1,'black'));
+
+#label axes
+$m = $i2-0.5;
+$n = $j2-0.5;
+$graphg->lb(new Label($m,0,'x','black','left','bottom'),
+            new Label(-0.25,$n,'y','black','left','bottom'));
+
+# add coord labels
+$graphg->lb( new Label($x1,$y1+0.5,"($x1,$y1)",'black','center','middle'));
+
+BEGIN_TEXT
+
+\{ image(insertGraph($graphg), width=>200, height=>200) \} 
+
+END_TEXT
+
+TEXT(EV2(<<EOT));
+$BR
+Give a possible formula for the function shown in the graph using shifts of \(x^2\) or \(x^3\). 
+$BR
+\( y=\)\{ans_rule(20)\}.
+$BR
+$BR
+**You may click on the graph to enlarge it.
+
+EOT
+
+ANS(fun_cmp("$sign(x - ($x1))^3 + $y1"));
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

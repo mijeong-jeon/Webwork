@@ -1,0 +1,75 @@
+#DESCRIPTION
+#ENDDESCRIPTION
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"MathObjects.pl",
+"PG.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"PGauxiliaryFunctions.pl",
+"parserPopUp.pl",
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+
+Context("Interval");
+
+$a = random(2, 5);
+$b = random(2, 4);
+$c = random(1, 7);
+$d = random(1, 7);
+
+$ans = Interval("(-inf, $b]");
+
+BEGIN_TEXT
+
+Find all values of the constant \(k\) such that the limit
+shown below exists.
+
+\[ \lim_{x \to \infty} \frac{$a^{k x} +  $c}{$a^{$b x} + $d} \]
+
+Write your answer in 
+\{ htmlLink( "$server_root_url" . "/webwork2_files/helpFiles/Entering-Intervals.html", "interval notation", 'target="ww_help"') \}.
+
+Values of \(k\) for which the limit exists: \{ans_rule(15)\}
+END_TEXT
+
+ANS($ans->cmp());
+
+BEGIN_SOLUTION
+
+\[
+\begin{aligned}
+\lim_{x \to \infty} \frac{$a^{kx} + $c}{$a^{$b x} + $d} & = \frac{\infty}{\infty} \mbox{ which is an indeterminate form.} \\
+\mbox{Divide top \& bottom by }$a^{$b x}: 
+& = \lim_{x \to \infty} \frac{$a^{kx}/$a^{$b x} +$c/$a^{$b x}}{1 + $d/$a^{$b x}}
+\end{aligned}
+\]
+In this new form, the denominator always approaches a single value, regardless
+of \(k\):  \[\displaystyle \lim_{x \to \infty} (1 + $d/$a^{$b x}) = 1 + 0 = 1\]
+$BR
+We are therefore more concerned with the numerator, and consider the following cases:
+$BR
+- If \(k > $b\), then \($a^{kx}/$a^{$b x} = $a^{(k-$b)x}\) will give \($a^{\mbox{\small (positive coef.)} \cdot x} \to \infty\) as \(x \to \infty\).
+$BR  Since this infinity is
+  in the numerator, the limit will continue to grow unboundedly, so
+  the limit is not finite/does not exist.
+$BR
+- If \(k = $b\) then \($a^{kx}/$a^{$b x} = $a^{$b x}/$a^{$b x} = 1\)
+$BR This gives
+  an overall limit of \(\displaystyle \frac{1}{1} = 1\) so the limit exists.
+$BR
+- If \(k < $b\) then \($a^{ $b x}/$a^{$b x}\) will give \($a^{\mbox{\small
+      (negative coef.)} \cdot x} \to 0\) as \(x \to \infty\) 
+$BR The
+  overall limit converges to \(\frac{0}{1} = 0\), so the limit exists.
+$PAR
+Thus, the limit \(\displaystyle \lim_{x \to \infty} \frac{$a^{kx} + 6}{$a^{$b x} + 4} \)
+exists if \(k \le $b\) and does $BBOLD not $EBOLD exist for \(k > $b\).
+END_SOLUTION
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

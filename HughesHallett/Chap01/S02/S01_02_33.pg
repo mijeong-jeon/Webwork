@@ -1,0 +1,149 @@
+#DESCRIPTION
+# Domain and range given a graph
+#ENDDESCRIPTION
+
+#KEYWORDS('exponential growth','exponential decay')
+## tagged by GH
+
+## DBsubject('Calculus')
+## DBchapter('1 A Library of Functions')
+## DBsection('1.2 Exponential Functions')
+## Problem('33')
+## Date('11/04/2012')
+## Author('Gina Hochban')
+## Institution('Queen's University')
+## TitleText1('Calculus')
+## EditionText1('5th Edition')
+## AuthorText1('Hughes-Hallett')
+
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros("PG.pl",
+           "PGbasicmacros.pl",
+           "PGchoicemacros.pl",
+           "PGanswermacros.pl",
+"MathObjects.pl",
+"parserPopUp.pl",
+"PGauxiliaryFunctions.pl",
+"PGgraphmacros.pl");
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+
+# Generate a linear function, an exponential, and a quadratic
+Context("Numeric");
+
+
+# Linear function: mx + b
+$m = random(0.5,2.5,0.5);
+$b = random(5,20,0.5);
+@linvals = ();
+foreach my $i ( -2, -1, 0, 1, 2 ) {
+    push( @linvals, sprintf("%.2f", Compute("$m *$i + $b")));
+}
+$functionLin = Formula("$m *x + $b");
+
+# Quadratic function, but just the increasing part
+# c(x+2+a)^2
+$c = random(0.25,3,0.25);
+$a = random(0.5, 2.5,0.5);
+@quadvals= ();
+foreach my $i ( -2, -1, 0, 1, 2 ) {
+    push( @quadvals, sprintf("%.2f", Compute("$c *($i+2+$a)^2") ));
+}
+
+# Exponential function, either increasing or decreasing
+# k * A^x
+$k = random(2,10,1);
+@bases = (1/4, 1/2, 3/4, 3/2, 5/4) ;
+$base_index = random(0, scalar(@bases)-1, 1);
+$A = $bases[$base_index];
+@expvals= ();
+foreach my $i ( -2, -1, 0, 1, 2 ) {
+    push( @expvals, sprintf("%.2f", Compute("$k * ($A^$i)") ));
+}
+$functionExp = Formula("$k*$A^(x)");
+
+# Set the random order of the 3 functions.
+@perm= NchooseK(3,3);
+@values = ();
+push(@values, [@linvals]);
+push(@values, [@quadvals]);
+push(@values, [@expvals]);
+
+# Identify the correct order of the solutions
+# linear = where perm[$i] = 0
+# exp'l = where perm[$i] = 2
+for ($i = 0; $i <= 2; $i++) {
+if ($perm[$i] == 0){  $indexLin = $i;}
+if ($perm[$i] == 2){ $indexExp = $i;}
+}
+
+#Define the drop-down lists for selecting the functions.
+@function_list= ("f(x)", "g(x)", "h(x)");
+$popupLin = PopUp([@function_list], $function_list[$indexLin]);
+$popupExp = PopUp([@function_list], $function_list[$indexExp]);
+#$popupLog = PopUp([@function_list], $function_list[$indexLog]);
+$popup = PopUp(["?", "one", "two", "three"], "three");
+
+#set graphs
+$f = FEQ("x for x in <0.5,6> using color:$bk and weight:2");
+$g = FEQ("1.44^x for x in <0.5,6> using color:$bk and weight:2");
+$h = FEQ("1.5*log(x)+0.5 for x in <1,4.5> using color:$bk and weight:2");
+
+$graphf = init_graph(0,0,7,7,'axes'=>[0,0]);
+$graphg = init_graph(0,0,7,7,'axes'=>[0,0]);
+$graphh = init_graph(1,0,5,3,'axes'=>[0,0]);
+
+($fRef) = plot_functions( $graphf,$f);
+($fRef) = plot_functions( $graphg,$g);
+($fRef) = plot_functions( $graphh,$h);
+
+
+BEGIN_TEXT
+
+Consider the table of data below, showing the values of 3 functions over a range of \(x\) values. Each function \(f\), \(g\), \(h\) is increasing, but each increases in a different way. Which of the graphs below best fits each function?
+
+$PAR
+
+$BCENTER
+\{ begintable(6) \}
+\{ row( "\(x = \)", "-2", "-1", "0", "1", "2" ) \}
+\{ row( "\(f(x) = \)",@{$values[$perm[0]]}) \}
+\{ row( "\(g(x) = \)", @{$values[$perm[1]]}) \}
+\{ row( "\(h(x) = \)", @{$values[$perm[2]]}) \}
+\{ endtable() \}
+$ECENTER
+
+$PAR
+
+$BCENTER
+(a) \{ image(insertGraph($graphf), width=>100, height=>100) \}
+
+(b) \{ image(insertGraph($graphg), width=>100, height=>100) \} 
+
+(c) \{ image(insertGraph($graphh), width=>100, height=>100) \}
+$ECENTER
+
+$PAR
+
+Which of the functions matches graph (a)?  \{ $popupLin->menu() \}
+$PAR
+
+Which of the functions matches graph (b)?  \{ $popupExp->menu() \}
+$PAR
+
+Which of the functions matches graph (c)?  \{ $popupExp->menu() \} **create this dropdown******
+$PAR
+
+
+*****UPDATE AND FIX TABLE VALUES, UPDATE DROP DOWN MENUS AND QUESTIONS. MAKE SURE INCREASING, FIX LOG******
+
+
+END_TEXT
+ANS( $popupLin->cmp() );
+ANS( $popupExp->cmp() );
+ANS( $popupExp->cmp() );
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

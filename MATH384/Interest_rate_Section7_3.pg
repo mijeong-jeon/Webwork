@@ -1,0 +1,74 @@
+##DESCRIPTION
+##  MATH 384: Theory of Interest 
+##ENDDESCRIPTION
+
+##KEYWORDS('force of interest')
+
+## DBsubject('MATH384')
+## DBchapter('Chapter 1: Interest Rate Measurement')
+## DBsection('real rate and inflation')
+## Date('8/1/2014')
+## Author('Ping Li')
+## Institution('QUEENS UNIVERSITY')
+## TitleText1('MATH 384')
+## EditionText1()
+## Section1('1.7')
+## Problem1('1')
+
+########################################################################
+
+DOCUMENT();      
+
+loadMacros(
+   "PGstandard.pl",     # Standard macros for PG language
+   "MathObjects.pl",
+   "unionTables.pl",
+
+   #"source.pl",        # allows code to be displayed on certain sites.
+   #"PGcourse.pl",      # Customization file for the course
+);
+
+
+TEXT(&beginproblem);
+
+$a=10.25;
+$b=$a+0.75;
+$i=random(1.8, 2.5,0.1);
+$j=random(2.9,3.1,0.1);
+$k=random(1.4,1.5,0.1);
+$l=random(0.9,1,0.1);
+
+
+$ans = 10.25*(1+$i/100)*(1+$j/100)*(1+$k/100)*(1+$l/100);
+&ANS(num_cmp($ans, format => '%0.2f', tol =>.01));
+$ans1 = 10.25*((1+$i/100)*(1+$j/100)*(1+$k/100)*(1+$l/100)-1);
+&ANS(num_cmp($ans1, format => '%0.2f', tol =>.01));
+
+
+
+TEXT(EV2(<<EOT));
+
+Premier Kathleen Wynne announced the 75-cent-an-hour hike this Jaunary — the first minimum wage increase in the province since 2010 — calling it a “fair adjustment” that reflects the rise in the Consumer Price Index. Based on the following data, calculate the hourly wage W in 2014 that should be. How much increase D is a ``fair adjustment''?
+
+$BR
+The minimum wage on June 1, 2010 is $DOLLAR $a, and the new minimum wage on June 1, 2014 is $DOLLAR$b.
+
+$BR
+$BCENTER
+\{begintable(5)\}
+\{row( 'Year (from June 1 to May 31)$SPACE  ', ' 2010 $SPACE ' , '$SPACE 2011$SPACE ',  '$SPACE 2012 $SPACE ', '$SPACE 2013 $SPACE ')\}
+\{row('Consumer Price Index $SPACE $SPACE  $SPACE  ','$SPACE  $i', '$SPACE $j', '$SPACE $k','$SPACE  $l')\}
+\{endtable();\}
+$ECENTER
+
+
+
+$BR
+W = $DOLLAR\{ans_rule(20)\}; D = $DOLLAR\{ans_rule(20)\}
+
+$BR
+
+EOT
+
+ENDDOCUMENT();
+

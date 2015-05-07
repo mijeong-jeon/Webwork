@@ -1,0 +1,100 @@
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"PGauxiliaryFunctions.pl",
+"MathObjects.pl",
+"parserPopUp.pl",
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+
+@graph_filenames = (
+"q_001_1.png",
+"q_001_2.png",
+"q_001_3.png",
+"q_001_4.png",
+);
+
+$ap = "Positive";
+$an = "Negative";
+$az = "Zero";
+
+$vers = random(1,4);  # Choose one of the pictures
+if ($vers == 1) {
+   @slope_sign = ($ap, $az, $an, $ap, $az, $an);
+   $big_pos_slope = 'A';
+   $big_neg_slope = 'F';
+}
+elsif ($vers == 2) {
+   @slope_sign = ($ap, $ap, $az, $an, $az, $ap);
+   $big_pos_slope = 'F';
+   $big_neg_slope = 'D';
+}
+elsif ($vers == 3) {
+   @slope_sign = ($an, $an, $ap, $ap, $az, $an);
+   $big_pos_slope = 'D';
+   $big_neg_slope = 'F';
+}
+elsif ($vers == 4) {
+   @slope_sign = ($an, $az, $ap, $an, $an, $ap);
+   $big_pos_slope = 'F';
+   $big_neg_slope = 'A';
+}
+
+@options = ($ap, $an, $az);
+$popupA = PopUp([@options], $slope_sign[0]);
+$popupB = PopUp([@options], $slope_sign[1]);
+$popupC = PopUp([@options], $slope_sign[2]);
+$popupD = PopUp([@options], $slope_sign[3]);
+$popupE = PopUp([@options], $slope_sign[4]);
+$popupF = PopUp([@options], $slope_sign[5]);
+
+@pointlist = ('A', 'B', 'C', 'D', 'E', 'F');
+
+$popup_big_slope_pos = PopUp([@pointlist], $big_pos_slope);
+$popup_big_slope_neg = PopUp([@pointlist], $big_neg_slope);
+
+BEGIN_TEXT
+
+Consider the function shown in the graph below.
+$PAR
+\{ image( $graph_filenames[$vers-1] , width=>300, height => 300, tex_size=>700) \}
+$PAR
+
+(a)For each labelled point, is the slope of the graph positive, negative or zero? 
+$BR
+A: \{ $popupA->menu() \}
+$BR
+B: \{ $popupB->menu() \}
+$BR
+C: \{ $popupC->menu() \}
+$BR
+D: \{ $popupD->menu() \}
+$BR
+E: \{ $popupE->menu() \}
+$BR
+F: \{ $popupF->menu() \}
+$BR
+(b) At which labeled point does the graph have the greatest ( i. e., most positive) slope? 
+\{ $popup_big_slope_pos->menu() \}
+$BR
+(c) At which labeled point does the graph have the least ( i. e., largest negative) slope? 
+\{ $popup_big_slope_neg->menu() \}
+END_TEXT
+
+ANS( $popupA->cmp() );
+ANS( $popupB->cmp() );
+ANS( $popupC->cmp() );
+ANS( $popupD->cmp() );
+ANS( $popupE->cmp() );
+ANS( $popupF->cmp() );
+ANS ($popup_big_slope_pos->cmp() );
+ANS ($popup_big_slope_neg->cmp() );
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.
+

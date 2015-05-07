@@ -1,0 +1,48 @@
+#DESCRIPTION
+# Domain and range given a graph
+#ENDDESCRIPTION
+
+#KEYWORDS('graphs', 'domain', 'range', 'functions')
+## tagged by GH
+
+## DBsubject('Calculus')
+## DBchapter('1 A Library of Functions')
+## DBsection('1.1 Functions and Change')
+## Problem('28')
+## Date('18/03/2012')
+## Author('Gina Hochban')
+## Institution('Queen's University')
+## TitleText1('Calculus')
+## EditionText1('5th Edition')
+## AuthorText1('Hughes-Hallett')
+
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"PGauxiliaryFunctions.pl",
+"PGgraphmacros.pl",
+"extraAnswerEvaluators.pl"
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+
+TEXT(EV2(<<EOT));
+Write a formula representing the function.
+$BR$BR
+The volume, \(V\) of a sphere is proportional to the cube of its radius, \(r\), with proportionality constant, \(k\). 
+$BR
+$BR
+ \(V\) = \{ans_rule(15)\}.
+
+EOT
+
+#ANSWERS
+ANS(fun_cmp("k*r^3", vars=>['k','r']));
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

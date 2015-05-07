@@ -1,0 +1,63 @@
+#DESCRIPTION
+# Function manipulation and transformation
+#ENDDESCRIPTION
+
+#KEYWORDS('graphs', 'domain', 'range', 'functions')
+## tagged by GH
+
+## DBsubject('Calculus')
+## DBchapter('1 A Library of Functions')
+## DBsection('1.3 New Functions From Old')
+## Problem('22')
+## Date('25/04/2012')
+## Author('Gina Hochban')
+## Institution('Queen's University')
+## TitleText1('Calculus')
+## EditionText1('5th Edition')
+## AuthorText1('Hughes-Hallett')
+
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PGstandard.pl",
+"MathObjects.pl",
+"PGchoicemacros.pl",
+"parserPopUp.pl",
+"parserNumberWithUnits.pl",
+"hhAdditionalMacros.pl",
+"PG.pl",
+"PGbasicmacros.pl",,
+"PGanswermacros.pl",
+"PGauxiliaryFunctions.pl",
+"extraAnswerEvaluators.pl"
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+
+$A=random(50,250,50);
+$m= random(50,250,50);
+
+$popupIncome = PopUp([("The minimum annual gross income, in thousands of dollars, needed to obtain a 30-year home mortgage loan of $A 000 dollars", "The size of the mortgage loan, in thousands of dollars, available with a minimum annual gross income of $A 000 dollars")], "The minimum annual gross income, in thousands of dollars, needed to obtain a 30-year home mortgage loan of $A 000 dollars");
+
+$popupMortgage = PopUp([("The minimum annual gross income, in thousands of dollars, needed to obtain a 30-year home mortgage loan of $m 000 dollars", "The size of the mortgage loan, in thousands of dollars, available with a minimum annual gross income of $m 000 dollars")], "The size of the mortgage loan, in thousands of dollars, available with a minimum annual gross income of $m 000 dollars");
+
+
+BEGIN_TEXT
+
+$BR
+Let \(m = f(A)\) be the minimum annual gross income, in thousands of dollars, needed to obtain a 30-year home mortgage loan of \(A\) thousand dollars at an interest rate of 6%. What do the following quantities represent in terms of the income needed for a loan? 
+$BR$BR
+\(a)\) \(f($A) = \) \{ $popupIncome->menu() \} $BR
+\(b)\) \(f^{-1}($m) = \) \{ $popupMortgage->menu() \}
+
+$BR$BR
+
+***** RANDOMIZE ORDER OF A) AND B)? make some options with totally wrong info?******
+END_TEXT
+
+#ANSWERS
+ANS($popupIncome->cmp, $popupMortgage->cmp);
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

@@ -1,0 +1,73 @@
+#DESCRIPTION
+# Infering derivative info from contour diagrams 
+#ENDDESCRIPTION
+
+#KEYWORDS('graphs', 'derivative', 'shape')
+## tsuda tagged and PAID on 2-20-2004
+
+## DBsubject('Calculus')
+## DBchapter('Applications of Differentiation')
+## DBsection('How Derivatives Affect the Shape of a Graph')
+## Date('6/3/2002')
+## Author('')
+## Institution('')
+## TitleText1('Calculus: Early Transcendentals')
+## EditionText1('6')
+## AuthorText1('Stewart')
+## Section1('4.3')
+## Problem1('5,6,8,29,30')
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"PGauxiliaryFunctions.pl",
+"parserPopUp.pl",
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+@s = NchooseK(5,3); # @slice might be (1, 0, 3)
+
+@statements = ('The population of people in a small village.', 
+'The age of the oldest person alive.',
+'The temperature at a measuring station within the Arctic circle.',
+'The speed of your car as you drive from home to work.',
+'The speed of your car as you collide with a brick wall.');
+
+@type = ('Not continuous', 
+'Not continuous', 
+'Continuous',
+'Continuous',
+'Not continuous');
+
+@q_statements = @statements[@s];
+@q_types = @type[@s];
+
+@options = ('Continuous', 'Not continuous');
+$popup0 = PopUp([@options], $q_types[0]);
+$popup1 = PopUp([@options], $q_types[1]);
+$popup2 = PopUp([@options], $q_types[2]);
+
+
+BEGIN_TEXT
+
+Which of the following would be best represented as continuous functions of time?
+$PAR
+(a) $q_statements[0] \{  $popup0->menu() \}
+$BR
+(b) $q_statements[1] \{    $popup1->menu() \}
+$BR
+(c) $q_statements[2] \{   $popup2->menu() \}
+
+
+END_TEXT
+
+ANS( $popup0->cmp() );
+ANS( $popup1->cmp() );
+ANS( $popup2->cmp() );
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

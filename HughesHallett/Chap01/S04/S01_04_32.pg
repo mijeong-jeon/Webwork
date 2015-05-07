@@ -1,0 +1,87 @@
+#DESCRIPTION
+# Logarithmic functions
+#ENDDESCRIPTION
+
+#KEYWORDS('logarithmic functions')
+## tagged by GH
+
+## DBsubject('Calculus')
+## DBchapter('1 A Library of Functions')
+## DBsection('1.4 Logarithmic Functions')
+## Problem('32')
+## Date('30/04/2012')
+## Author('Gina Hochban')
+## Institution('Queen's University')
+## TitleText1('Calculus')
+## EditionText1('5th Edition')
+## AuthorText1('Hughes-Hallett')
+
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PGstandard.pl",
+"MathObjects.pl",
+"PGchoicemacros.pl",
+"parserPopUp.pl",
+"parserNumberWithUnits.pl",
+"hhAdditionalMacros.pl",
+"PG.pl",
+"PGbasicmacros.pl",,
+"PGanswermacros.pl",
+"PGauxiliaryFunctions.pl",
+"PGgraphmacros.pl",
+"extraAnswerEvaluators.pl"
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+
+$popupGraphs1 = PopUp([("A", "B", "C", "D")], "D");
+$popupGraphs2 = PopUp([("A", "B", "C", "D")], "C");
+$popupGraphs3 = PopUp([("A", "B", "C", "D")], "A");
+$popupGraphs4 = PopUp([("A", "B", "C", "D")], "B");
+
+$bk="black";
+
+# FEQ (Format EQuations) cleans up the writing of the functions (see FEQ in PGbasicmacros)
+
+# define function and domain
+$A = FEQ("x^2 for x in <0,4> using color:$bk and weight:2");
+$B = FEQ("x^{1/2} for x in <0,4> using color:$bk and weight:2");
+$C = FEQ("ln(x) for x in <1,4> using color:$bk and weight:2");
+$D = FEQ("exp(x) for x in <0,4> using color:$bk and weight:2");
+
+#set graph dimensions, axes 
+$graphA = init_graph(-1,-1,4,4,'axes'=>[0,0]);
+$graphB = init_graph(-1,-1,4,4,'axes'=>[0,0]);
+$graphC = init_graph(-1,-1,4,4,'axes'=>[0,0]);
+$graphD = init_graph(-1,-1,4,4,'axes'=>[0,0]);
+
+($ARef) = plot_functions( $graphA,$A);
+($BRef) = plot_functions( $graphB,$B);
+($CRef) = plot_functions( $graphC,$C);
+($DRef) = plot_functions( $graphD,$D);
+
+BEGIN_TEXT
+
+$BR
+Without a calculator or computer, match the functions \(e^x\), \(\ln x\), \(x^2\), and \(x^{1/2}\) to their graphs. 
+$PAR
+\(a) e^x\) \{ $popupGraphs1->menu() \} $BR
+\(b) \ln x\) \{ $popupGraphs2->menu() \}$BR
+\(c) x^2\) \{ $popupGraphs3->menu() \}$BR
+\(d) x^{1/2}\) \{ $popupGraphs4->menu() \}$BR
+$PAR
+**You may click a graph to enlarge it
+$BR$BR
+\(A)\) \{ image(insertGraph($graphA), width=>200, height=>200) \}
+\(B)\) \{ image(insertGraph($graphB), width=>200, height=>200) \}
+\(C)\) \{ image(insertGraph($graphC), width=>200, height=>200) \}
+\(D)\) \{ image(insertGraph($graphD), width=>200, height=>200) \}
+END_TEXT
+
+#ANSWERS
+ANS($popupGraphs1->cmp,$popupGraphs2->cmp,$popupGraphs3->cmp,$popupGraphs4->cmp);
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

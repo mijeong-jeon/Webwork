@@ -1,0 +1,13 @@
+State	Decision	P1	P2	p3	P4
+1	Nothing	0.1	0.8	0.05	0.05
+	Maintenance	0.4	0.6	0	0
+	Replace	1	0	0	0
+2	Nothing	0	0.8	0.1	0.1
+	Maintenance	0	0.9	0.05	0.05
+	Replace	1	0	0	0
+3	Nothing	0	0	0.5	0.5
+	Maintenance	0	0	0.9	0.1
+	Replace	1	0	0	0
+4	Nothing	0	0	0	1
+	Maintenance	0	0	0	1
+	Replace	1	0	0	0

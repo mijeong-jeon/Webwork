@@ -1,0 +1,51 @@
+# Modified from problem library
+##DESCRIPTION
+##KEYWORDS('integrals', 'exponentials', 'substitution', 'substitution rule')
+##Use the substitution rule to evaluate the integral
+##ENDDESCRIPTION
+
+## DBsubject('Calculus')
+## DBchapter('Integrals')
+## DBsection('Antiderivatives')
+## Date('6/3/2002')
+## Author('')
+## Institution('')
+## TitleText1('Calculus: Early Transcendentals')
+## EditionText1('6')
+## AuthorText1('Stewart')
+## Section1('')
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"PGauxiliaryFunctions.pl",
+"parserFormulaUpToConstant.pl"
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+Context("Numeric");
+
+# Formula is e^($c x)
+# Interval is x=0..$b
+
+$b = random(1,5,1);
+$c = random(2, 5, 1);
+$f = Formula("(1/$c)* e^($c * x)");
+$answer = Formula($f->substitute(x=>$b) - $f->substitute(x=>0));
+
+TEXT(EV2(<<EOT));
+
+Evaluate the indefinite integral.
+$BR \[ \int_0^$b e^{$c x} dx \]
+$BR $BR \{ans_rule( 30) \}
+$BR
+EOT
+
+ANS($answer->cmp());
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

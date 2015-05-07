@@ -1,0 +1,53 @@
+#DESCRIPTION
+# Domain and range given a graph
+#ENDDESCRIPTION
+
+#KEYWORDS('exponential growth','exponential decay')
+## tagged by GH
+
+## DBsubject('Calculus')
+## DBchapter('1 A Library of Functions')
+## DBsection('1.2 Exponential Functions')
+## Problem('28')
+## Date('10/04/2012')
+## Author('Gina Hochban')
+## Institution('Queen's University')
+## TitleText1('Calculus')
+## EditionText1('5th Edition')
+## AuthorText1('Hughes-Hallett')
+
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"PGauxiliaryFunctions.pl",
+"PGgraphmacros.pl"
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+
+# assign elevation and rate of decay
+$rate = 0.67;
+$Aprildays = 30;
+$Annualdays = 365;
+
+TEXT(EV2(<<EOT));
+During April 2006, Zimbabwe's inflation rate averaged $rate% a day. This means that, on average, prices went up by $rate% from one day to the next.
+$PAR
+(a) By what percentage did prices in Zimbabwe increase in April of 2006? (Round answer to 2 decimal places) \{ans_rule(15)\}%.
+$BR
+(b) Assuming the same rate all year, what was Zimbabwe's annual inflation rate during 2006? (Round answer to 2 decimal places) \{ans_rule(15)\}%.
+
+EOT
+
+$ans1 = ((1+($rate/100))**($Aprildays) - 1)*100;
+$ans2 = ((1+($rate/100))**($Annualdays) - 1)*100;
+
+ANS(fun_cmp("$ans1"), fun_cmp("$ans2"));
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

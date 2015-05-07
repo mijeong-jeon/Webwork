@@ -1,0 +1,78 @@
+#DESCRIPTION
+# Domain and range given a graph
+#ENDDESCRIPTION
+
+#KEYWORDS('graphs', 'domain', 'range', 'functions')
+## tagged by GH
+
+## DBsubject('Calculus')
+## DBchapter('1 A Library of Functions')
+## DBsection('1.1 Functions and Change')
+## Problem('26')
+## Date('11/03/2012')
+## Author('Gina Hochban')
+## Institution('Queen's University')
+## TitleText1('Calculus')
+## EditionText1('5th Edition')
+## AuthorText1('Hughes-Hallett')
+
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"PGauxiliaryFunctions.pl",
+"PGgraphmacros.pl",
+"extraAnswerEvaluators.pl"
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+
+#*****RANDOMIZATION NOT IMPLEMENTED. GENERALIZE B VARIABLE (need to test if t is an integer) and REMOVE # from A variable definition.*****
+
+#$a = random(1,9,1)**2;
+
+#Fixed value of a
+$a = 6**2;
+
+$domain_1 = -$a**(1/2);
+$domain_2 = $a**(1/2);
+
+#fixed value of b
+$b = 8;
+
+$t_value = ($b**2 + $a)**(1/2);
+
+
+#for($i = 1; $i < 15; $i++){
+#   $t_value = ($i**2 + $a)**(1/2); 
+#   if(/^\d+\z/){
+#      $b=$i; #t_value is a whole number
+#   }
+#}
+
+TEXT(EV2(<<EOT));
+
+$BR
+Let \(f(t)=\sqrt{t^2-$a}\). 
+$BR$BR
+\(a)\) Find all values of \(t\) for which \(f(t)\) is a real number. 
+$BR
+\( t \epsilon \)\{ans_rule(15)\}. Write this answer in 
+\{ htmlLink( "$server_root_url" . "/webwork2_files/helpFiles/Entering-Intervals.html", "interval notation", 'target="ww_help"') \}.
+$BR$BR
+\(b)\) When \(f(t)=$b\), \(t \epsilon\) \{ans_rule(15)\}. 
+$BR
+Write this answer in set notation, e.g. if \(t = A, B, C,\) then \(t \epsilon \lbrace A,B,C \rbrace\). Write elements in ascending order. 
+
+EOT
+
+#ANSWERS
+ANS(interval_cmp("(-inf, $domain_1]U[$domain_2, inf)"));
+ANS(interval_cmp("{-$t_value, $t_value}"));
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

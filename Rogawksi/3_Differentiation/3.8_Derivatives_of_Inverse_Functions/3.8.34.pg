@@ -1,0 +1,57 @@
+DOCUMENT();
+
+loadMacros("PG.pl",
+           "PGbasicmacros.pl",
+           "PGchoicemacros.pl",
+           "PGanswermacros.pl",
+           "PGauxiliaryFunctions.pl",
+           "PGgraphmacros.pl",
+          );
+loadMacros("freemanMacros.pl");
+# Author('JustAsk!')
+
+## DBsubject('Calculus')
+## DBchapter('Differentiation')
+## DBsection('Derivatives of Inverse Trigonometric Functions')
+## KEYWORDS('calculus', 'derivatives', 'inverse functions', 'trigonometric functions', 'chain rule')
+## TitleText1('Calculus: Early Transcendentals')
+## EditionText1('2')
+## AuthorText1('Rogawski')
+## Section1('3.8')
+## Problem1('34')
+## Institution('W.H.Freeman')
+
+## Show partial correct answers
+$showPartialCorrectAnswers = 1;
+$solutionexits=1;
+
+TEXT(beginproblem());
+
+$a=random(2,15,1);
+
+$derivf="-$a*(acos($a*x)+asin($a*x))/(sqrt(1-($a*x)^2)*asin($a*x)^2)";
+
+TEXT(EV2(<<EOT));
+$BR
+Calculate the derivative of: \[ f(x)=\frac{\arccos($a x)}{\arcsin($a x)}. \] $BR
+\( f'(x) = \) \{ ans_rule() \} $BR
+EOT
+
+
+SOLUTION(EV3(<<'END_SOLUTION'));
+$BR$BBOLD Solution:$EBOLD $PAR
+Applying the quotient rule: $BR
+
+\[
+\begin{array}{rcl}
+f'(x)
+&=& \displaystyle \frac{ \arcsin($a x) \left( \arccos($a x) \right) ' - \arccos($a x) \left( \arcsin($a x) \right) ' }{\left( \arcsin($a x) \right)^2 } \\
+&=& \displaystyle \frac {\frac {-$a \arcsin($a x)}{\sqrt{1-($a x)^2}} - \frac {$a \arccos($a x)}{\sqrt{1-($a x)^2}} }{ (\arcsin($a x))^2} \\
+&=& \displaystyle \frac {-$a \left( \arcsin($a x) + \arccos($a x) \right)}{ \left( \arcsin($a x) \right)^2 \sqrt{1-($a x)^2}}
+\end{array}
+\]
+END_SOLUTION
+
+ANS(fun_cmp($derivf,limits=>[-1/$a,1/$a]));
+
+ENDDOCUMENT();

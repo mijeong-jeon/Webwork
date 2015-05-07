@@ -1,0 +1,70 @@
+
+## DESCRIPTION
+## Calculus: Functions and models
+## ENDDESCRIPTION
+
+## KEYWORDS('calculus', 'functions','implicit', 'differentiation', 'tangent line');
+## Tagged by LD
+
+## DBsubject('Calculus')
+## DBchapter('Differentiation')
+## DBsection('Implicit Differentation')
+## Date('05/23/2012')
+## Author('Alan Ableson')
+## Institution('Queen's University')
+
+
+## TitleText1('Calculus')
+## EditionText1('5')
+## AuthorText1('Hughes-Hallett')
+## Section1('3.7')
+## Problem1('23')
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros("PG.pl",
+           "PGbasicmacros.pl",
+           "PGanswermacros.pl",
+	   "MathObjects.pl",
+        "contextFraction.pl",
+	   "PGauxiliaryFunctions.pl");
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+
+Context("Numeric");
+
+# Function options
+$b = random(2, 5, 1);
+
+$I = Interval("[$b,inf)"); 
+
+BEGIN_TEXT
+
+$PAR
+Consider the function \(f(x) =  a x + \sin($b x) \), where \(a\) is a positive 
+constant.
+$PAR
+  For what range of \(a\) values is this function always increasing?
+$BR
+  \(a \in \) \{ans_rule(15)\}.  Use \{ helpLink("interval notation") \}.
+$PAR
+
+END_TEXT
+ANS( $I->cmp() );
+
+SOLUTION(EV3(<<'END_SOLUTION'));
+$BR$BBOLD Solution:$EBOLD
+$BR
+For the function to be always increasing, we note that we need
+  the derivative to be larger than zero $BBOLD or at worst equal to zero$EBOLD.  (If the derivative equals zero at separated points, but is always
+										  positive otherwise, then the function is always increasing; think of \(y = x^3\) as an example.)
+$PAR
+  The derivative will be \(f'(x) = a + $b \cos($b x)\).
+$PAR
+  The smallest value of the derivative will be \(a - $b\), so \($a \ge $b\) 
+  for the derivative to be greater than or equal to zero.  
+
+END_SOLUTION
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

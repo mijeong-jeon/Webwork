@@ -1,0 +1,14 @@
+# Problem library questions go to the wwadmin's home directory;
+# there are symlinks from there to the courses
+export COLL="Calculus"
+export SRC_DIR="."
+export TARGET_DIR="/home/wwadmin/ProblemLibrary/$COLL"
+#export SERVER="InWebworkTest"
+export SERVER="InWebwork4"
+rsync -avH --perms --exclude "*~" -e ssh $SRC_DIR/ $SERVER:$TARGET_DIR/
+ssh $SERVER 'chmod -R a+rX' $TARGET_DIR 
+
+# The macros go to 
+#export MACRO_DIR="/opt/webwork/pg/macros/"
+#rsync -arv --perms --exclude "*~" -e ssh ./macros/ $SERVER:$MACRO_DIR
+

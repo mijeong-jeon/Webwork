@@ -1,0 +1,4 @@
+
+In Test 2, Question 1 (implicit differentiation, find points where tangent line is horizontal and vertical), have:
+- no zero values for x, y coefficients, and 
+- different coeff values for x, y (to get different point matches.

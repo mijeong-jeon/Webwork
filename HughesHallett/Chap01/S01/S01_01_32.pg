@@ -1,0 +1,48 @@
+#DESCRIPTION
+# Domain and range given a graph
+#ENDDESCRIPTION
+
+#KEYWORDS('graphs', 'domain', 'range', 'functions')
+## tagged by GH
+
+## DBsubject('Calculus')
+## DBchapter('1 A Library of Functions')
+## DBsection('1.1 Functions and Change')
+## Problem('32')
+## Date('18/03/2012')
+## Author('Gina Hochban')
+## Institution('Queen's University')
+## TitleText1('Calculus')
+## EditionText1('5th Edition')
+## AuthorText1('Hughes-Hallett')
+
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"PGauxiliaryFunctions.pl",
+"PGgraphmacros.pl",
+"extraAnswerEvaluators.pl"
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+
+TEXT(EV2(<<EOT));
+Write a formula representing the function.
+$BR$BR
+The number of animal species, \(N\), of a certain body length, \(l\), is inversely proportional to the square of \(l\), with proportionality constant, \(k\). 
+$BR
+$BR
+\(N\) = \{ans_rule(15)\}.
+
+EOT
+
+#ANSWERS
+ANS(fun_cmp("k*1/(l^2)", vars=>['k','l']));
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

@@ -1,0 +1,82 @@
+## DESCRIPTION
+## Calculus: Functions and models
+## ENDDESCRIPTION
+
+## KEYWORDS('calculus', 'differential')
+
+## DBsubject('Calculus')
+## Date('01/22/2011')
+## Author('Alan Ableson')
+## Institution('Queens University')
+
+
+## TitleText1('Calculus')
+## EditionText1('X')
+## AuthorText1('Hughes-Hallett')
+## Section1('XXX')
+## Problem1('XX')
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros("PG.pl",
+           "PGbasicmacros.pl",
+           "PGanswermacros.pl",
+"MathObjects.pl",
+"PGauxiliaryFunctions.pl");
+
+TEXT(beginproblem());
+
+$showPartialCorrectAnswers = 1;
+
+# Family of functions
+Context("Numeric");
+Context()->variables->add( k => 'Real' );
+# Form of the function is kx - e^x 
+$h = Compute("k x - e^{x}");
+$h_tex = $h->TeX;
+
+# Answers
+$h0 = Compute("-1");  # h(0)
+$cp_x = Compute("ln(k)");  # x loc of critical point
+$cp_y = Compute("k ln(k) - k");  # y loc of critical point
+Context("Interval");
+Context()->variables->add( k => 'Real' );
+$h_inc = Interval("(-INF, ln(k)]");
+$h_decr = Interval("[ln(k), INF)");
+
+BEGIN_TEXT 
+
+$PAR
+Consider the family of functions 
+\[ h(x) = $h_tex \]
+  where \(k\) is a positive constant.
+$BR
+a) Find \(h(0) \):  \{ans_rule(25)\} 
+$PAR
+b) Find the \(x\) $BBOLD and $EBOLD \(y\) coordinates of the single
+  critical point of \(h(x)\).
+  $BR \(x\) = \{ans_rule(10)\},  \(y\) = \{ans_rule(10)\}
+$PAR
+c) Find the intervals on which \(h(x)\) is increasing, and those on which is it decreasing.
+$BR
+Increasing intervals: \{ans_rule(25)\} Use \{ helpLink("interval notation") \}. 
+$BR
+Decreasing intervals: \{ans_rule(25)\} 
+$PAR
+d)  $BBOLD On your solution page$EBOLD, using the information from parts (a-c), sketch two members of the family, using \(k = 1\) and \(k = e\).  Identify which graph used which \(k \) value.
+
+
+END_TEXT
+
+ANS( $h0->cmp() );
+
+ANS( $cp_x->cmp() );
+
+ANS( $cp_y->cmp() );
+
+ANS( $h_inc->cmp() );
+
+ANS( $h_decr->cmp() );
+
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

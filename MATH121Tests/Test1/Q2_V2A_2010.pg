@@ -1,0 +1,89 @@
+##DESCRIPTION
+##  Find a constant for a piecewise function
+##  that would make it continuous
+##ENDDESCRIPTION
+
+##KEYWORDS('continuity')
+## tagged by GH
+
+## DBsubject('Calculus')
+## DBchapter('Limits and Derivatives')
+## DBsection('Continuity')
+## Date('6/12/2011')
+## Author('Gina Hochban')
+## Institution('Queen\'s University')
+## TitleText1('Calculus')
+## EditionText1('')
+## AuthorText1('')
+## Section1('')
+## Problem1('')
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"MathObjects.pl",
+"PG.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"PGauxiliaryFunctions.pl",
+"Parser.pl",
+"parserPopUp.pl",
+"QUpolynomialmacros.pl"
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+
+# Part a)
+$a = random(1,9,1);
+$b = random(2,9,1);
+$ansA = Compute("($a * $b)/($a * $a)");
+
+# Part B
+# Flip a coin:
+# 1) k in the numerator
+# 2) k in the denominator
+$coin_toss = random(0, 1, 1);
+
+$pow = random(2, 4, 1);
+$num_leading_coeff = random(2, 6, 1);
+$den_leading_coeff = random(2, 6, 1);
+if ($coin_toss == 0) {
+$num = Queens::CreateRandomPolynomial($pow-1, 0, 1, 5);
+$den = Queens::CreateRandomPolynomial($pow, $den_leading_coeff, 1, 5);
+$num = "$num_leading_coeff x^{k} + " . $num->TeX;
+$den = $den->TeX;
+$ansB = Compute("(-inf, $pow]");
+}
+else {
+$num = Queens::CreateRandomPolynomial($pow, $num_leading_coeff, 1, 5);
+$den = Queens::CreateRandomPolynomial($pow-1, 0, 1, 5);
+$num = $num->TeX;
+$den = "$den_leading_coeff x^{k} +" . $den->TeX;
+$ansB = Compute("[$pow, inf)");
+}
+$func_str = "\frac{$num}{$den}";
+
+TEXT(EV2(<<EOT));
+A) Find all values of \(k \) that make the following function continuous on any interval.
+\[ f( x ) = \begin{cases}
+k{ x }^2 & x \leq $a \quad \quad \\
+$b x & x \gt $a \quad \quad 
+\end{cases}  \]
+$BR $BR \(k=\) \{ans_rule(25) \}
+$PAR
+
+B) Find all values of \(k\) for which the limit below exists.
+
+\[ \lim_{ x \rightarrow \infty } $func_str \] 
+\(k \) must be in the interval \{ans_rule(15) \}
+$BR
+Use  
+\{ htmlLink( "$server_root_url" . "/webwork2_files/helpFiles/Entering-Intervals.html", "interval notation", 'target="ww_help"') \}.
+EOT
+
+ANS(num_cmp($ansA));
+ANS($ansB->cmp);
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

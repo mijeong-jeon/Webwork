@@ -1,0 +1,84 @@
+# Modified from problem library
+##DESCRIPTION
+##KEYWORDS('integrals', 'exponentials', 'substitution', 'substitution rule')
+##Use the substitution rule to evaluate the integral
+##ENDDESCRIPTION
+
+## DBsubject('Calculus')
+## DBchapter('Integrals')
+## DBsection('Antiderivatives')
+## Date('6/3/2002')
+## Author('')
+## Institution('')
+## TitleText1('Calculus: Early Transcendentals')
+## EditionText1('6')
+## AuthorText1('Stewart')
+## Section1('')
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"PGauxiliaryFunctions.pl",
+"parserFormulaUpToConstant.pl"
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+Context("Numeric");
+
+# Formula is e^($c x)
+# Interval is x=0..$b
+$b = random(1,5,1);
+$c = random(3, 7, 1);
+$f = Formula("(1/$c)* e^($c * x)");
+$answer1 = Formula($f->substitute(x=>$b) - $f->substitute(x=>0));
+
+# Formula requiring substitution: (root(x) pm k)^n/root(x)
+$k = non_zero_random(-4, 4);
+$n = random(3, 5, 1);
+$answer2 = FormulaUpToConstant("(2/($n+1))*(sqrt(x) + $k)^($n+1)");
+
+TEXT(EV2(<<EOT));
+
+$PAR
+a) Evaluate the definite integral below.
+$BR \[ \int_0^$b e^{$c x} dx \]
+$BR $BR Integral value = \{ans_rule( 30) \}
+$BR
+
+$PAR
+b) Evaluate the indefinite integral below.
+$BR \[ \int \frac{(\sqrt{x} + $k)^$n}{\sqrt{x}} \]
+$BR $BR Integral = \{ans_rule( 30) \}
+$BR
+$BITALIC Note: $EITALIC You can type "sqrt(x)" to enter a square root of \(x\).
+
+EOT
+
+ANS($answer1->cmp());
+
+ANS($answer2->cmp());
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.
+
+
+
+TEXT(EV2(<<EOT));
+
+Evaluate the indefinite integral.
+$BR \[ \int x^$power e^{x^$a + $c} dx \]
+$BR $BR \{ans_rule( 30) \}
+$BR
+EOT
+
+# Note: the limits are added because the default interval
+# for function comparison [-2,2] has values that grow too large
+# when we have e^x^9.  Symptom: students adding +C at the end doesn't work, but
+# adding +D does work. 
+ANS($funct->with(limits=>[-1, 1])->cmp());
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

@@ -1,0 +1,58 @@
+#DESCRIPTION
+# Logarithmic functions
+#ENDDESCRIPTION
+
+#KEYWORDS('functions', 'logarithmic')
+## tagged by GH
+
+## DBsubject('Calculus')
+## DBchapter('1 A Library of Functions')
+## DBsection('1.4 Logarithmic Functions')
+## Problem('48')
+## Date('01/05/2012')
+## Author('Gina Hochban')
+## Institution('Queen's University')
+## TitleText1('Calculus')
+## EditionText1('5th Edition')
+## AuthorText1('Hughes-Hallett')
+
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PGstandard.pl",
+"MathObjects.pl",
+"PGchoicemacros.pl",
+"parserPopUp.pl",
+"parserNumberWithUnits.pl",
+"hhAdditionalMacros.pl",
+"PG.pl",
+"PGbasicmacros.pl",,
+"PGanswermacros.pl",
+"PGauxiliaryFunctions.pl",
+"extraAnswerEvaluators.pl"
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+
+#initial conditions
+$initial = list_random(90, 100, 110, 120);
+$percent = list_random(15,16,17,18,19);
+$decimal = $percent/100;
+
+BEGIN_TEXT
+
+A cup of coffee contains $initial mg of caffeine, which leaves the body at a ${BBOLD} continuous ${EBOLD} rate of $percent% per hour. 
+$PAR
+\(a)\) Write a formula for the amount, \(A\) mg, of caffeine in the body \(t\) hours after drinking a cup of coffee: \(A(t) = \) \{ans_rule(15)\}
+$BR
+\(b)\) A graph could be drawn to estimate the half-life of caffeine. Use logarithms to find the half-life of caffeine: \{ans_rule(15)\} hours
+
+
+END_TEXT
+
+#ANSWERS
+ANS(fun_cmp("$initial e^(-$decimal t)", vars=>('t')), fun_cmp(ln(1/2)/(-$decimal)));
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

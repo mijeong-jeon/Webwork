@@ -1,0 +1,92 @@
+## DESCRIPTION
+## Transition probability formalism 
+## ENDDESCRIPTION
+
+## DBsubject('Probability')
+## DBchapter('Distributions')
+## DBsection('Markov Chains')
+## Date('1/21/2012')
+## Author('Alan Ableson')
+## Institution('Queens University')
+## Section1()
+## Problem1()
+
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGbasicmacros.pl",
+"PGauxiliaryFunctions.pl",
+"MathObjects.pl",
+"PGanswermacros.pl",
+"parserRadioButtons.pl",
+"contextFraction.pl",
+);
+
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 0;
+
+Context("Numeric");
+
+$service = RadioButtons(
+["The service times are exponentially distributed.",
+"The service times are distributed as a sum of 2 exponential random variables.", 
+"The service times are distributed as a Gamma function, with shape parameter 4."],
+"The service times are distributed as a Gamma function, with shape parameter 4.");
+
+$arrival = RadioButtons(
+["The number of arrivals in a given time interval are Poisson distributed.",
+"The inter-arrival times are Erlang distributed with k=4.",
+"The inter-arrival times are Erlang distributed with k=2."],
+"The number of arrivals in a given time interval are Poisson distributed.");
+
+$state_list = RadioButtons(
+["State 0.",
+"State 0 or 1.",
+"State 0, 1 or 2.",
+"State 1 or 2."],
+"State 0 or 1.");
+
+
+BEGIN_TEXT
+
+$PAR  
+
+Consider an \(M/E_4/2\) queue model.
+
+$PAR
+A. Which of following is true of the $BBOLD service process$EBOLD?
+$BR
+\{ $service->buttons() \}
+
+$PAR
+B. Which of following is true of the $BBOLD arrival process$EBOLD?
+$BR
+\{ $arrival->buttons() \}
+
+$PAR If a new customer arrives, what state(s) would the system have to
+be in if they proceeded immediately to being serviced (i.e. no wait
+time before service begins)?
+
+$BR
+\{ $state_list->buttons() \}
+
+
+
+END_TEXT
+
+ANS($service->cmp());
+ANS($arrival->cmp());
+ANS($state_list->cmp());
+
+BEGIN_SOLUTION
+${PAR}SOLUTION:$PAR
+
+
+$PAR
+
+END_SOLUTION
+
+ENDDOCUMENT();       # This should be the last executable line in the problem.

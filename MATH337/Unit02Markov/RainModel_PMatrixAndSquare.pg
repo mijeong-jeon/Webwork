@@ -1,0 +1,138 @@
+
+## DESCRIPTION
+##  Exponential Distribution
+## ENDDESCRIPTION
+
+## KEYWORDS('probability', 'continuous', 'exponential', 'distribution')
+## naw tagged this problem.
+
+## DBsubject('Probability')
+## DBchapter('Distributions')
+## DBsection('Exponential Distribution')
+## Date('6/27/2005')
+## Author('Jeff Holt')
+## Institution('UVA')
+## TitleText1('Statistics for Management and Economics')
+## EditionText1('6')
+## AuthorText1('Keller, Warrack')
+## Section1()
+## Problem1()
+
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"PGnumericalmacros.pl",
+"PGstatisticsmacros.pl",
+"MathObjects.pl",
+"PGauxiliaryFunctions.pl"
+);
+
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+
+$table_start = begintable(3);
+$table_row1 = row("t \ t+1", "Sun", "Rain");
+$table_row2 = row("Sun", ans_rule(5), ans_rule(5));
+$table_row3 = row("Rain", ans_rule(5), ans_rule(5));
+$table_end = endtable();
+
+Context()->variables->add(a => 'Real');
+Context()->variables->add(b => 'Real');
+$p_ss = Compute("1-a");
+$p_sr = Compute("a");
+$p_rs = Compute("b");
+$p_rr = Compute("1-b");
+
+# *** Two-step 
+$table2_start = begintable(3);
+$table2_row1 = row("t \ t+1", "Sun", "Rain");
+$table2_row2 = row("Sun", ans_rule(15), ans_rule(15));
+$table2_row3 = row("Rain", ans_rule(15), ans_rule(15));
+$table2_end = endtable();
+
+$p2_ss = Compute("(1-a)^2 + ab");
+$p2_sr = Compute("a(1-a)+a(1-b)");
+$p2_rs = Compute("b(1-a)+b(1-b)");
+$p2_rr = Compute("ab + (1-b)^2");
+
+# Third part: 'a' set, minimize p2_rr
+$a_value = random(0.1, 0.9, 0.1);  
+# critical point at 2b + (a-2) = 0, or
+# b = (a-2)/2
+$b_value = Compute("(2-$a_value)/2");
+
+
+BEGIN_TEXT 
+
+Consider a Markov chain model for the weather, where $BR
+- given it is sunny on day \(t\), it rains on day \(t+1\) with probability \(a\), and  $BR
+- given it rained on day \(t\), it is sunny on day \(t+1\) with probability \(b\)  $BR
+Assume that rain and sunny are the only two possible states on a given day.
+
+$PAR 
+A)  Construct the transition probability matrix \(P\) for this system.  Use
+only the symbols \(a\), \(b\) and real numbers. 
+$PAR
+$table_start
+$table_row1
+$table_row2
+$table_row3
+$table_end
+
+$PAR 
+
+B) Find the 2-step transition probability matrix.  I.e.  the entry in
+Rain-Rain in the table below should be the probability that
+it is raining exactly two days from now, if it is raining today.
+$PAR
+$table2_start
+$table2_row1
+$table2_row2
+$table2_row3
+$table2_end
+
+$PAR
+C) For this part, assume that \(a = $a_value\).  For what
+value of \(b\) is the $BBOLD two$EBOLD-step probability of a
+Rain-to-Rain transition $BBOLD minimized$EBOLD?
+
+$BR
+Optimal \(b\) = \{ans_rule(10)\}
+
+END_TEXT
+
+ANS($p_ss->cmp());
+ANS($p_sr->cmp());
+ANS($p_rs->cmp());
+ANS($p_rr->cmp());
+
+ANS($p2_ss->cmp());
+ANS($p2_sr->cmp());
+ANS($p2_rs->cmp());
+ANS($p2_rr->cmp());
+
+ANS($b_value->cmp());
+
+BEGIN_SOLUTION
+${PAR}$BBOLD SOLUTION: $EBOLD $PAR
+A.  The entries for Sun-to-Rain, and Rain-to-Sun are given (\(a\) and \(b\)). 
+Since each $BBOLD row $EBOLD must sum to 1, the remaining values must be \(1-a\) and \(1-b\).
+$PAR
+B. The two-step transition probabilities are computed by finding the
+values in \(P^2\). 
+$PAR
+C. The Rain-to-Rain two-step transition probability, from \(P^2\), was 
+\(ab + (1-b)^2\).  Taking the derivative and setting it equal to zero 
+will  produce the optimal \(b\) value.
+
+
+END_SOLUTION
+
+
+ENDDOCUMENT();       # This should be the last executable line in the problem.

@@ -1,0 +1,58 @@
+#DESCRIPTION
+# Logarithmic functions
+#ENDDESCRIPTION
+
+#KEYWORDS('logarithmic', 'functions')
+## tagged by GH
+
+## DBsubject('Calculus')
+## DBchapter('1 A Library of Functions')
+## DBsection('1.4 Logarithmic Functions')
+## Problem('53')
+## Date('01/05/2012')
+## Author('Gina Hochban')
+## Institution('Queen's University')
+## TitleText1('Calculus')
+## EditionText1('5th Edition')
+## AuthorText1('Hughes-Hallett')
+
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PGstandard.pl",
+"MathObjects.pl",
+"PGchoicemacros.pl",
+"parserPopUp.pl",
+"parserNumberWithUnits.pl",
+"hhAdditionalMacros.pl",
+"PG.pl",
+"PGbasicmacros.pl",,
+"PGanswermacros.pl",
+"PGauxiliaryFunctions.pl",
+"extraAnswerEvaluators.pl"
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+
+$present_year = 2012;
+$age = $present_year - 1675;
+$percent_left = ((1/2)**($age/5730))*100;
+
+$popupFake = PopUp([("Real", "Fake", "Not enough data to tell")], "Fake");
+
+BEGIN_TEXT
+
+A picture supposedly painted by Vermeer (1632-1675) contains 99.5% of its carbon-14 (half-life 5730 years).
+$PAR
+\(a)\) What percentage of the painting's original carbon would be left today if the picture had been created in 1675? \{ans_rule(15)\}%
+$BR
+\(b)\) From this information, decide whether the picture is a fake.  \{ $popupFake->menu() \} 
+
+END_TEXT
+
+#ANSWERS
+ANS(fun_cmp($percent_left), $popupFake->cmp);
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

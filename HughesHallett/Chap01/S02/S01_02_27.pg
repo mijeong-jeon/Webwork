@@ -1,0 +1,48 @@
+#DESCRIPTION
+# Domain and range given a graph
+#ENDDESCRIPTION
+
+#KEYWORDS('exponential growth','exponential decay')
+## tagged by GH
+
+## DBsubject('Calculus')
+## DBchapter('1 A Library of Functions')
+## DBsection('1.2 Exponential Functions')
+## Problem('27')
+## Date('10/04/2012')
+## Author('Gina Hochban')
+## Institution('Queen's University')
+## TitleText1('Calculus')
+## EditionText1('5th Edition')
+## AuthorText1('Hughes-Hallett')
+
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"PGauxiliaryFunctions.pl",
+"PGgraphmacros.pl"
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+
+# assign elevation and rate of decay
+$elevation = 7340;
+$rate = 0.4;
+
+TEXT(EV2(<<EOT));
+When the Olympic Games were held outside Mexico City in 1968, there was much discussion about the effect the high altitude ($elevation feet) would have on the athletes. Assuming air pressure decays exponentially by $rate % every 100 feet, by what percentage is air pressure reduced by moving from sea level to Mexico City? \{ans_rule(15)\}%.
+$BR
+$BR
+
+EOT
+
+$ans = (1 - (1- ($rate/100))**($elevation/100))*100;
+ANS(fun_cmp("$ans"));
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

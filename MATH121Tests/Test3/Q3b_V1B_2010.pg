@@ -1,0 +1,54 @@
+# Modified from problem library
+##DESCRIPTION
+##KEYWORDS('integrals', 'exponentials', 'parts')
+##Use integration by parts to evaluate the integral
+##ENDDESCRIPTION
+
+## DBsubject('Calculus')
+## DBchapter('Integrals')
+## DBsection('The Substitution Rule')
+## Date('6/3/2002')
+## Author('')
+## Institution('')
+## TitleText1('Calculus: Early Transcendentals')
+## EditionText1('6')
+## AuthorText1('Stewart')
+## Section1('5.5')
+## Problem1('6,27,28,32,58')
+## TitleText2('Calculus: Early Transcendentals')
+## EditionText2('1')
+## AuthorText2('Rogawski')
+## Section2('5.7')
+## Problem2('49')
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"PGauxiliaryFunctions.pl",
+"parserFormulaUpToConstant.pl"
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+
+$a = random(2, 5,1);
+$c = random(1, 4, 1);
+# Integrand is  (x e^(ax + c))
+# Integral is (x/a) e^(ax + c) - (1/a^2) e^(ax + c)
+$funct = FormulaUpToConstant("(x/$a)* e^($a x + $c)- (1/$a)^2 e^($a x + $c)");
+
+TEXT(EV2(<<EOT));
+
+Evaluate the indefinite integral.
+$BR \[ \int x  e^{$a  x + $c} dx \]
+$BR $BR \{ans_rule( 30) \}
+$BR
+EOT
+
+ANS($funct->cmp());
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

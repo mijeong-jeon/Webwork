@@ -1,0 +1,336 @@
+## DESCRIPTION
+## Operations Research / Linear Algebra
+## ENDDESCRIPTION
+
+## KEYWORDS('steady state', 'eigenvalues' 'eigenvectors')
+## Tagged by aableson
+
+## DBsubject('Linear Algebra')
+## DBchapter('Matrices')
+## DBsection('Eigenvalues')
+## Date('')
+## Author('')
+## Institution('Queens')
+## TitleText1('')
+## EditionText1('')
+## AuthorText1('')
+## Section1('')
+## Problem1('')
+
+DOCUMENT();        # This should be the first executable line in the problem.
+loadMacros(
+        "PGbasicmacros.pl",
+        "PGanswermacros.pl",
+        "PGmatrixmacros.pl",
+	"parserPopUp.pl",
+	"parserMultiAnswer.pl",
+	"MathObjects.pl",
+	"unionLists.pl",
+	"PGauxiliaryFunctions.pl",
+	"QUpolynomialmacros.pl",
+        );
+
+TEXT(beginproblem());    
+Context("Numeric");
+$showPartialCorrectAnswers = 1;
+
+
+# Randomly set the global re-order strategy
+$max_state = random(8, 10);
+@reorder_amt = 0 x ($max_state + 1);
+for ($s = 0; $s < ($max_state + 1); $s++) {
+  $reorder_amt[$s] = random(min(2, $max_state-$s), $max_state-$s);
+}
+# Make sure it's not an s/S policy: look for a new re-order for the first entry
+while ( ($low_state + $reorder_amt[0]) == ($low_state + 1 + $reorder_amt[1])) {
+  $s = $low_state;   
+  $reorder_amt[0] = random(0, $max_state-$s);
+}
+
+# Set the mean demand
+$mean_demand = random(2, 6, 0.1);
+
+# Construct the P matrix
+$P = (new Matrix($max_state+1, $max_state+1))->clone();  
+for ($s = 0; $s <= $max_state; $s++) { 
+    $cum_pdf = 0;  
+    for ($s_np1 = 1; $s_np1 <= $max_state; $s_np1++) {  # s_(n+1)
+      # Fill in states 1...n with Poisson PDF
+      $a = $reorder_amt[$s]; # reorder amt
+      $pre_demand_s = $s + $a;
+      $d = $pre_demand_s - $s_np1;  # new s = old_s - demand, so dem - old_s - new_s
+      if ($d >= 0) {
+        $p = (exp(-$mean_demand)*$mean_demand**$d)/fact($d); # Poisson prob
+        $P->assign($s+1, $s_np1 + 1, $p); # Store the probability
+        $cum_pdf = $cum_pdf + $p; 
+      }
+      else {
+        $P->assign($s+1, $s_np1 + 1, 0); # zero prob of negative demand
+      }
+    }
+    # Fill in states 0, which is 1 - (P (states > 1)
+    $P->assign($s+1, 1, 1 - $cum_pdf); 
+}
+
+# We know that lambda=1 is an eigenvalue for P transtion prob. matrix
+# We just need to find the corresponding eigenvector and normalize it
+# so the sum is 1.
+$I = (new Matrix($max_state + 1, $max_state + 1))->clone();
+for ($s = 0; $s <= $max_state; $s++) {
+  $I->assign($s+1, $s+1, 1);
+}
+$Pt_minus_I = (~$P) - $I;
+$LR = $Pt_minus_I->decompose_LR();
+$L = $LR->L();
+$R = $LR->R();
+$PR = $LR->PR();
+$PL = $LR->PL();
+#$newA = $PL * $L * $R * $PR;  # check: should equal Pt - I
+
+# Solve for eigenvalue:   L has det ne 0, but R has det = 0
+# (PL L R PR) v  = [0] can be reduced by inverses to
+#   R PR v = [0]
+#   Let y = PR v, so 
+#   R y = [0]
+#   This can be solved by backsubstitution; 
+#  Since P has one eigenvalue of 1, there is one zero in the
+#  diagonal of R, in the last element in diag(R).
+$y = (new Matrix($max_state + 1, 1))->clone();
+$y->assign($max_state + 1, 1 , 1);
+for ($s = $max_state-1; $s >= 0; $s--) {
+  $r = $R->row($s+1); 
+  # $y's last relevant entry is zero, so $r * $y gives the value of  
+  $comb = $r * $y;  # matrix mult
+  $comb = $comb->element(1,1);  # matrix mult
+  $y->assign($s+1, 1, -1 * $comb/$R->element($s+1, $s+1));  # matrix mult
+}
+#  y = PR v, so (PR_inv y) = v.  
+# NOTE: PR is orthogonal, so ~PR (transpose) = PR inverse 
+$ss_prob = (~$PR) * $y;
+
+# Verify eigenvector status: Should satisfy Pt v = v
+#$eigv_check = ((~$P) * $v) - $v;
+
+# Normalize the eigenvector: sum of probabilities = 1
+$sum = 0; 
+for ($s = 0; $s <= $max_state; $s++)  {
+  $sum = $sum + $ss_prob->element($s+1, 1); 
+}
+for ($s = 0; $s <= $max_state; $s++)  {
+  $ss_prob->assign($s+1, 1, $ss_prob->element($s+1, 1)/$sum); 
+}
+
+# Define a subset of P to be entered
+$r = random(0, 3);
+$c = random(0, 3);
+$P_r1 = MultiAnswer($P->element($r+1, $c+1),  
+$P->element($r+1, $c+2),  
+$P->element($r+1, $c+3))->with(
+  singleResult => 1,
+  checker => sub {
+    my ($correct, $student, $self) = @_;
+      my @correct = @{$correct};
+      my @student = @{$student};
+my $i;
+for ($i = 0; $i < @student; $i++) {
+  if (!defined($student[$i]) || abs($student[$i] - $correct[$i]) > 1e-3) {
+return 0
+}
+}
+return 1;});
+$P_r2 = MultiAnswer($P->element($r+2, $c+1),  
+$P->element($r+2, $c+2),  
+$P->element($r+2, $c+3))->with(
+  singleResult => 1,
+  checker => sub {
+    my ($correct, $student, $self) = @_;
+      my @correct = @{$correct};
+      my @student = @{$student};
+my $i;
+for ($i = 0; $i < @student; $i++) {
+  if (!defined($student[$i]) || $student[$i] != Compute($correct[$i])) {
+return 0
+}
+}
+return 1;});
+$P_r3 = MultiAnswer($P->element($r+3, $c+1),  
+$P->element($r+3, $c+2),  
+$P->element($r+3, $c+3))->with(
+  singleResult => 1,
+  checker => sub {
+    my ($correct, $student, $self) = @_;
+      my @correct = @{$correct};
+      my @student = @{$student};
+my $i;
+for ($i = 0; $i < @student; $i++) {
+  if (!defined($student[$i]) || $student[$i] != Compute($correct[$i])) {
+return 0
+}
+}
+return 1;});
+
+# Subset of the steady-state distribution
+$ss = random(0, 2);
+$SS_ans = MultiAnswer($ss_prob->element($ss+1, 1),  
+$ss_prob->element($ss+2, 1),
+$ss_prob->element($ss+3, 1),
+$ss_prob->element($ss+4, 1))->with(
+  singleResult => 1,
+  checker => sub {
+    my ($correct, $student, $self) = @_;
+      my @correct = @{$correct};
+      my @student = @{$student};
+my $i;
+for ($i = 0; $i < @student; $i++) {
+  if (!defined($student[$i]) || abs($student[$i] - $correct[$i]) > 1e-3) {
+return 0
+}
+}
+return 1;});
+
+# Random cost elements
+$order_fixed = random(80, 120, 10);
+$order_per_unit = random(30, 60, 10);
+$inventory = random(10, 60, 5);
+$unmet_demand = random(10, 60, 5);
+
+
+# Expected cost for the policy, per day, for each state
+$total_expected_cost = 0;
+$expected_cost = (0) x ($max_state + 1); 
+for ($s = 0; $s <= $max_state; $s++) {
+  $a = $reorder_amt[$s];
+  if ($a > 0) {
+    $order_cost = $order_fixed + $a * $order_per_unit;
+  }
+  else {
+    $order_cost = 0;
+  }
+  $inventory_cost = $inventory * ($s + $a);
+  $unmet_demand_cost = 0;
+  for ($d = 0; $d < 100; $d++) {
+    $ud = max($d- ($s + $a), 0);
+    $p = (exp(-$mean_demand)*$mean_demand**$d)/fact($d); # Poisson prob   
+    $unmet_demand_cost = $unmet_demand_cost + $unmet_demand * $ud * $p ;
+  }
+  $expected_cost[$s] = $order_cost + $inventory_cost + $unmet_demand_cost;
+
+  $total_expected_cost = $total_expected_cost + $expected_cost[$s] * $ss_prob->element($s+1, 1);
+}
+
+# Window into expected cost
+$scost = random(0, 2);
+$SCost_ans = MultiAnswer(
+$expected_cost[$scost], 
+$expected_cost[$scost+1], 
+$expected_cost[$scost+2])->with(
+  singleResult => 1,
+  checker => sub {
+    my ($correct, $student, $self) = @_;
+      my @correct = @{$correct};
+      my @student = @{$student};
+my $i;
+for ($i = 0; $i < @student; $i++) { # absolute tolerance: $0.5 or 50 cents
+  if (!defined($student[$i]) || abs($student[$i] - $correct[$i]) > 0.5) {
+return 0
+}
+}
+return 1;});
+
+BEGIN_TEXT
+
+Consider the CN rail repair centre problem, where train axles are
+stocked in case replacements are needed for damaged rail cars. A handout summary of the scenario is available on Moodle or at $BR
+http://www.mast.queensu.ca/~math337/Handouts/Unit05_CNRailInventory.pdf
+
+$PAR
+For your particular scenario, 
+
+\{BeginList("UL") \}
+$ITEM A maximum of \{$max_state\} axles can be stored in the yard at any point during the day. 
+$ITEM The mean demand is \{$mean_demand\} axles per day. 
+$ITEM It costs $DOLLAR$order_fixed to place an order, and $DOLLAR$order_per_unit more per axle ordered. 
+$ITEM Storage costs are $DOLLAR$inventory per day per axle (based on number of axles present $BITALIC after$EITALIC the day's order arrives).
+$ITEM Each axle required but without sufficient inventory to cover it that day (unmet demand) costs $DOLLAR$unmet_demand.
+\{EndList("UL") \}
+
+$PAR 
+Consider the following re-ordering strategy:
+\{begintable(2)\}
+\{row("State, \(s_n\)", 0..$max_state) \}
+\{row("Action, \(a_n\)", @reorder_amt) \}
+\{endtable()\}
+
+$PAR Note: this re-order policy is deliberately $BBOLD not$EBOLD as simple as
+a  \((\sigma, \Sigma)\) (safe level, order-to level) policy.  
+
+$PAR 
+A) Based on the re-ordering policy and the mean demand, the one-step transition probability matrix \(P\) is defined.  Complete the following sub-set of the
+\(P\) matrix:
+
+\{begintable(4)\}
+\{ row( "\(s_n \backslash s_{n+1}\)", $c..($c+2)) \}
+\{ row( $r, $P_r1->ans_rule(6), $P_r1->ans_rule(6), $P_r1->ans_rule(6)) \}
+\{ row( $r+1, $P_r2->ans_rule(6), $P_r2->ans_rule(6), $P_r2->ans_rule(6)) \}
+\{ row( $r+2, $P_r3->ans_rule(6), $P_r3->ans_rule(6), $P_r3->ans_rule(6)) \}
+\{endtable \}
+
+
+$PAR B) Compute the steady-state probability distribution, given the
+re-ordering policy provided.
+
+$BR Enter the particular values of the steady-state probability distribution below.
+\{begintable(5)\}
+\{ row( "\(s\)", ($ss)..($ss+3) ) \} 
+\{ row( "\(\pi_{s}\)", $SS_ans->ans_rule(6),$SS_ans->ans_rule(6),$SS_ans->ans_rule(6),   $SS_ans->ans_rule(6))\}
+\{endtable \}
+
+$PAR 
+
+C) Find the expected cost for each day the system is in the following
+states:
+\{begintable(5)\}
+\{ row( "\(s\)", $scost, $scost+1, $scost+2   ) \} 
+\{ row( "Cost/day of being in state \( s \)", $SCost_ans->ans_rule(6),
+$SCost_ans->ans_rule(6),$SCost_ans->ans_rule(6) )\}
+\{endtable \}
+
+Note: the three costs you need to model for each state are:
+\{BeginList("UL") \}
+$ITEM the ordering cost (total of fixed and variable) for each state, given the ordering policy, 
+$ITEM the inventory cost of having \(s + a\) as the inventory level for the day, and
+$ITEM the $BBOLD expected $EBOLD cost of unmet demand, which
+will require computing the sum over the Poisson distributed demand, \(d\), $BR 
+\(\sum_{d=0}^\infty \mbox{UnmetDemand}(d; s, a(s)) P(d) \)
+\{EndList("UL") \}
+
+$PAR 
+
+D) Find the average expected cost per day of running your system with
+the policy provided.
+
+$BR
+Total expected cost per day: $\{ans_rule(10)\}
+
+END_TEXT
+
+# Check answers
+ANS( $P_r1->cmp() );
+ANS( $P_r2->cmp() );
+ANS( $P_r3->cmp() );
+
+ANS( $SS_ans->cmp() );
+
+ANS( $SCost_ans->cmp() );
+
+ANS( num_cmp($total_expected_cost, tol => 15, tolType => "absolute"));
+
+BEGIN_SOLUTION
+$BR $BBOLD SOLUTION:$EBOLD
+$BR
+
+
+END_SOLUTION
+
+
+ENDDOCUMENT();       # This should be the last executable line in the problem.

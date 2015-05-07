@@ -1,0 +1,84 @@
+## DESCRIPTION
+## Calculus: Functions and models
+## ENDDESCRIPTION
+
+## KEYWORDS('calculus', 'differential')
+
+## DBsubject('Calculus')
+## Date('01/22/2011')
+## Author('Alan Ableson')
+## Institution('Queens University')
+
+
+## TitleText1('Calculus')
+## EditionText1('X')
+## AuthorText1('Hughes-Hallett')
+## Section1('XXX')
+## Problem1('XX')
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros("PG.pl",
+           "PGbasicmacros.pl",
+           "PGanswermacros.pl",
+"MathObjects.pl",
+"PGauxiliaryFunctions.pl");
+
+TEXT(beginproblem());
+
+$showPartialCorrectAnswers = 1;
+
+# Linearization, and extensions
+Context("Numeric");
+
+$f = Compute("e^{-x}");
+$f_tex = $f->TeX;
+$g = Compute("e^{-2x}");
+$g_tex = $g->TeX;
+
+# Create the linear approximation to f
+$f_x = $f->D('x');
+$f_0 = $f->eval(x=>0);
+$f_x0 = $f_x->eval(x=>0);
+$f_lin = Compute("$f_0 + $f_x0 x");
+$f_lin = $f_lin->reduce();
+
+# Compute the square of the linear approximation to f
+$f_lin_sq = Compute("$f_lin^2");
+
+# Compute the quadratic approximation to g
+$g_x = $g->D('x');
+$g_xx = $g_x->D('x');
+$g_0 = $g->eval(x=>0);
+$g_x0 = $g_x->eval(x=>0);
+$g_xx0 = $g_xx->eval(x=>0);
+$g_quad_deriv = $g_x0;
+
+BEGIN_TEXT 
+
+$PAR
+a) Find the formula for the local linearization of \( f(x) = $f_tex \) around \( x = 0\). 
+$BR
+\(f(x) \approx \) \{ans_rule(25)\} 
+
+$PAR
+b) Use your answer from part (a) to find an approximation for \( g(x) =  $g_tex \)
+$BR
+\(g(x) \approx \) \{ans_rule(25)\} 
+
+$PAR
+c) Referring only to your previous answer, find the derivative of \(g(x) = $g_tex\) at \(x=0\). 
+$BR
+\(g'(0) = \) \{ans_rule(25)\} 
+
+
+END_TEXT
+
+ANS( $f_lin->cmp() );
+
+ANS( $f_lin_sq->cmp() );
+
+ANS( $g_quad_deriv->cmp() );
+
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

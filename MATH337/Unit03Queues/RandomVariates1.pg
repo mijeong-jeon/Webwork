@@ -1,0 +1,111 @@
+## DESCRIPTION
+## Transition probability formalism 
+## ENDDESCRIPTION
+
+## DBsubject('Probability')
+## DBchapter('Distributions')
+## DBsection('Markov Chains')
+## Date('1/21/2012')
+## Author('Alan Ableson')
+## Institution('Queens University')
+## Section1()
+## Problem1()
+
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGbasicmacros.pl",
+"PGauxiliaryFunctions.pl",
+"MathObjects.pl",
+"PGanswermacros.pl",
+"parserRadioButtons.pl",
+"contextFraction.pl",
+);
+
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+
+Context("Numeric");
+Context()->flags->set(
+  tolerance => 0.001,
+  tolType => "relative",
+);
+
+@U_list = (0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9);
+@Erlang_mean_list = (0.6, 0.9, 1.5, 4.2);
+
+$U_index = random(0, scalar(@U_list)-1);
+$E_index = random(0, scalar(@Erlang_mean_list)-1);
+
+$M = Matrix([2.204130656499e-001, 3.070088405289e-001, 3.827551588254e-001, 4.570153808007e-001, 5.348120627447e-001, 6.210757194527e-001, 7.231135331732e-001, 8.558059720251e-001, 1.064464067567e+000],
+[3.306195984748e-001, 4.605132607934e-001, 5.741327382381e-001, 6.855230712010e-001, 8.022180941171e-001, 9.316135791790e-001, 1.084670299760e+000, 1.283708958038e+000, 1.596696101350e+000],
+[5.510326641247e-001, 7.675221013223e-001, 9.568878970635e-001, 1.142538452002e+000, 1.337030156862e+000, 1.552689298632e+000, 1.807783832933e+000, 2.139514930063e+000, 2.661160168917e+000],
+[1.542891459549e+000, 2.149061883703e+000, 2.679286111778e+000, 3.199107665605e+000, 3.743684439213e+000, 4.347530036169e+000, 5.061794732212e+000, 5.990641804175e+000, 7.451248472968e+000]);
+
+$U = $U_list[$U_index];
+$E_mean = $Erlang_mean_list[$E_index];
+$E_answer = Compute($M->element($E_index+1, $U_index+1));
+
+# Compute the actual values we need
+$exp_mean_or_rate = list_random(0.5, 0.8, 1.2, 2.5);
+
+if (random(0, 1)) {
+$exp_mean_or_rate_text = "mean";
+$exp_answer = Compute("-ln(1-$U)*$exp_mean_or_rate");
+} 
+else {
+$exp_mean_or_rate_text = "rate parameter";
+$exp_answer = Compute("-ln(1-$U)/$exp_mean_or_rate");
+}
+
+BEGIN_TEXT
+
+$PAR
+
+Imagine that a $BBOLD uniform random number generator $EBOLD
+produced the value
+$BR
+\(p = $U\)
+$BR
+
+Using the $BBOLD inverse transformation method$EBOLD for
+generating random variates, find the resulting 
+$PAR
+A) $BBOLD exponential $EBOLD random variate, given a \{$exp_mean_or_rate_text\} of \{$exp_mean_or_rate\}.
+$BR
+Exponential variate: \{ ans_rule(15)\}  (include at least 4 sig figs)
+
+$PAR
+B) $BBOLD Erlang \(E_3\) $EBOLD random variate, given the distribution has a mean of $E_mean.
+$BR
+Erlang variate: \{ ans_rule(15)\}  (include at least 4 sig figs)
+
+END_TEXT
+
+ANS($exp_answer->cmp());
+ANS($E_answer->cmp());
+
+
+BEGIN_SOLUTION
+${PAR}SOLUTION:$PAR
+
+$PAR
+A) For the exponential distribution, you can use either an inverse
+gamma with \(k=1\), or the inverse formula \(x = f(p)\) derived from
+the exponential CDF.
+
+$PAR 
+
+B) This value can be computed using the inverse gamma distribution in
+Excel, R or MATLAB.  Just check how you are computing the second
+parameter for those distributions, which is $BBOLD not $EBOLD the mean
+of the gamma distribution itself (but closely related to the mean).
+
+$PAR
+
+END_SOLUTION
+
+ENDDOCUMENT();       # This should be the last executable line in the problem.

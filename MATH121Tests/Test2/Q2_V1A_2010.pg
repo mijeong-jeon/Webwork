@@ -1,0 +1,83 @@
+## DESCRIPTION
+## Calculus: Functions and models
+## ENDDESCRIPTION
+
+## KEYWORDS('calculus', 'differential')
+
+## DBsubject('Calculus')
+## Date('01/22/2011')
+## Author('Alan Ableson')
+## Institution('Queens University')
+
+
+## TitleText1('Calculus')
+## EditionText1('X')
+## AuthorText1('Hughes-Hallett')
+## Section1('XXX')
+## Problem1('XX')
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros("PG.pl",
+           "PGbasicmacros.pl",
+           "PGanswermacros.pl",
+"MathObjects.pl",
+"PGauxiliaryFunctions.pl");
+
+TEXT(beginproblem());
+
+$showPartialCorrectAnswers = 1;
+
+# Family of functions
+Context("Numeric");
+Context()->variables->add( k => 'Real' );
+# Form of the function is a (1-e^(-k x))
+$a = random(2, 6);
+$h = Compute("$a (1-e^{-k x})");
+$h_tex = $h->TeX;
+
+# Answers
+$h0 = Compute("0");
+$hp0 = Compute("$a k");
+$h_lim_inf = Compute("$a");
+Context("Interval");
+$h_inc = Compute("[0, INF)");
+$h_decr = Compute("{}");
+
+BEGIN_TEXT 
+
+$PAR
+Consider the family of functions 
+\[ h(x) = $h_tex \]
+  where \(k\) is a positive constant, and \(x \ge 0\).
+$BR
+a) Find \(h(0) \):  \{ans_rule(25)\} 
+$PAR
+b) Find \(h'(0) \): \{ans_rule(25)\} 
+$PAR
+c) Find \(\displaystyle \lim_{x\to \infty} h(x)  \): \{ans_rule(25)\} 
+$PAR
+d) Find the intervals on which \(h(x)\) is increasing, and those on which is it decreasing.  $BR
+$BBOLD Your answer should only include intervals for which \(x \ge 0\)$EBOLD.
+$BR
+Increasing intervals: \{ans_rule(25)\} Use \{ helpLink("interval notation") \}. 
+$BR
+Decreasing intervals: \{ans_rule(25)\} 
+$PAR
+e) $BBOLD On your solution page$EBOLD, using the information from parts (a-d), sketch two members of the family, using \(k = 1\) and \(k = 2\).  Identify which graph used which \(k \) value, and remember that \(x \ge 0\).
+
+
+END_TEXT
+
+ANS( $h0->cmp() );
+
+ANS( $hp0->cmp() );
+
+ANS( $h_lim_inf->cmp() );
+
+ANS( $h_inc->cmp() );
+
+ANS( $h_decr->cmp() );
+
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

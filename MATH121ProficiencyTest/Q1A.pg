@@ -1,0 +1,69 @@
+## DESCRIPTION
+## Calculus: Functions and models
+## ENDDESCRIPTION
+
+## KEYWORDS('calculus', 'functions','models', 'exponential', '121Test1)
+## Tagged by LD
+
+## DBsubject('Calculus')
+## DBchapter('Functions and Models')
+## DBsection('Exponential Functions')
+## Date('10/27/2011')
+## Author('Alan Ableson')
+## Institution('Queen's University')
+
+
+## TitleText1('Calculus')
+## EditionText1('5')
+## AuthorText1('Hughes-Hallett')
+## Section1('1.2')
+## Problem1('22')
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros("PG.pl",
+           "PGbasicmacros.pl",
+           "PGanswermacros.pl",
+"MathObjects.pl",        
+"contextFraction.pl",
+"PGauxiliaryFunctions.pl");
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+
+# Construct a linear function, then ask for a PERPENDICULAR LINE to it.
+Context("Numeric");
+
+
+# Linear function: mx + b
+$m = list_random( (-4, -3, -2, 2, 3, 4) );
+$b = random(-5, 5);  # zero is okay, because the new line will typically have a non-zero intercept
+$f = Formula("$m  x + $b")->reduce;
+
+# The PERPENDICULAR line:
+$x_trans = non_zero_random(-3, 3); # where do the lines intersect?
+$y_trans = $f->eval(x=>$x_trans); 
+Context("Fraction");
+$m_p = Fraction(-1,$m ); # slope of perpendicular line
+Context("Numeric");
+$new_line = Formula( "$m_p * (x-$x_trans) + $y_trans"); # point/slope
+$b_p = $new_line->eval(x=>0);  # new intercept is new line at x=0
+
+   Context()->texStrings;
+BEGIN_TEXT
+
+Find the equation of the line that intersects the line \( y = $f \) at
+  right angles when \(x=$x_trans\).
+
+$BR
+
+Put your answer in the form \(y=mx+b\), and select the appropriate
+  value of \(m \).  
+
+$PAR In \(y = mx + b\) form, \(m\) = \{ ans_rule(20) \} $PAR
+
+END_TEXT
+   Context()->normalStrings;
+ANS( $m_p->cmp() );
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

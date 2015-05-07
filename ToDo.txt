@@ -1,0 +1,8 @@
+
+Isolate and modularize the eigenvector calculation in MATH337/Unit02 and Unit05.  Examples exist in 
+
+Unit05MarkovDecisionProcesses/MachineMaintenanceIntro
+
+Calculus/Unit01_Functions/q_001.pg is messed up, and testing it seems
+to not work very well.  I don't know what to do with it, but I've
+dropped it from the corresponding Self-test for now.

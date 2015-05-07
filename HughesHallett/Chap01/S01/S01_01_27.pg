@@ -1,0 +1,63 @@
+#DESCRIPTION
+# Domain and range given a graph
+#ENDDESCRIPTION
+
+#KEYWORDS('graphs', 'domain', 'range', 'functions')
+## tagged by GH
+
+## DBsubject('Calculus')
+## DBchapter('1 A Library of Functions')
+## DBsection('1.1 Functions and Change')
+## Problem('27')
+## Date('18/03/2012')
+## Author('Gina Hochban')
+## Institution('Queen's University')
+## TitleText1('Calculus')
+## EditionText1('5th Edition')
+## AuthorText1('Hughes-Hallett')
+
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"PGauxiliaryFunctions.pl",
+"PGgraphmacros.pl",
+"extraAnswerEvaluators.pl"
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+
+#The formulas are reduced to fix 1*x=> x; however, now displays brackets and *
+
+$a1 = random(1,9,1)**2;
+$a2 = random(1,9,1)**2;
+$b1 = random(1,9,1);
+$b2 = random(1,9,1);
+$c1 = $a1**(1/2);
+$c2 = $a2**(1/2);
+$g1 = Formula("$a1 - $a2 x^2")->reduce();
+$g2 = Formula("$b1 x^2 + $b2 x")->reduce();
+
+TEXT(EV2(<<EOT));
+$BR
+Consider the function \(g(x)=\frac{$g1}{$g2}\).
+$BR$BR
+\(a)\) Find the domain of \(g(x)\). 
+Domain = \{ans_rule(15)\}. Write this answer in \{helpLink('interval notation')\}.
+
+$BR$BR
+\(b)\) When \(g(x)=0\), \(x \epsilon\) \{ans_rule(15)\}. 
+Write this answer in set notation, e.g. if \(x = A, B, C,\) then \(x \epsilon \lbrace A,B,C \rbrace\). Write elements in ascending order. 
+
+EOT
+
+#ANSWERS
+ANS(interval_cmp("R-{0,-$b2/$b1}"));
+ANS(interval_cmp("{-$c1/$c2, $c1/$c2}"));
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

@@ -1,0 +1,53 @@
+
+## DESCRIPTION
+## Calculus
+## ENDDESCRIPTION
+
+## KEYWORDS ('integration','integration by parts')
+## Tagged by cmd6a 4/26/06
+
+## DBsubject('Calculus')
+## DBchapter('Techniques of Integration')
+## DBsection('Integration by Parts')
+## Date('')
+## Author('')
+## Institution('Rochester')
+## TitleText1('')
+## EditionText1('')
+## AuthorText1('')
+## Section1('')
+## Problem1('')
+
+DOCUMENT();
+
+loadMacros("PG.pl","PGbasicmacros.pl","PGanswermacros.pl","parserFormulaUpToConstant.pl");
+loadMacros("PGchoicemacros.pl");
+loadMacros("Parser.pl");
+loadMacros("freemanMacros.pl");
+$context = Context();
+
+$showPartialCorrectAnswers = 1;
+
+$a = random(2,4,1);
+$coeff = 1 / $a;
+$ans = FormulaUpToConstant("$coeff * (x * e^($a * x) - $coeff * e^($a * x))");
+
+TEXT(beginproblem());
+BEGIN_TEXT
+Evaluate the integral \( \displaystyle \int x e^{$a x} dx \)
+$BR $BR \{ans_rule( 60) \} 
+END_TEXT
+
+##set $PG_environment{'textbook'} in webworkCourse.ph
+if (defined($textbook)) {
+   if ($textbook eq "EllisGulick5") {
+BEGIN_TEXT
+$PAR
+This is similar to problem 8 of section 7.1 in the text.
+END_TEXT
+}
+}
+
+ANS($ans->cmp());
+
+ENDDOCUMENT();

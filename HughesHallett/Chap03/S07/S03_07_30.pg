@@ -1,0 +1,92 @@
+
+## DESCRIPTION
+## Calculus: Functions and models
+## ENDDESCRIPTION
+
+## KEYWORDS('calculus', 'functions','implicit', 'differentiation', 'tangent line');
+## Tagged by LD
+
+## DBsubject('Calculus')
+## DBchapter('Differentiation')
+## DBsection('Implicit Differentation')
+## Date('05/23/2012')
+## Author('Alan Ableson')
+## Institution('Queen's University')
+
+
+## TitleText1('Calculus')
+## EditionText1('5')
+## AuthorText1('Hughes-Hallett')
+## Section1('3.7')
+## Problem1('23')
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros("PG.pl",
+           "PGbasicmacros.pl",
+           "PGanswermacros.pl",
+	   "unorderedAnswer.pl",   
+	   "MathObjects.pl",
+	   "PGauxiliaryFunctions.pl");
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+
+Context("Numeric");
+
+# Function options
+$eq = "x^2 + y^2 = 25";
+$x = list_random(-4, -3, 3, 4);  
+$y1 = sqrt(25 - $x**2);
+$y2 = -$y1;
+
+$m1 = Compute("-$x/$y1");
+$m2 = Compute("-$x/$y2");
+$tgt1 = Formula("$m1 * (x-$x) + $y1"); 
+$tgt2 = Formula("$m2 * (x-$x) + $y2"); 
+
+$n1 = "($y1/$x)";
+$n2 = "($y2/$x)";
+$normal1 = Formula("$n1 * (x-$x) + $y1"); 
+$normal2 = Formula("$n2 * (x-$x) + $y2"); 
+
+$center1 = Real("0");
+$center2 = Real("0");
+
+BEGIN_TEXT
+
+$PAR
+Consider the circle defined by \($eq\)
+$PAR
+A) Find the equations of the tangent lines to the circle where
+\(x = $x\).  
+$BR
+  Tangent line through \( ($x, $y1) \): y = \{ans_rule(20)\}
+$BR
+  Tangent line through \( ($x, $y2) \): y = \{ans_rule(20)\}
+
+$PAR
+
+B) Find the quations of the $BBOLD normal $EBOLD lines to this ciricle at the same points. (The normal line is perpendicular to the tangent line.)
+
+$BR
+  Normal line through \( ($x, $y1) \): y = \{ans_rule(20)\}
+$BR
+  Normal line through \( ($x, $y2) \): y = \{ans_rule(20)\}
+
+$PAR
+C) At what point do the two normal lines intersect?
+$BR
+		      \( (x, y) \) = \{ ans_rule(3)\}, \{ans_rule(3) \}
+
+END_TEXT
+
+ANS($tgt1->cmp()); 
+ANS($tgt2->cmp());
+ANS($normal1->cmp()); 
+ANS($normal2->cmp());
+
+ANS($center1->cmp());
+ANS($center2->cmp());
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

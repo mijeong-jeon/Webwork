@@ -1,0 +1,100 @@
+#DESCRIPTION
+# Domain and range given a graph
+#ENDDESCRIPTION
+
+#KEYWORDS('exponential growth','exponential decay')
+## tagged by GH
+
+## DBsubject('Calculus')
+## DBchapter('1 A Library of Functions')
+## DBsection('1.2 Exponential Functions')
+## Problem('20')
+## Date('29/03/2012')
+## Author('Gina Hochban')
+## Institution('Queen's University')
+## TitleText1('Calculus')
+## EditionText1('5th Edition')
+## AuthorText1('Hughes-Hallett')
+
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PGstandard.pl",
+"MathObjects.pl",
+"PGchoicemacros.pl",
+"parserPopUp.pl",
+"parserNumberWithUnits.pl",
+"hhAdditionalMacros.pl",
+"PG.pl",
+"PGbasicmacros.pl",,
+"PGanswermacros.pl",
+"PGauxiliaryFunctions.pl",
+"PGgraphmacros.pl",
+"extraAnswerEvaluators.pl"
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+
+$popupGraphs = PopUp([("A", "B", "C", "D")], "D");
+$popupConcavity = PopUp([("Concave up", "Concave down")], "Concave down");
+
+$bk="black";
+
+# FEQ (Format EQuations) cleans up the writing of the functions (see FEQ in PGbasicmacros)
+
+# define function and domain
+$A = FEQ("-x^2+2 for x in <0,1.414> using color:$bk and weight:2");
+$B = FEQ("x^2 for x in <0,1.75> using color:$bk and weight:2");
+$C = FEQ("3exp(-x) for x in <0,5> using color:$bk and weight:2");
+$D = FEQ("3*ln(x+1) for x in <0,9> using color:$bk and weight:2");
+
+#set graph dimensions, axes 
+$graphA = init_graph(-0.75,-0.75,3,3,'axes'=>[0,0]);
+$graphB = init_graph(-1,-1,4,4,'axes'=>[0,0]);
+$graphC = init_graph(-1,-1,5,5,'axes'=>[0,0]);
+$graphD = init_graph(-2,-2,10,8,'axes'=>[0,0]);
+
+($ARef) = plot_functions( $graphA,$A);
+($BRef) = plot_functions( $graphB,$B);
+($CRef) = plot_functions( $graphC,$C);
+($DRef) = plot_functions( $graphD,$D);
+
+#label axes
+$graphA->lb(new Label(2.5,0.25,'t','black','left','bottom'),
+            new Label(0.25,2.5,'p','black','left','bottom'),
+            new Label ( 2,2,'Graph A',$bk,'left'),);
+$graphB->lb(new Label(3.5,0.25,'t','black','left','bottom'),
+            new Label(0.25,3.5,'p','black','left','bottom'),
+            new Label ( 2,3,'Graph B',$bk,'left'),);
+$graphC->lb(new Label(4.5,0.25,'t','black','left','bottom'),
+            new Label(0.25,4,'p','black','left','bottom'),
+            new Label ( 1,3,'Graph C',$bk,'left'),);
+$graphD->lb(new Label(8.5,0.25,'t','black','left','bottom'),
+            new Label(0.25,7,'p','black','left','bottom'),
+            new Label ( 2,6,'Graph D',$bk,'left'),);
+
+BEGIN_TEXT
+
+$BR
+When a new product is advertised, more and more people try it. However, the rate at which new people try it slows as time, \(t\), goes on.   
+$BR$BR
+\(a)\) Which graph best reflects the above situation? 
+\{ $popupGraphs->menu() \} 
+$PAR
+**You may click a graph to enlarge it
+$BR$BR
+\(A)\) \{ image(insertGraph($graphA), width=>200, height=>200) \}
+\(B)\) \{ image(insertGraph($graphB), width=>200, height=>200) \}
+\(C)\) \{ image(insertGraph($graphC), width=>200, height=>200) \}
+\(D)\) \{ image(insertGraph($graphD), width=>200, height=>200) \}
+$PAR
+\(b)\) What do you know about the concavity of the graph? 
+\{ $popupConcavity->menu() \} 
+END_TEXT
+
+#ANSWERS
+ANS($popupGraphs->cmp,$popupConcavity->cmp);
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

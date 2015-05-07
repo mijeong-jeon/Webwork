@@ -1,0 +1,97 @@
+
+## DESCRIPTION
+## Operations Research / Linear Algebra
+## ENDDESCRIPTION
+
+## KEYWORDS('steady state', 'eigenvalues' 'eigenvectors')
+## Tagged by aableson
+
+## DBsubject('Linear Algebra')
+## DBchapter('Matrices')
+## DBsection('Eigenvalues')
+## Date('')
+## Author('')
+## Institution('Queens')
+## TitleText1('')
+## EditionText1('')
+## AuthorText1('')
+## Section1('')
+## Problem1('')
+
+DOCUMENT();        # This should be the first executable line in the problem.
+loadMacros(
+        "PGbasicmacros.pl",
+        "PGchoicemacros.pl",
+        "PGanswermacros.pl",
+        "PGgraphmacros.pl",
+        "PGmatrixmacros.pl",
+	"parserPopUp.pl",
+	"MathObjects.pl",
+        );
+ 
+TEXT(beginproblem());    
+Context("Numeric");
+Context()->flags->set(tolerance=>.01);
+$showPartialCorrectAnswers = 1;
+
+$X_max = random(4, 6);
+$row = random(1, $X_max - 1);
+$p_win = random(0.1, 0.9, 0.1); 
+$p_lose = 1 - $p_win;
+
+@states = ();
+@ans_bar = ();
+@row_vals = ();
+for ($i = 0; $i <= $X_max; $i++){
+  push(@states, $i);
+  push(@ans_bar, ans_rule(5));
+  if ($i == $row -1) {  # lose prob
+      push(@row_vals,  Compute("$p_lose"));
+  } 
+  elsif ($i == $row +1) {  # win prob
+      push(@row_vals,  Compute("$p_win"));
+  }
+  else {
+      push(@row_vals,  Compute("0"));
+  }
+}
+
+
+
+
+# Define the answer table
+$table_start = begintable($X_max + 2);
+$table_row1  = row( "state i\j", @states);
+$table_row2  = row( "$row ", @ans_bar);
+$table_end   = endtable();
+
+BEGIN_TEXT 
+
+Consider the Markov chain model for a simple gambling game.  
+<ul>
+<li>\(X_t\) represents the amount of money you have (in dollars) at the start of round \(t\).
+<li>Every time you play, there is a $p_win probability of winning the round.
+  <li>If you win a round, you gain ${DOLLAR}1;  if you lose a round (with probability \{$p_lose\}), you give up ${DOLLAR}1. 
+  <li> You stop the game when you reach ${DOLLAR}0, or when you reach or exceed ${DOLLAR}$X_max.
+</ul>
+
+  Fill in the one-step transition probabilities for the row for state $row of the transition probability matrix \(P\) for this system.
+
+$table_start
+$table_row1
+$table_row2
+$table_end
+
+
+END_TEXT
+  foreach my $rowv (@row_vals) {
+    ANS( $rowv->cmp());
+}
+
+BEGIN_SOLUTION
+
+
+END_SOLUTION
+
+
+ENDDOCUMENT();       # This should be the last executable line in the problem.

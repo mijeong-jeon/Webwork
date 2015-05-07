@@ -1,0 +1,106 @@
+
+## DESCRIPTION
+##  Exponential Distribution
+## ENDDESCRIPTION
+
+## KEYWORDS('probability', 'continuous', 'exponential', 'distribution')
+## naw tagged this problem.
+
+## DBsubject('Probability')
+## DBchapter('Distributions')
+## DBsection('Exponential Distribution')
+## Date('6/27/2005')
+## Author('Jeff Holt')
+## Institution('UVA')
+## TitleText1('Statistics for Management and Economics')
+## EditionText1('6')
+## AuthorText1('Keller, Warrack')
+## Section1()
+## Problem1()
+
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"PGnumericalmacros.pl",
+"PGstatisticsmacros.pl",
+"MathObjects.pl",
+"PGauxiliaryFunctions.pl"
+);
+
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+
+$start_state = random(1, 4);
+$end_state = $start_state+ 1;
+$up_one_state_prob = Compute("0.592654577");
+$same_state_prob = Compute("0.325960017");
+
+$five_to_j = random(1, 5);
+$five_failures = 5 - $five_to_j;
+@arr = (1.5785E-05,
+	0.000250026,	
+	0.003333682,	
+	0.03333682,	
+	0.222245466,	
+	0.740818221);
+
+$five_to_0_prob = Compute("1.5785E-05");
+
+BEGIN_TEXT 
+
+For the questions below, answer using the Truck Fleet model, using the $BBOLD Poisson $EBOLD failure distribution (mean 0.3 failures per day). Give each answer to at least 4 significant digits.
+
+$PAR 
+  A. What is the probability of a transition from $start_state working trucks one day to $end_state working trucks the next day? (Remember: include at least 4 sig figs.) 
+  $BR Probability = \{ans_rule(15)\}.  
+$PAR
+  B. What is the probability of starting with $start_state working trucks, and then having the same number working the next day?
+  $BR Probability = \{ans_rule(15)\}.  
+$PAR
+  C. What is the probability of starting with 5 working trucks, and having $five_to_j trucks the next day?
+  $BR Probability = \{ans_rule(15)\}.  
+$PAR
+  D. What is the probability of having 5 working trucks one day, and 0 working the next?
+  $BR Probability = \{ans_rule(15)\}.  
+END_TEXT
+
+ANS(num_cmp($up_one_state_prob));
+
+ANS(num_cmp($same_state_prob));
+
+ANS(num_cmp($arr[$five_to_j]));
+
+ANS(num_cmp($five_to_0_prob));
+
+
+BEGIN_SOLUTION
+${PAR}$BBOLD SOLUTION: $EBOLD $PAR
+A.  To go from state $start_state to state $end_state, 
+  there must be a successful repair (prob. 0.8), and 0 failures (prob POISSON(0, 0.3)). 
+
+$PAR
+B.  To stay in the same state $start_state, there can be either 
+(successful repair and 1 failure) or (unsuccessful repair and no failures).  This probabiliy is given by $BR
+								 0.8 POISSON(1, 0.3) + 0.2 POISSON(0, 0.3)
+
+$PAR
+C. With 5 trucks initially, there are no repairs made at the start of the day.
+The transition from state 5 to state $five_to_j is just given by the probability of $five_failures failures, or POISSON($five_failures, 0.3).
+
+$PAR
+D. To go from 5 trucks down to 0, using our Poisson assumption, we
+have to consider the probability of 5 $BBOLD or more $EBOLD failures.
+This is most easily calculated by computing the converse outcome, 4 of fewer failures, and subtracting it from 1:
+$BR
+1 - POISSON CDF(4, 0.3)
+
+END_SOLUTION
+
+
+ENDDOCUMENT();       # This should be the last executable line in the problem.

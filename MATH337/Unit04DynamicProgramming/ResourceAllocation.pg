@@ -1,0 +1,443 @@
+
+## DESCRIPTION
+## Operations Research / Linear Algebra
+## ENDDESCRIPTION
+
+## KEYWORDS('steady state', 'eigenvalues' 'eigenvectors')
+## Tagged by aableson
+
+## DBsubject('Linear Algebra')
+## DBchapter('Matrices')
+## DBsection('Eigenvalues')
+## Date('')
+## Author('')
+## Institution('Queens')
+## TitleText1('')
+## EditionText1('')
+## AuthorText1('')
+## Section1('')
+## Problem1('')
+
+DOCUMENT();        # This should be the first executable line in the problem.
+loadMacros(
+        "PGbasicmacros.pl",
+        "PGanswermacros.pl",
+        "PGmatrixmacros.pl",
+	"parserPopUp.pl",
+	"parserMultiAnswer.pl",
+	"MathObjects.pl",
+        );
+ 
+TEXT(beginproblem());    
+Context("Numeric");
+Context()->flags->set(tolerance=>.01);
+$showPartialCorrectAnswers = 1;
+
+# Amount spent -> percentage popularity change matrix
+$S = 6; # number of states, or 0.... $S-1 are the amounts
+$Nr = 4; # number of regions to split money
+# Awful hack, because "new Matrix($S, $Nr)" doesn't seem to work.
+$Zeros = Matrix->new_from_array_ref([[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]);
+$B = $Zeros->clone();
+for ($r = 1; $r <= $Nr; $r++) {
+  # Generate an array with the values
+    $B->assign(1, $r, 0);
+  for ($s = 2; $s <= $S; $s++) {
+$prev = $B->element($s-1, $r);
+    $val = random(2,5);
+    $B->assign($s, $r, $val + $prev);
+  }
+}
+
+# Generate the cost matrix table
+@rowvals = (0,0,0,0);
+$table_cost_start = begintable($Nr + 1); 
+$table_cost_h1 = row("Funds allocated (thousands)", "Region", "", "", "");
+$table_cost_h2 = row("", "1", "2", "3", "4"); 
+for ($i = 0; $i < $Nr; $i++) 
+{ $rowvals[$i] = sprintf("%d", $B->element(1, $i + 1)); }
+$table_cost_r0  = row( "0", @rowvals);
+for ($i = 0; $i < $Nr; $i++) 
+{ $rowvals[$i] = sprintf("%d", $B->element(2, $i + 1)); }
+$table_cost_r1  = row( "1", @rowvals);
+for ($i = 0; $i < $Nr; $i++) 
+{ $rowvals[$i] = sprintf("%d", $B->element(3, $i + 1)); }
+$table_cost_r2  = row( "2", @rowvals);
+for ($i = 0; $i < $Nr; $i++) 
+{ $rowvals[$i] = sprintf("%d", $B->element(4, $i + 1)); }
+$table_cost_r3  = row( "3", @rowvals);
+for ($i = 0; $i < $Nr; $i++) 
+{ $rowvals[$i] = sprintf("%d", $B->element(5, $i + 1)); }
+$table_cost_r4  = row( "4", @rowvals);
+for ($i = 0; $i < $Nr; $i++) 
+{ $rowvals[$i] = sprintf("%d", $B->element(6, $i + 1)); }
+$table_cost_r5  = row( "5", @rowvals);
+$table_cost_end   = endtable();
+
+# Determine the amount we can spend in total.
+$max_spend = random(10, 15);
+
+
+# *** Compute the solution matrices
+$region = 4;
+$F4max = $B->column(4);  # only one choice
+
+$region = 3;
+$F3 = (new Matrix($max_spend+1, $S))->clone();
+for ($s = 0; $s <= $max_spend; $s++) {
+  for ($x = 0; $x < $S; $x++) {
+$rem = $s - $x;  # cash to use in later rounds
+     if ($rem < 0) {
+$F3->assign(($s)+1, ($x)+1, 0);
+}
+else  {
+if ($rem > 5) {  # even if we have >5 left, we can only spend 5
+$rem = 5;
+}
+$this_benefit = $B->element($x+1, $region);
+$future_benefit = $F4max->element($rem +1,1);
+$F3->assign(($s)+1, ($x)+1, $this_benefit + $future_benefit);
+  }
+} # next x/decision
+} # next s/state
+$F3max = (new Matrix($max_spend+1, 1))->clone();
+for ($s = 0; $s <= $max_spend; $s++) {
+  $m = 0;
+  for ($x = 0; $x < $S; $x++) {
+if ($F3->element($s+1, $x+1) > $m) {
+$m = $F3->element($s+1, $x+1);
+}
+} # next x/decision
+$F3max->assign($s+1,1,$m);
+}
+
+# **** Region 2
+$region = 2;
+$F2 = (new Matrix($max_spend+1, $S))->clone();
+for ($s = 0; $s <= $max_spend; $s++) {
+  for ($x = 0; $x < $S; $x++) {
+$rem = $s - $x;  # cash to use in later rounds
+     if ($rem < 0) {
+$F2->assign(($s)+1, ($x)+1, 0);
+}
+else  {
+$this_benefit = $B->element($x+1, $region);
+$future_benefit = $F3max->element($rem +1,1);
+$F2->assign(($s)+1, ($x)+1, $this_benefit + $future_benefit);
+  }
+} # next x/decision
+} # next s/state
+$F2max = (new Matrix($max_spend+1, 1))->clone();
+for ($s = 0; $s <= $max_spend; $s++) {
+  $m = 0;
+  for ($x = 0; $x < $S; $x++) {
+if ($F2->element($s+1, $x+1) > $m) {
+$m = $F2->element($s+1, $x+1);
+}
+} # next x/decision
+$F2max->assign($s+1,1,$m);
+}
+
+
+# **** Region 1
+$region = 1;
+$F1 = (new Matrix($max_spend+1, $S))->clone();
+for ($s = 0; $s <= $max_spend; $s++) {
+  for ($x = 0; $x < $S; $x++) {
+$rem = $s - $x;  # cash to use in later rounds
+     if ($rem < 0) {
+$F1->assign(($s)+1, ($x)+1, 0);
+}
+else  {
+$this_benefit = $B->element($x+1, $region);
+$future_benefit = $F2max->element($rem +1,1);
+$F1->assign(($s)+1, ($x)+1, $this_benefit + $future_benefit);
+  }
+} # next x/decision
+} # next s/state
+$F1max = (new Matrix($max_spend+1, 1))->clone();
+for ($s = 0; $s <= $max_spend; $s++) {
+  $m = 0;
+  for ($x = 0; $x < $S; $x++) {
+if ($F1->element($s+1, $x+1) > $m) {
+$m = $F1->element($s+1, $x+1);
+}
+} # next x/decision
+$F1max->assign($s+1,1,$m);
+}
+
+# *** Stage 3 Solution ***
+$s = 5;
+$m_s3A = MultiAnswer($F3->element($s+1, 1), $F3->element($s+1, 2), $F3->element($s+1, 3), $F3->element($s+1, 4), $F3->element($s+1, 5), $F3->element($s+1, 6))->with(
+  singleResult => 1,
+  checker => sub {
+    my ($correct, $student, $self) = @_;
+      my @correct = @{$correct};
+      my @student = @{$student};
+my $i;
+for ($i = 0; $i < 6; $i++) {
+  if (!defined($student[$i]) || $student[$i] != Compute($correct[$i])) {
+return 0
+}
+}
+return 1;});
+$S3A_fstar = Compute($F3max->element($s+1, 1));
+
+$s = 6;
+$m_s3B = MultiAnswer($F3->element($s+1, 1), $F3->element($s+1, 2), $F3->element($s+1, 3), $F3->element($s+1, 4), $F3->element($s+1, 5), $F3->element($s+1, 6))->with(
+  singleResult => 1,
+  checker => sub {
+    my ($correct, $student, $self) = @_;
+      my @correct = @{$correct};
+      my @student = @{$student};
+my $i;
+for ($i = 0; $i < 6; $i++) {
+  if (!defined($student[$i]) || $student[$i] != Compute($correct[$i])) {
+return 0
+}
+}
+return 1;});
+$S3B_fstar = Compute($F3max->element($s+1, 1));
+
+# Stage 3 response table
+$table_s3_start = begintable(8);
+$table_s3_row1  = row( "\(S_3\) \ \(X_3\) ", 0,1,2,3,4,5,"\(f^*\)");
+$table_s3_row2  = row( 5, $m_s3A->ans_rule(6),$m_s3A->ans_rule(6),$m_s3A->ans_rule(6),$m_s3A->ans_rule(6),$m_s3A->ans_rule(6),$m_s3A->ans_rule(6),ans_rule(6));
+$table_s3_row3  = row( 6, $m_s3B->ans_rule(6),$m_s3B->ans_rule(6),$m_s3B->ans_rule(6),$m_s3B->ans_rule(6),$m_s3B->ans_rule(6),$m_s3B->ans_rule(6),ans_rule(6));
+$table_s3_end   = endtable();
+
+
+# *** Stage 2 Solution ***
+$s = $max_spend-1;
+$m_s2A = MultiAnswer($F2->element($s+1, 1), $F2->element($s+1, 2), $F2->element($s+1, 3), $F2->element($s+1, 4), $F2->element($s+1, 5), $F2->element($s+1, 6))->with(
+  singleResult => 1,
+  checker => sub {
+    my ($correct, $student, $self) = @_;
+      my @correct = @{$correct};
+      my @student = @{$student};
+my $i;
+for ($i = 0; $i < 6; $i++) {
+if (!defined($student[$i]) || $student[$i] != $correct[$i]) {
+  return 0;
+}
+}
+return 1;});
+$S2A_fstar = Compute($F2max->element($s+1, 1));
+
+$s = $max_spend;
+$m_s2B = MultiAnswer($F2->element($s+1, 1), $F2->element($s+1, 2), $F2->element($s+1, 3), $F2->element($s+1, 4), $F2->element($s+1, 5), $F2->element($s+1, 6))->with(
+  singleResult => 1,
+  checker => sub {
+    my ($correct, $student, $self) = @_;
+      my @correct = @{$correct};
+      my @student = @{$student};
+my $i;
+for ($i = 0; $i < 6; $i++) {
+if (!defined($student[$i]) || $student[$i] != $correct[$i]) {
+  return 0;
+}
+}
+return 1;});
+$S2B_fstar = Compute($F2max->element($s+1, 1));
+
+# Stage 2 response table
+$table_s2_start = begintable(8);
+$table_s2_row1  = row( "\(S_2\) \ \(X_2\) ", 0,1,2,3,4,5,"\(f^*\)");
+$table_s2_row2  = row( $max_spend-1, $m_s2A->ans_rule(6),$m_s2A->ans_rule(6),$m_s2A->ans_rule(6),$m_s2A->ans_rule(6),$m_s2A->ans_rule(6),$m_s2A->ans_rule(6),ans_rule(6));
+$table_s2_row3  = row( $max_spend, $m_s2B->ans_rule(6),$m_s2B->ans_rule(6),$m_s2B->ans_rule(6),$m_s2B->ans_rule(6),$m_s2B->ans_rule(6),$m_s2B->ans_rule(6),ans_rule(6));
+$table_s2_end   = endtable();
+
+
+# Stage 1 Solution
+$s = $max_spend;
+$m_s1 = MultiAnswer($F1->element($s+1, 1),
+$F1->element($s+1, 2),
+$F1->element($s+1, 3),
+$F1->element($s+1, 4),
+$F1->element($s+1, 5),
+$F1->element($s+1, 6))->with(
+  singleResult => 1,
+  checker => sub {
+    my ($correct, $student, $self) = @_;
+      my @correct = @{$correct};
+      my @student = @{$student};
+my $i;
+for ($i = 0; $i < 6; $i++) {
+if (!defined($student[$i]) || $student[$i] != $correct[$i]) {
+  return 0;
+}
+}return 1;});
+$S1_fstar = Compute($F1max->element($s+1, 1));
+
+# Stage 1 response table
+$table_s1_start = begintable(8);
+$table_s1_row1  = row( "\(S_1\) \ \(X_1\) ", 0,1,2,3,4,5,"\(f^*\)");
+$table_s1_row2  = row( $max_spend, $m_s1->ans_rule(6),$m_s1->ans_rule(6),$m_s1->ans_rule(6),$m_s1->ans_rule(6),$m_s1->ans_rule(6),$m_s1->ans_rule(6),ans_rule(6));
+$table_s1_end   = endtable();
+
+
+# Solution for optimal allocation
+$opt_f = Compute($F1max->element($max_spend + 1, 1));
+#from maa.org Webwork wiki on MultiAnswerProblems
+$multians = MultiAnswer($max_spend, $opt_f, $opt_f, $opt_f)->with(
+  singleResult => 1,
+  checker => sub {
+      my ( $correct, $student, $self ) = @_;
+      my ( $x1stu, $x2stu, $x3stu, $x4stu ) = @{$student};
+# compute the score of the 4 student selections
+$s = $B->element($x1stu+1, 1);
+$s = $s + $B->element($x2stu+1, 2);
+$s = $s + $B->element($x3stu+1, 3);
+$s = $s + $B->element($x4stu+1, 4);
+      my ( $max_spend, $opt_f, $f3, $f4 ) = @{$correct};
+ $student_spend = $x1stu + $x2stu + $x3stu + $x4stu;
+      if ( ($s == $opt_f) && ($max_spend == $student_spend)) {
+          return 1;
+      } else {
+if ($student_spend < $max_spend) {
+Value->Error("Your allocation of $student_spend thousand dollars does not use all the funds available, so produces a sub-optimal allocation.");
+}
+elsif ($student_spend > $max_spend) {
+Value->Error("Your allocation of $student_spend thousand dollars exceeds the available funds of $max_spend thousand dollars."); 
+}
+elsif ($s < $opt_f)  {
+Value->Error("Your allocation does not produce the optimal popularity increase possible of $opt_f percent.");
+}
+return 0;
+      }
+  }
+);
+
+# Construct the response table for the optimal allocation
+$table_alloc_start = begintable(5);
+$table_alloc_row1  = row( "Region", 1, 2, 3, 4);
+$table_alloc_row2  = row( "Allocation \(X_n\)", $multians->ans_rule(6), $multians->ans_rule(6), $multians->ans_rule(6), $multians->ans_rule(6));
+$table_alloc_end   = endtable();
+
+
+BEGIN_TEXT 
+$BR
+	   (Adapted from Hillier and Liebermann.)
+$PAR
+A political candidate's campaign office is deciding how to allocate its advertising budget.
+Based on polling information, estimates have been made about the
+expected increase in popularity of the candidate (in percentage
+points), given the amount spent on advertising in each of 4 regions.  These estimates are indicated in the table below.
+
+$table_cost_start
+$table_cost_h1
+$table_cost_h2
+$table_cost_r0
+$table_cost_r1
+$table_cost_r2
+$table_cost_r3
+$table_cost_r4
+$table_cost_r5
+$table_cost_end
+$PAR
+
+For example, if the office were to allocate
+4 thousand dollars to advertise in Region 3, 
+the candidate's popularity would increase 
+by \{$B->element(5,3)\} percent.  $PAR
+
+Given that the office has $BBOLD $max_spend thousand dollars $EBOLD to
+spend in total, across all 4 regions, your goal is to determine the
+distribution of that money across the four regions so as to maximize
+the total percent increase in popularity. I.e. the sum of the
+popularity changes across the 4 regions.
+$BR
+- The amount allocated to each region must be between 0 to 5 thousand dollars, inclusive.
+$BR
+- You can choose not to spend all your money.  E.g. if you had 6 thousand dollars to spend on Regions 3 and 4, you could choose to spend $0 in Region 3, and $5 thousand in Region 4, leaving $1 thousand unspent.  
+
+$PAR
+
+You should solve this problem using the tableau approach
+  shown in class (either on paper, or in Excel). Though it doesn't matter in this particular problem, the question will assume that you
+start the calculations with Region 4 and then work backwards to Region
+1.  To validate your work, you will be asked to complete subsets of
+the tableaux to verify your answers.
+
+$PAR 
+	   A) Benefits/score at Stage 3. Each entry should be the optimal $BBOLD total $EBOLD benefit from Regions 3 $BBOLD and $EBOLD 4, given \(S_3\) remaining funds, and the choice of using \(X_3\) funds in Region 3.
+$table_s3_start
+$table_s3_row1
+$table_s3_row2
+$table_s3_row3
+$table_s3_end
+
+$PAR 
+	     B) Benefits/score at Stage 2. Each entry should be the optimal $BBOLD total $EBOLD benefit from Regions 2, 3 $BBOLD and $EBOLD 4, given \(S_2\) remaining funds, and the choice of using \(X_2\) funds in Region 2.
+$table_s2_start
+$table_s2_row1
+$table_s2_row2
+$table_s2_row3
+$table_s2_end
+
+		 C) Benefits/score at Stage 1. Each entry should be the $optimal $BBOLD total $EBOLD benefit from Regions 1, 2, 3 $BBOLD and $EBOLD 4, given the starting fund of $max_spend thousand dollars, and the choice of using \(X_1\) funds in Region 1.
+$table_s1_start
+$table_s1_row1
+$table_s1_row2
+$table_s1_end
+
+		     D) Optimal allocation.  Enter the allocation
+of funds across the 4 regions that leads to an optimal increase 
+		     in popularity.  If there are multiple allocations
+		     with the same benefit, simply enter one
+of the possible choices. 
+
+$table_alloc_start
+$table_alloc_row1
+$table_alloc_row2
+$table_alloc_end 
+
+END_TEXT
+
+# Check answers
+
+# Stage 3
+ANS( $m_s3A->cmp() );
+ANS( $S3A_fstar->cmp() );
+ANS( $m_s3B->cmp() );
+ANS( $S3B_fstar->cmp() );
+
+# Stage 2
+ANS( $m_s2A->cmp() );
+ANS( $S2A_fstar->cmp() );
+ANS( $m_s2B->cmp() );
+ANS( $S2B_fstar->cmp() );
+
+# Stage 1
+ANS( $m_s1->cmp() );
+ANS( $S1_fstar->cmp() );
+
+# Check the final allocation; answer isn't easy to format,
+# so this kludge provides better feedback
+ANS( $multians->cmp() );
+
+BEGIN_SOLUTION
+
+	   $SOL
+
+Here are the (unannotated) intermediate benefit tableaux at each stage.
+$BR
+- rows = state/amount left to spend in the whole campaign, and 
+$BR
+- columns = amount to spend at this stage.
+$BR
+  Note that the first/row column represent \(S_n\) = 0 and  \(X_n\) = 0 respectively.
+$PAR
+	   At stage 3, 
+  \{display_matrix($F3) \}
+$PAR
+	   At stage 2, 
+	   \{display_matrix($F2)\}
+$PAR
+	   At stage 1, 
+	   \{display_matrix($F1)\}
+
+END_SOLUTION
+
+
+ENDDOCUMENT();       # This should be the last executable line in the problem.

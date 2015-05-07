@@ -1,0 +1,186 @@
+
+## DESCRIPTION
+## Operations Research / Linear Algebra
+## ENDDESCRIPTION
+
+## KEYWORDS('steady state', 'eigenvalues' 'eigenvectors')
+## Tagged by aableson
+
+## DBsubject('Linear Algebra')
+## DBchapter('Matrices')
+## DBsection('Eigenvalues')
+## Date('')
+## Author('')
+## Institution('Queens')
+## TitleText1('')
+## EditionText1('')
+## AuthorText1('')
+## Section1('')
+## Problem1('')
+
+DOCUMENT();        # This should be the first executable line in the problem.
+loadMacros(
+        "PGbasicmacros.pl",
+        "PGanswermacros.pl",
+        "PGmatrixmacros.pl",
+	"parserRadioButtons.pl",
+	"parserMultiAnswer.pl",
+	"MathObjects.pl",
+	"PGauxiliaryFunctions.pl",
+        );
+ 
+TEXT(beginproblem());    
+Context("Numeric");
+Context()->flags->set(tolerance=>.01);
+$showPartialCorrectAnswers = 1;
+
+$ver = random(1, 1);
+
+if ($ver == 1) {
+  $N = 50;
+  $risk_free_r = 0.02;
+  $stock_name = "Google";
+  $S0 = 687.65;
+  $expiry = "Jan 19, 2013";
+  $months = 2.5;
+  $image_name = "CallOptions1.png";
+  @X = (670.0, 675.0, 680.0, 685.0, 690.0, 695.0);
+  @D0 = (36.60, 31.50, 28.70, 25.80, 23.40, 20.90);
+  @vol = (0.204, 0.185, 0.185, 0.184, 0.185, 0.183);
+}
+elsif ($ver == 2) {
+  $N = 50;
+  $risk_free_r = 0.02;
+  $stock_name = "Microsoft";
+  $S0 = 26.78;
+  $expiry = "Jan 19, 2013";
+  $months = 2.5;
+  $image_name = "CallOptions2.png";
+  @X = (25.0, 26.0, 27.0, 28.0, 29.0);
+  @D0 = (2.07, 1.24, 0.71, 0.32, 0.15);
+  @vol = (0.170, 0.147, 0.155, 0.149, 0.158);
+}
+elsif ($ver == 3) {
+  $N = 50;
+  $risk_free_r = 0.02;
+  $stock_name = "Apple";
+  $S0 = 587.04;
+  $expiry = "Feb 16, 2013";
+  $months = 2.5;
+  $image_name = "CallOptions3.png";
+  @X = (575.0, 580.0, 585.0, 590.0, 595.0, 600.0, 605.0);
+  @D0 = (42.45, 39.75, 37.55, 34.75, 32.20, 30.25, 28.35);
+  @vol = (0.328, 0.328, 0.332, 0.328, 0.324, 0.325, 0.327);
+}
+elsif ($ver == 4) {
+  $N = 50;
+  $risk_free_r = 0.02;
+  $stock_name = "Orace (Database)";
+  $S0 = 31.89;
+  $expiry = "Mar 19, 2013";
+  $months = 3.5;
+  $image_name = "CallOptions4.png";
+  @X = (30.0, 31.0, 32.0, 33.0, 34.0, 35.0);
+  @D0 = (2.71, 2.00, 1.46, 1.04, 0.69, 0.46);
+  @vol = (0.218, 0.208, 0.208, 0.209, 0.206, 0.207);
+}
+# Select 3 random stock prices: ugly!
+$nx = scalar(@X);
+@I = 0 x 3;
+$I[0] = random(0, $nx-1);
+do { $I[1] = random(0, $nx-1); } until ($I[1] != $I[0]);
+do { $I[2] = random(0, $nx-1); } until ( ($I[2] != $I[1]) and ($I[2] != $I[0]));
+@I2 = @I;
+@I = num_sort(sub {$_[1] <=> $_[0]}, @I);
+
+$vol1 = Compute($vol[$I[0]])->with( tolType => 'absolute', tolerance => .01);
+$vol2 = Compute($vol[$I[1]])->with( tolType => 'absolute', tolerance => .01);
+$vol3 = Compute($vol[$I[2]])->with( tolType => 'absolute', tolerance => .01);
+
+$X1 = $X[$I[0]];
+$X2 = $X[$I[1]];
+$X3 = $X[$I[2]];
+
+
+
+BEGIN_TEXT 
+$PAR
+$stock_name stock was trading on Nov 30th 2012 at $DOLLAR$S0.
+
+$PAR The table below shows the option prices for $stock_name expiring
+on $expiry, or roughly $months months from Dec 1st.  (These are real
+option prices traded on the market, not simulated ones.)
+
+$BR
+
+\{ image( $image_name ) \}
+$BR
+(Click on image for larger view.)
+
+$PAR 
+Banks are currently offering risk-free savings at \{$risk_free_r*100\}
+percent interest, compounded continuously.
+
+$PAR 
+
+One of the claims about fair (arbitrage-free) stock option pricing is
+that option prices are essentially a price based on the underlying
+stock's $BBOLD volatility$EBOLD \(\sigma\), given the environment
+(current stock price, strike price, option expiry time, and risk-free
+interest rate).
+
+$PAR 
+
+In this problem, you will validate this relationship between option
+pricing and volatility to some extent by reverse-engineering the
+volatility of the stock starting from option prices, and seeing
+whether the volatility inferred from the option prices is roughly
+constant at various strike prices.  (The volatility computed using the
+current option prices and a stock model is often called the $BITALIC
+implied$EITALIC volatility of a stock.)
+
+$PAR 
+
+You have all the parameters of the model required to compute call
+option prices, except the strike price and volatility.  For each
+strike price listed below, experiment with the volatility value until
+your model-based stock price matches the market price. (You need only
+narrow the volatility down to $BBOLD two decimal digits$EBOLD,
+e.g. \(\sigma \) = 0.12, not 0.121.)
+
+$PAR
+
+To perform your calculations, use a stock pricing tree with $N
+intervals to compute the arbitrage-free price of an American call
+option, using an $BBOLD expiry date $months months from now$EBOLD.
+Use the $BBOLD Last $EBOLD option price in the table as the market's
+option value.  $BR
+
+Recall: a European call option can only be exercised on its maturity
+date; an American call option can be exercised anytime before its
+maturity date.
+
+$PAR
+A) Strike price $DOLLAR$X1, implied \(\sigma\) = \{ans_rule(8)\}
+$BR
+B) Strike price $DOLLAR$X2, implied \(\sigma\) = \{ans_rule(8)\}
+$BR
+C) Strike price $DOLLAR$X3, implied \(\sigma\) = \{ans_rule(8)\}
+
+END_TEXT
+
+# Check answers
+ANS($vol1->cmp());
+ANS($vol2->cmp());
+ANS($vol3->cmp());
+
+BEGIN_SOLUTION
+
+$PAR
+$BBOLD Solutions $EBOLD
+$PAR
+
+END_SOLUTION
+
+
+ENDDOCUMENT();       # This should be the last executable line in the problem.

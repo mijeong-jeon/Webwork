@@ -1,0 +1,95 @@
+
+## DESCRIPTION
+## Operations Research / Linear Algebra
+## ENDDESCRIPTION
+
+## KEYWORDS('steady state', 'eigenvalues' 'eigenvectors')
+## Tagged by aableson
+
+## DBsubject('Linear Algebra')
+## DBchapter('Matrices')
+## DBsection('Eigenvalues')
+## Date('')
+## Author('')
+## Institution('Queens')
+## TitleText1('')
+## EditionText1('')
+## AuthorText1('')
+## Section1('')
+## Problem1('')
+
+DOCUMENT();        # This should be the first executable line in the problem.
+loadMacros(
+        "PGbasicmacros.pl",
+        "PGchoicemacros.pl",
+        "PGanswermacros.pl",
+        "PGgraphmacros.pl",
+        "PGmatrixmacros.pl",
+	"parserPopUp.pl",
+	"PGnumericalmacros.pl",
+	"MathObjects.pl",
+	"PGauxiliaryFunctions.pl"
+        );
+ 
+TEXT(beginproblem());    
+Context("Numeric");
+Context()->flags->set(tolerance=>.01);
+$showPartialCorrectAnswers = 1;
+
+$X_max = random(3, 5);
+$row = random(1, $X_max - 1);
+$p_win = random(0.1, 0.9, 0.1); 
+$p_lose = 1 - $p_win;
+
+@states = ();
+@ans_bar = ();
+@row_vals = ();
+for ($i = 0; $i <= $X_max; $i++){
+  push(@states, $i);
+  push(@ans_bar, ans_rule(5));
+  if ($i < $row +1) {  # possibility of this many after breakdowns
+      $a = $row-$i + 1; # req'd breakdowns to reach $i from $row
+    $p = fact($row)/fact($a)/fact($row-$a) * 0.8**$a * 0.2**($row-$a);
+      push(@row_vals,  Compute("$p"));
+  } 
+  else {
+      push(@row_vals,  Compute("0"));
+  }
+}
+
+# Define the answer table
+$table_start = begintable($X_max + 2);
+$table_row1  = row( "in\out", @states);
+$table_row2  = row( "$row ", @ans_bar);
+$table_end   = endtable();
+
+BEGIN_TEXT 
+
+Consider the Markov chain model for the number of working machines in a factory.   There are $X_max machines in total (working and not). 
+<ul>
+<li>\(X_t\) represents the number of machines that are working at the start of the day. 
+  <li>Given that \(X_t\) are working at the start of the day, the number that will $BBOLD break down $EBOLD that day will be binomially distributed, with \(N = X_t\) and \(p = 0.2\) (probability of an individual machine breakdown).
+  <li>If \(X_t\) is less than the total number of machines, then one machine will be repaired that day.
+  <li> The net change between \(X_t\) and \(X_{t+1}\) will be the combined effect of the binomially distributed breakdowns and the repair (if any).
+</ul>
+
+  Fill in the one-step transition probabilities for row $row of the transition probability matrix \(P\) for this system.
+
+$table_start
+$table_row1
+$table_row2
+$table_end
+
+
+END_TEXT
+  foreach my $rowv (@row_vals) {
+    ANS( $rowv->cmp());
+}
+
+BEGIN_SOLUTION
+
+
+END_SOLUTION
+
+
+ENDDOCUMENT();       # This should be the last executable line in the problem.

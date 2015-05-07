@@ -1,0 +1,129 @@
+## DESCRIPTION
+## Transition probability formalism 
+## ENDDESCRIPTION
+
+## DBsubject('Probability')
+## DBchapter('Distributions')
+## DBsection('Markov Chains')
+## Date('1/21/2012')
+## Author('Alan Ableson')
+## Institution('Queens University')
+## Section1()
+## Problem1()
+
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGbasicmacros.pl",
+"PGauxiliaryFunctions.pl",
+"MathObjects.pl",
+"PGanswermacros.pl",
+"parserPopUp.pl",
+"unionLists.pl",
+);
+
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+
+Context("Numeric");
+
+# Set lambda and mu
+
+$lambda = list_random(0.5, 0.8, 1.2, 2.5, 5.6, 7.9);
+$mu = list_random(1.2, 1.5, 1.8, 2.0) * $lambda;
+$service_time = 60/$mu; 
+$service_time = floor($service_time); # round to a nice one-decimal value
+$mu = 60/$service_time; # convert back to an hourly rate
+$rho = $lambda/$mu;
+
+$k = list_random(2,4, 6, 8);  # Erlang coefficient
+$E_sigma_sq = 1/($k * $mu * $mu);
+
+# Answers - Discrete service time
+$sigma_sq = 0;
+$D_Lq = ($lambda*$lambda * $sigma_sq + $rho*$rho)/(2 * (1-$rho));
+$D_L = Compute($rho + $D_Lq);
+$D_W = Compute($D_L/$lambda);
+
+# Answers - Exponential service time
+$sigma_sq = 1/($mu * $mu);
+$M_Lq = ($lambda*$lambda * $sigma_sq + $rho*$rho)/(2 * (1-$rho));
+$M_L = Compute($rho + $M_Lq);
+$M_W = Compute($M_L/$lambda);
+
+# Answers - Erlang service time
+$sigma_sq = $E_sigma_sq;
+$E_Lq = ($lambda*$lambda * $sigma_sq + $rho*$rho)/(2 * (1-$rho));
+$E_L = Compute($rho + $E_Lq);
+$E_W = Compute($E_L/$lambda);
+
+# Popups for units
+$popup_L = PopUp(["?", "customers", "hours", "customers per hour"], "customers");
+$popup_W = PopUp(["?", "customers", "hours", "customers per hour"], "hours");
+
+BEGIN_TEXT
+
+$PAR
+
+Consider the following queue scenario.
+\{BeginList("UL")\}
+$ITEM customers arrive at an average rate of \{$lambda\} customers per hour;
+$ITEM customers are being served by a $BBOLD single server$EBOLD, with
+the service taking \{$service_time\} minutes on average.
+\{EndList("UL")\}
+
+Compute the values of \(L\) and \(W\) for the system under the following assumptions:
+$PAR
+A) The service times are all $BITALIC exactly $EITALIC $service_time minutes;
+$BR
+\(L\) = \{ans_rule(10)\} \{ $popup_L->menu() \}
+$BR
+\(W\) = \{ans_rule(10)\} \{ $popup_W->menu() \}
+
+$PAR
+B) The service times are $BITALIC exponentially distributed $EITALIC;
+$BR
+\(L\) = \{ans_rule(10)\} $BITALIC [same units as above]$EITALIC
+$BR
+\(W\) = \{ans_rule(10)\} $BITALIC [same units as above]$EITALIC
+
+
+$PAR
+C) The service times are $BITALIC Erlang distributed $EITALIC, with \(k = $k\). 
+$BR
+\(L\) = \{ans_rule(10)\} $BITALIC [same units as above]$EITALIC
+$BR
+\(W\) = \{ans_rule(10)\} $BITALIC [same units as above]$EITALIC
+
+
+$PAR 
+D) Finally, which of the following distributions would have a waiting time closest to 
+
+
+END_TEXT
+
+ANS( $D_L->cmp() );
+ANS( $popup_L->cmp() );
+ANS( $D_W->cmp() );
+ANS( $popup_W->cmp() );
+
+ANS( $M_L->cmp() );
+ANS( $M_W->cmp() );
+
+ANS( $E_L->cmp() );
+ANS( $E_W->cmp() );
+
+BEGIN_SOLUTION
+${PAR}SOLUTION:$PAR
+
+All of the three service time options can be solved
+using the same calculation shown in class for \(L_q, L \mbox{ and } W\) 
+for the M/G/1 queue system. 
+
+
+END_SOLUTION
+
+ENDDOCUMENT();       # This should be the last executable line in the problem.

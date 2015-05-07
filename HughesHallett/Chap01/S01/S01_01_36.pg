@@ -1,0 +1,61 @@
+#DESCRIPTION
+# Domain and range given a graph
+#ENDDESCRIPTION
+
+#KEYWORDS('graphs', 'domain', 'range', 'functions')
+## tagged by GH
+
+## DBsubject('Calculus')
+## DBchapter('1 A Library of Functions')
+## DBsection('1.1 Functions and Change')
+## Problem('36')
+## Date('26/03/2012')
+## Author('Gina Hochban')
+## Institution('Queen's University')
+## TitleText1('Calculus')
+## EditionText1('5th Edition')
+## AuthorText1('Hughes-Hallett')
+
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"PGauxiliaryFunctions.pl",
+"PGgraphmacros.pl",
+"extraAnswerEvaluators.pl"
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+
+$cost = random(0.01,0.04,0.005);
+$fixed = random(5,20,5);
+$cubicfeet1 = random(1000,1800,100);
+$cubicfeet2 = random(1600,2100,100);
+while ($cubicfeet2 != $cubicfeet1) {
+      $cubicfeet2 = random(1600,2100,100);
+}
+$dollars1 = $cost*$cubicfeet1 + $fixed;
+$dollars2 = $cost*$cubicfeet2 + $fixed;
+
+TEXT(EV2(<<EOT));
+
+$BR
+Residents of the town of Maple Grove who are connected to the municipal water supply are billed a fixed amount monthly plus a charge for each cubic foot of water used. A household using $cubicfeet1 cubic feet was billed $DOLLAR$dollars1, while one using $cubicfeet2 cubic feet was billed $DOLLAR$dollars2. $BR$BR
+(a) What is the charge per cubic foot? $DOLLAR \{ans_rule(25)\} \( /ft^3\). $BR
+(b) Write an equation for the total cost, \(C\), of a resident's water as a function of cubic feet, \(x\), of water used. \(C\) = \{ans_rule(20)\}.
+$BR
+(c) How many cubic feet of water used would lead to a bill of $DOLLAR 100? \{ans_rule(25)\} \(ft^3\).
+
+EOT
+
+#ANSWERS
+ANS(fun_cmp("$cost"), 
+    fun_cmp("$cost * x + $fixed"), 
+    fun_cmp("(100-$fixed)/$cost"));
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

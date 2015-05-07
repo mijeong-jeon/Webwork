@@ -1,0 +1,59 @@
+##DESCRIPTION
+##Calculus: Limits and Derivatives
+##ENDDESCRIPTION
+
+##KEYWORDS('calculus', 'derivatives', '121Test3')
+##Tagged by GH
+
+## DBsubject('Calculus')
+## DBchapter('Limits and Derivatives')
+## DBsection('The Derivative as a Function')
+## Date('5/12/2011')
+## Author('Gina Hochban')
+## Institution('Queen\'s University')
+## TitleText1('Calculus')
+## EditionText1('5')
+## AuthorText1('Hughes-Hallett')
+## Section1('')
+## Problem1('')
+
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros("PG.pl",
+           "PGbasicmacros.pl",
+           "PGchoicemacros.pl",
+           "PGanswermacros.pl",
+           "PGauxiliaryFunctions.pl",
+           "extraAnswerEvaluators.pl");
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+
+$a = non_zero_random(2,9,1);
+$b = non_zero_random(2,9,1);
+$c = non_zero_random(2,9,1);
+$d = non_zero_random(2,9,1);
+$e = $a-1;
+$f = $d-1;
+
+TEXT(EV2(<<EOT));
+Evaluate the following derivatives. You do not need to simplify the result.
+
+$BR
+$BR
+(a) \( \frac{d}{dx} (x^$a + $b \sin(x)) \) = \{ans_rule(25) \}
+$BR
+$BR
+(b) \( \frac{d}{dx} (\ln($c x^$d)) \) = \{ans_rule(25) \}
+$BR
+$BR
+(c) \( \frac{d}{dx} \arctan(x) \) = \{ans_rule(25) \}
+$BR
+EOT
+
+@ans = (fun_cmp("$a*x^$e + $b*cos{x}"),fun_cmp("($c*$d*x^$f)/($c*x^$d)"),fun_cmp("1/(1+x^2)"));
+ANS(@ans);
+
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

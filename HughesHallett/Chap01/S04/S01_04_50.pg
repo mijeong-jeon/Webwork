@@ -1,0 +1,68 @@
+#DESCRIPTION
+# Logarithmic functions
+#ENDDESCRIPTION
+
+#KEYWORDS('logarithmic', 'functions')
+## tagged by GH
+
+## DBsubject('Calculus')
+## DBchapter('1 A Library of Functions')
+## DBsection('1.4 Logarithmic Functions')
+## Problem('50')
+## Date('01/05/2012')
+## Author('Gina Hochban')
+## Institution('Queen's University')
+## TitleText1('Calculus')
+## EditionText1('5th Edition')
+## AuthorText1('Hughes-Hallett')
+
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PGstandard.pl",
+"MathObjects.pl",
+"PGchoicemacros.pl",
+"parserPopUp.pl",
+"parserNumberWithUnits.pl",
+"hhAdditionalMacros.pl",
+"PG.pl",
+"PGbasicmacros.pl",,
+"PGanswermacros.pl",
+"PGauxiliaryFunctions.pl",
+"extraAnswerEvaluators.pl"
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+
+$percent = list_random(5,10,15);
+$first_time = list_random(4,5,6,7);
+$t = list_random(8,10,12,14);
+$k = (-1/$first_time)*ln((100-$percent)/100);
+$reduced = list_random(40, 50, 60, 70);
+
+#answers
+$percent_left = 100*exp(-$k*$t);
+$how_long = $first_time*(log($reduced/100)/log((100-$percent)/100));
+
+$popupWhy = PopUp([("When highly polluted air is filtered, there is more pollutant per liter of air to remove", 
+"As the air gets cleaner and cleaner, the filter will collect pollutant at a slower rate", "All of the above", "None of the above")], "All of the above");
+
+BEGIN_TEXT
+
+The air in a factory is being filtered so that the quantity of a pollutant, \(P\) (in mg/liter), is decreasing according to the function \(P = P_0 e^{-kt}\), where \(t\) is time in hours. If $percent% of the pollution is removed in the first $first_time hours: 
+$PAR
+\(a)\) What percentage of the pollution is left after $t hours? \{ans_rule(15)\} %
+$BR
+\(b)\) How long is it before the pollution is reduced to $reduced% of its original level? \{ans_rule(15)\} hours (Try not to round calculations mid-step)
+$BR
+\(c)\) Plot a graph of pollution against time. Show the results of your calculations on the graph. $BR
+Why might the quantity of pollutant decrease in this way? \{ $popupWhy->menu() \} 
+
+END_TEXT
+
+#ANSWERS
+ANS(fun_cmp($percent_left), fun_cmp($how_long), $popupWhy->cmp);
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

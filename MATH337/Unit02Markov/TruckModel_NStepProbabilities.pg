@@ -1,0 +1,116 @@
+
+## DESCRIPTION
+##  Exponential Distribution
+## ENDDESCRIPTION
+
+## KEYWORDS('probability', 'continuous', 'exponential', 'distribution')
+## naw tagged this problem.
+
+## DBsubject('Probability')
+## DBchapter('Distributions')
+## DBsection('Exponential Distribution')
+## Date('6/27/2005')
+## Author('Jeff Holt')
+## Institution('UVA')
+## TitleText1('Statistics for Management and Economics')
+## EditionText1('6')
+## AuthorText1('Keller, Warrack')
+## Section1()
+## Problem1()
+
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"PGnumericalmacros.pl",
+"PGstatisticsmacros.pl",
+"MathObjects.pl",
+"PGauxiliaryFunctions.pl"
+);
+
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+
+$P = Matrix([4.073454234546e-01, 5.926545765454e-01, 0.000000000000e+00, 0.000000000000e+00, 0.000000000000e+00, 0.000000000000e+00],
+[8.138540635467e-02, 3.259600171000e-01, 5.926545765454e-01, 0.000000000000e+00, 0.000000000000e+00, 0.000000000000e+00],
+[1.026685716922e-02, 7.111854918544e-02, 3.259600171000e-01, 5.926545765454e-01, 0.000000000000e+00, 0.000000000000e+00],
+[9.325475886353e-04, 9.334309580590e-03, 7.111854918544e-02, 3.259600171000e-01, 5.926545765454e-01, 0.000000000000e+00],
+[6.579027043774e-05, 8.667573181976e-04, 9.334309580590e-03, 7.111854918544e-02, 3.259600171000e-01, 5.926545765454e-01],
+[1.578504054167e-05, 2.500261494801e-04, 3.333681993068e-03, 3.333681993068e-02, 2.222454662045e-01, 7.408182206817e-01]);
+
+$P2 = $P * $P;
+$P3 = $P * $P2;
+$P4 = $P * $P3;
+$P5 = $P * $P4;
+$P6 = $P * $P5;
+
+$two_step_state = random(3, 5);
+$P2_answer = Compute($P2->element(6, $two_step_state+1));
+
+$n_steps = random(3, 5);
+if ($n_steps == 3) {
+  $Pn = $P3; 
+}
+elsif ($n_steps == 4) {
+  $Pn = $P4; }
+else { # n = 5
+  $Pn = $P5;
+  $n_steps = 5; # redundant, but for safety in case n got larger than 5
+}
+
+$n_step_state = random(2, 5);
+$Pn_answer = Compute($Pn->element(6, $n_step_state+1));
+
+# probability of state 3 or greater 
+$Pn_range_answer = Compute($Pn->element(6, 4) + $Pn->element(6, 5) +$Pn->element(6, 6));
+
+BEGIN_TEXT 
+For the questions below, answer using the Truck Fleet model, using the $BBOLD Poisson $EBOLD failure distribution (mean 0.3 failures per day). Give each answer to at least 4 significant digits.
+
+$PAR 
+  A. If the fleet starts with 5 working trucks, what is the probability that
+$two_step_state are working after exactly $BBOLD 2 $EBOLD days?
+  $BR Probability = \{ans_rule(15)\}.  
+$PAR
+  B. What is the probability of starting with 5 working trucks, and then having $BBOLD \{$n_step_state\}$EBOLD working after exactly $BBOLD \{$n_steps\} $EBOLD days?
+  $BR Probability = \{ans_rule(15)\}.  
+$PAR
+C.  What is the probability that the fleet will have 3 or more working
+   trucks after exactly \{$n_steps\} days, given you started with 5 working trucks?
+  $BR Probability = \{ans_rule(15)\}.  
+
+$PAR
+END_TEXT
+
+ANS($P2_answer->cmp());
+ANS($Pn_answer->cmp());
+ANS($Pn_range_answer->cmp());
+
+BEGIN_SOLUTION
+${PAR}$BBOLD SOLUTION: $EBOLD $PAR
+A.  After having built the one-step transition probability matrix \(P\), 
+use matrix multiplication to find \(P^2\).  The entry
+corresponding to row 6 (state 5), column \{$two_step_state + 1\} (
+state \{$two_step_state\}) contains the two-step transition probability
+requested.
+
+$PAR
+B.  Similar to Part A, you need to compute the matrix of \(P^{$n_steps}\), 
+and read the entry corresponding to row 6 (state 5), column \{$n_step_state + 1\} (
+state \{$n_step_state\}).
+
+$PAR 
+C. To find the probability of being in a range of states, you sum
+the corresponding values in the \(P^{$n_steps}\) matrix.
+
+$PAR
+
+END_SOLUTION
+
+
+ENDDOCUMENT();       # This should be the last executable line in the problem.

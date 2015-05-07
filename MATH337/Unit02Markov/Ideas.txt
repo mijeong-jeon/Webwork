@@ -1,0 +1,46 @@
+
+Lecture 1 - Markov chain intro
+  - any definitions, examples of state sequences that would _not_ be Markov?
+  - generation of a simple transition probability matrix
+  
+Simple example, turn into P matrix (RainModel_PMatrixAndSquare)
+
+Sum of rows in P must be 1. (PMatrix_SumsInTransition.pg)
+Truck Model - one-step probabilities (TruckModel_OneStepProbabilities.pg)
+
+---------------
+
+Lecture 2 - Markov chain powers
+  - probability of multi-step transitions
+  - probability in the long run, using high power approximation.
+  
+Interpretation of p^2_ij - PMatrix_TransitionInterpretation.pg
+
+-------------
+Lecture 3 - classes of states, classification of states 
+Match the transition probability matrix to a diagram.
+  - include self-loops/not include self-loops
+
+Match a transition diagram to a transition probability matrix. 
+  - include self-loops/not include self-loops
+
+Identify classes - too easy, all of them understood that.
+
+Identify transient states vs recurrent states 
+
+Alternate statements/consequences of the definitions of transient and
+recurrent states.
+
+
+
+---
+
+Assignment 2
+Part A) about basic model (RainModel), and definitions/interpretation
+of P matrix, 
+
+Part B) Truck Model - P Matrix, and some P^2, P^3 values as well. 
+Trend for the long-term probability
+
+Part C) Theory around classes, with examples.
+

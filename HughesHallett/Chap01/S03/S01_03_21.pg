@@ -1,0 +1,53 @@
+#DESCRIPTION
+# Function manipulation and transformation
+#ENDDESCRIPTION
+
+#KEYWORDS('graphs', 'domain', 'range', 'functions')
+## tagged by GH
+
+## DBsubject('Calculus')
+## DBchapter('1 A Library of Functions')
+## DBsection('1.3 New Functions From Old')
+## Problem('21')
+## Date('25/04/2012')
+## Author('Gina Hochban')
+## Institution('Queen's University')
+## TitleText1('Calculus')
+## EditionText1('5th Edition')
+## AuthorText1('Hughes-Hallett')
+
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PGstandard.pl",
+"MathObjects.pl",
+"PGchoicemacros.pl",
+"parserPopUp.pl",
+"parserNumberWithUnits.pl",
+"hhAdditionalMacros.pl",
+"PG.pl",
+"PGbasicmacros.pl",,
+"PGanswermacros.pl",
+"PGauxiliaryFunctions.pl",
+"extraAnswerEvaluators.pl"
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+
+$y=random(-10, 31, 1);
+
+$popupTemp = PopUp([("The temperature when the column of mercury is $y inches long", "The length of the column of mercury when the temperature is $y degrees Celsius")], "The length of the column of mercury when the temperature is $y degrees Celsius");
+
+BEGIN_TEXT
+
+$BR
+Let \(f(x)\) be the temperature \((^\circ C)\) when the column of mercury in a particular thermometer is \(x\) inches long. What is the meaning of \(f^{-1}($y)\) in practical terms? \{ $popupTemp->menu() \} 
+
+END_TEXT
+
+#ANSWERS
+ANS($popupTemp->cmp);
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

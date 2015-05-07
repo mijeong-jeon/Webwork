@@ -1,0 +1,92 @@
+#DESCRIPTION
+# Domain and range given a graph
+#ENDDESCRIPTION
+
+#KEYWORDS('graphs', 'domain', 'range', 'functions')
+## tagged by GH
+
+## DBsubject('Calculus')
+## DBchapter('1 A Library of Functions')
+## DBsection('1.1 Functions and Change')
+## Problem('23')
+## Date('10/03/2012')
+## Author('Gina Hochban')
+## Institution('Queen's University')
+## TitleText1('Calculus')
+## EditionText1('5th Edition')
+## AuthorText1('Hughes-Hallett')
+
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"PGauxiliaryFunctions.pl",
+"PGgraphmacros.pl",
+"extraAnswerEvaluators.pl"
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+
+#randomize domain
+$domain_start = random(0,2,1);
+$domain_end = random(6,9,1);
+
+if($domain_start == 0){
+   $range_start = 0;
+}
+else{
+   $range_start = 1;
+}
+
+if($domain_end == 6){
+   $range_end = 5.5;
+}
+else{
+   $range_end = 8;
+}
+
+$bk="black";
+
+# FEQ (Format EQuations) cleans up the writing of the functions (see FEQ in PGbasicmacros)
+
+# define function and domain
+$f = FEQ("x+sin(2*x) for x in <$domain_start,$domain_end> using color:$bk and weight:2");
+
+#set graph dimensions, axes and tick marks
+$graphf = init_graph(-2,-2,10,10,'axes'=>[0,0], 'ticks'=>[12,12]);
+
+($fRef) = plot_functions( $graphf,$f);
+
+#label axes
+$graphf->lb(new Label(9.5,0.25,'x','black','left','bottom'),
+            new Label(-0.5,9.5,'y','black','left','bottom'));
+
+BEGIN_TEXT
+
+\{ image(insertGraph($graphf), width=>200, height=>200) \}
+
+END_TEXT
+
+TEXT(EV2(<<EOT));
+$BR
+$BITALIC  You may click on the graph to enlarge it. $EITALIC
+$BR $BR
+Give the appropriate domain and range of the function. Assume the entire graph is shown. 
+$BR$BR
+\( Domain: \)\{ans_rule(25)\}.
+$BR
+\( Range: \)\{ans_rule(25)\}.
+$BR
+Write these answers in \{helpLink('interval notation')\}.
+EOT
+
+#ANSWERS
+ANS(interval_cmp("[$domain_start,$domain_end]"));
+ANS(interval_cmp("[$range_start,$range_end]"));
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

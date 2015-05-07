@@ -1,0 +1,112 @@
+##DESCRIPTION
+##Calculus: Limits and Derivatives
+##ENDDESCRIPTION
+
+##KEYWORDS('calculus', 'derivatives', '121Test3')
+##Tagged by GH
+
+## DBsubject('')
+## DBchapter('')
+## DBsection('')
+## Date('7/03/2012')
+## Author('Alan Ableson')
+## Institution('Queen\'s University')
+## TitleText1('Calculus')
+## EditionText1('5')
+## AuthorText1('Hughes-Hallett')
+## Chapter1('2')
+## Section1('4')
+## Problem1('5')
+
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros("PG.pl",
+	   "PGstandard.pl",
+	   "MathObjects.pl",
+           "parserRadioButtons.pl");
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+
+# Random order to the variables
+if (random(0, 1, 1)) {
+  $strA = "f(5) = 18";
+} else {
+  $strA = "18 = f(5)";
+}
+if (random(0, 1, 1)) {
+  $strB = "f'(5) = -3";
+} else {
+  $strB = "-3 = f'(5)";
+}
+
+$radioA_x = RadioButtons(
+["min","ml","min/ml", "ml/min"],
+  "ml", # correct answer
+);
+$radioA_y = RadioButtons(
+["min","ml","min/ml", "ml/min"],
+  "min", # correct answer
+);
+$radioB_x = RadioButtons(
+["min","ml","min/ml", "ml/min"],
+  "ml", # correct answer
+);
+$radioB_y = RadioButtons(
+["min","ml","min/ml", "ml/min"],
+  "min/ml", # correct answer
+);
+
+BEGIN_TEXT
+
+
+The time for a chemical reaction \(T\) (in  minutes),
+  is a function of the amount of catalyst present, \(a\) (in milliliters), so \(T = f(a)\).
+
+$BR
+     (a) If \($strA\), then
+$BR '5' is in 
+$BR
+\{ $radioA_x->buttons() \}
+$BR
+
+$BR '18' is in 
+$BR
+\{ $radioA_y->buttons() \}
+$BR
+
+$BR
+     (b) If \($strB\), then 
+$BR '5' is in 
+$BR
+\{ $radioB_x->buttons() \}
+$BR
+
+$BR '-3' is in 
+$BR
+\{ $radioB_y->buttons() \}
+$BR
+
+END_TEXT
+
+ANS( $radioA_x->cmp() );
+ANS( $radioA_y->cmp() );
+ANS( $radioB_x->cmp() );
+ANS( $radioB_y->cmp() );
+
+Context()->texStrings;
+BEGIN_SOLUTION
+${PAR}SOLUTION:
+$PAR
+
+(a) the input to \(f\) is in \{ $radioA_x->correct_ans() \}, 
+while the output of \(f\) is in  \{ $radioA_y->correct_ans() \}. 
+$PAR
+(b) the input to \(f'\) is still in \{ $radioB_x->correct_ans() \}, 
+while the output of \(f\) is a rate of change of \(f(a)\)
+with respect to \(a\), which must be in \{ $radioB_y->correct_ans() \}.
+
+END_SOLUTION
+Context()->normalStrings;
+ENDDOCUMENT();        # This should be the last executable line in the problem.

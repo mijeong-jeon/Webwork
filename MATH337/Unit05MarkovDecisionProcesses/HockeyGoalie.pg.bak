@@ -1,0 +1,225 @@
+## DESCRIPTION
+## Operations Research / Linear Algebra
+## ENDDESCRIPTION
+
+## KEYWORDS('steady state', 'eigenvalues' 'eigenvectors')
+## Tagged by aableson
+
+## DBsubject('Linear Algebra')
+## DBchapter('Matrices')
+## DBsection('Eigenvalues')
+## Date('')
+## Author('')
+## Institution('Queens')
+## TitleText1('')
+## EditionText1('')
+## AuthorText1('')
+## Section1('')
+## Problem1('')
+
+DOCUMENT();        # This should be the first executable line in the problem.
+loadMacros(
+        "PGbasicmacros.pl",
+        "PGanswermacros.pl",
+        "PGmatrixmacros.pl",
+	"parserPopUp.pl",
+	"parserMultiAnswer.pl",
+	"MathObjects.pl",
+	"unionLists.pl",
+	"PGauxiliaryFunctions.pl",
+	"QUpolynomialmacros.pl",
+        );
+
+TEXT(beginproblem());    
+Context("Numeric");
+$showPartialCorrectAnswers = 1;
+
+# Add the "On" and "Off" strings as an option
+#Context()->strings->add(off=>{}, Off=>{});
+#Context()->strings->add(on=>{}, On=>{});
+
+$vector_checker = sub {
+    my ($correct, $student, $self) = @_;
+      my @correct = @{$correct};
+      my @student = @{$student};
+      my $abstol = $ansHash->{abstol};
+my $i;
+for ($i = 0; $i < @student; $i++) {
+  if (!defined($student[$i]) || abs($student[$i] - $correct[$i]) > $abstol) {
+return 0
+}
+}
+return 1;};
+
+$on_off_checker = sub {
+    my ($correct, $student, $self) = @_;
+      my @correct = @{$correct};
+      my @student = @{$student};
+my $i;
+Value->Error("STopping!");
+return 0;
+for ($i = 0; $i < @student; $i++) {
+  if (!defined($student[$i])) {
+      Value->Error("Student i=$i not defined");
+    return 0;
+  } 
+  $s = 0;
+  if ($student[$i] =~ /^off$/) {
+    $s = 1;  
+  }
+  if ($student[$i] =~ /^on$/) {
+    $s = 2;  
+  }
+  if (  abs($s - $correct[$i]) > 1e-3) {
+      Value->Error("Answer i=$i, s=$s, correct=$correct[$i], student=$student[$i].");
+    return 0;
+  }
+} # next i
+return 1;};
+
+$ver = random(1, 1);
+
+if ($ver == 1) {
+  @pOff = (0.15, 0.81, 0.04);
+  @pOn = (0.02, 0.96, 0.02);
+  $dt = 15;
+  $T = 90;
+  $Off_2step = 0.0664;
+  $On_2step = 0.0388;
+  @A = (2, 1, 1, 1, 1, 1);
+  @p_tie_down_by_one = (0.14597, 0.13279, 0.11673, 0.09670, 0.07160, 0.04000);
+}
+else { #error
+  
+}
+
+$N = $T / $dt;
+$two_dt = 2 * $dt;
+@t_list = ("0") x $N;
+for ($i = 1; $i <= $N; $i++) {
+  $t_list[$N-$i] = $i * $dt;
+}
+
+  
+$OneStep_ans = MultiAnswer( $pOff[2], $pOn[2])->with(
+  singleResult => 0,
+  checker => sub {
+    my ($correct, $student, $self) = @_;
+      my @correct = @{$correct};
+      my @student = @{$student};
+      my $abstol = $ansHash->{abstol};
+    my $i;
+    for ($i = 0; $i < @correct; $i++) {
+      if (!defined($student[$i]) || abs($student[$i] - $correct[$i]) > $abstol) {
+        return 0;
+      }
+    }
+    return 1;
+  }, abstol => 1e-3);
+
+$TwoStep_ans = MultiAnswer( $Off_2step, $On_2step)->with(
+  singleResult => 1,
+  checker => $vector_checker, abstol => 1e-3);
+
+$OptimalA_ans = MultiAnswer( @A )->with(
+  singleResult => 1,
+  checker => $on_off_checker);  # should be exact match
+
+# Ask about the probability of winning given this strategy
+$rand_p_ind = random(0, 2);
+$rand_p_time = $t_list[$rand_p_ind];
+
+BEGIN_TEXT
+
+Consider the problem of a hockey coach who is behind by one goal near
+the end of a hockey game.  The coach has the option of trading her
+goalie for one more offensive player.  If they do this, they are more
+likely to score, but also more likely to be scored upon.  
+
+$PAR
+
+Your challenge as advisor to the coach is to to determine the optimal
+time to pull the goalie.  You consider the problem starting $T
+seconds away from the end of the game, and dividing this total time into
+$N intervals of $dt seconds each.
+
+$PAR
+
+Your goal is to find the strategy that maximizes the probability that
+you will achieve a $BBOLD tie score or better $EBOLD at the end of the
+game.
+
+\{BeginList("UL") \}
+$ITEM When your goalie is $BBOLD off$EBOLD the ice, in
+each $dt second interval$BR 
+\(p_{\mbox{\tiny they score}}\) = \{$pOff[0]\} and 
+\(p_{\mbox{\tiny you score}}\) = \{$pOff[2]\}.
+$ITEM When your goalie is $BBOLD on$EBOLD the ice, in
+each $dt second interval $BR
+\(p_{\mbox{\tiny they score}}\) = \{$pOn[0]\} and 
+\(p_{\mbox{\tiny you score}}\) = \{$pOn[2]\}.
+\{EndList("UL") \}
+
+$PAR 
+A) At $BBOLD \{ $dt\} seconds $EBOLD before the end of the game, if you are $BBOLD behind by 1 goal$EBOLD, what is the probability that you will end the game with a tie or better?
+
+\{ begintable(3) \}
+\{ row("", "Goalie off", "Goalie on") \}
+\{ row("\(p\)(tie or better at end)", $OneStep_ans->ans_rule(5),$OneStep_ans->ans_rule(5)) \}
+\{ endtable() \}
+
+$PAR 
+B) At $BBOLD \{ $two_dt\} seconds $EBOLD before the end of the game, if you are $BBOLD behind by 1 goal$EBOLD, what is the probability that you will end the game with a tie or better?  
+
+\{ begintable(3) \}
+\{ row("", "Goalie off (all $two_dt seconds)", "Goalie on (all $two_dt seconds)") \}
+\{ endtable() \}
+
+(Hint: these involve two-step transition probabilities: how can you compute them easily using \(P\)?)
+$PAR 
+
+Build a dynamic programming solution for this problem which will identify the optimal action (goalie on or off) on each interval.
+
+$PAR 
+
+C) For a score where you are $BBOLD 1 goal behind $EBOLD at the each
+of the following time points, what is the optimal strategy for that
+interval?
+
+Use the words "On" and "Off" to indicate your strategy for the presence
+or absence of the goalie respectively.
+
+\{ begintable(3) \}
+\{ row("Time to end", @t_list) \}
+\{ endtable() \}
+
+D) If your are $BBOLD $rand_p_time$EBOLD seconds from the end, and
+using your optimal strategy, what is the probability that you will end
+the game with a tie or better?
+$BR
+Prob. of tie or better with $rand_p_time remaining: \{ans_rule(10)\}
+
+
+END_TEXT
+#\{ row("\(p\)(tie or better at end)", $TwoStep_ans->ans_rule(8),$TwoStep_ans->ans_rule(8)) \}
+#\{ row("Optimal action, \(a^*\)", $OptimalA_ans->ans_rule(4), $OptimalA_ans->ans_rule(4), $OptimalA_ans->ans_rule(4), $OptimalA_ans->ans_rule(4), $OptimalA_ans->ans_rule(4), $OptimalA_ans->ans_rule(4)) \}
+
+# Check answers
+ANS( $OneStep_ans->cmp() );
+
+#ANS( $TwoStep_ans->cmp() );
+
+#ANS( $OptimalA_ans->cmp() );
+
+ANS( num_cmp($p_tie_down_by_one[$rand_p_ind], tol => 0.005, tolType => "absolute"));
+
+
+BEGIN_SOLUTION
+$BR $BBOLD SOLUTION:$EBOLD
+$BR
+
+
+END_SOLUTION
+
+
+ENDDOCUMENT();       # This should be the last executable line in the problem.

@@ -1,0 +1,297 @@
+## DESCRIPTION
+## Operations Research / Linear Algebra
+## ENDDESCRIPTION
+
+## KEYWORDS('steady state', 'eigenvalues' 'eigenvectors')
+## Tagged by aableson
+
+## DBsubject('Linear Algebra')
+## DBchapter('Matrices')
+## DBsection('Eigenvalues')
+## Date('')
+## Author('')
+## Institution('Queens')
+## TitleText1('')
+## EditionText1('')
+## AuthorText1('')
+## Section1('')
+## Problem1('')
+
+DOCUMENT();        # This should be the first executable line in the problem.
+loadMacros(
+        "PGbasicmacros.pl",
+        "PGanswermacros.pl",
+        "PGmatrixmacros.pl",
+	"parserPopUp.pl",
+	"parserMultiAnswer.pl",
+	"MathObjects.pl",
+	"unionLists.pl",
+	"PGauxiliaryFunctions.pl",
+	"QUpolynomialmacros.pl",
+        );
+
+TEXT(beginproblem());    
+Context("Numeric");
+$showPartialCorrectAnswers = 1;
+
+# Add the "On" and "Off" strings as an option
+Context()->strings->add(off=>{}, Off=>{});
+Context()->strings->add(on=>{}, On=>{});
+$vector_checker =  sub {
+  my ($correct, $student, $self) = @_;
+  my @correct = @{$correct};
+  my @student = @{$student};
+  my $i;
+  for ($i = 0; $i < @student; $i++) {
+    if (!defined($student[$i]) || abs($student[$i] - $correct[$i]) > 1e-3) {
+      return 0
+    }
+  }
+  return 1;
+};
+
+$on_off_checker =  sub {
+  my ($correct, $student, $self) = @_;
+  my @correct = @{$correct};
+  my @student = @{$student};
+      Value->Error("Fail on 0, $student[0]");
+return 0;
+  my $i;
+  %s_hash = ("on" => 2, "off" => 1);
+  for ($i = 0; $i < @student; $i++) {
+    if (!defined($student[$i]) || abs($s_hash{$student[$i]} - $correct[$i]) > 1e-3) {
+      Value->Error("Fail on $i");
+      return 0
+    }
+  }
+  return 1;
+};
+
+$ver = random(1, 6);
+
+if ($ver == 1) {
+  @pOff = (0.15, 0.81, 0.04);
+  @pOn = (0.02, 0.96, 0.02);
+  $dt = 15;
+  $T = 90;
+  $Off_2step = 0.0664;
+  $On_2step = 0.0388;
+  @A = (2, 1, 1, 1, 1, 1);
+  @p_tie_down_by_one = (0.14597, 0.13279, 0.11673, 0.09670, 0.07160, 0.04000);
+  $A_1 = Compute("On");
+  $A_2 = Compute("Off");
+  $A_3 = Compute("Off");
+  $A_4 = Compute("Off");
+  $A_5 = Compute("Off");
+  $A_6 = Compute("Off");
+}
+elsif ($ver == 2) {
+  @pOff = (0.15, 0.82, 0.03);
+  @pOn = (0.03, 0.95, 0.02);
+  $dt = 20;
+  $T = 120;
+  $Off_2step = 0.0501;
+  $On_2step = 0.0384;
+  @A = (2, 2, 1, 1, 1, 1);
+  @p_tie_down_by_one = (0.11344, 0.10088, 0.08726, 0.07244, 0.05370, 0.03000);
+  $A_1 = Compute("On");
+  $A_2 = Compute("On");
+  $A_3 = Compute("Off");
+  $A_4 = Compute("Off");
+  $A_5 = Compute("Off");
+  $A_6 = Compute("Off");
+}
+elsif ($ver == 3) {
+  @pOff = (0.50, 0.47, 0.03);
+  @pOn = (0.01, 0.98, 0.01);
+  $dt = 20;
+  $T = 120;
+  $Off_2step = 0.0291;
+  $On_2step = 0.0197;
+  @A = (2, 2, 2, 2, 1, 1);
+  @p_tie_down_by_one = (0.07801, 0.06983, 0.06141, 0.05274, 0.04380, 0.03000);
+  $A_1 = Compute("On");
+  $A_2 = Compute("On");
+  $A_3 = Compute("On");
+  $A_4 = Compute("On");
+  $A_5 = Compute("Off");
+  $A_6 = Compute("Off");
+}
+elsif ($ver == 4) {
+  @pOff = (0.04, 0.92, 0.04);
+  @pOn = (0.01, 0.96, 0.02);
+  $dt = 15;
+  $T = 90;
+  $Off_2step = 0.0752;
+  $On_2step = 0.0390;
+  @A = (1, 1, 1, 1, 1, 1);
+  @p_tie_down_by_one = (0.19057, 0.16589, 0.13880, 0.10901, 0.07620, 0.04000);
+  $A_1 = Compute("Off");
+  $A_2 = Compute("Off");
+  $A_3 = Compute("Off");
+  $A_4 = Compute("Off");
+  $A_5 = Compute("Off");
+  $A_6 = Compute("Off");
+}
+elsif ($ver == 5) {
+  @pOff = (0.20, 0.73, 0.07);
+  @pOn = (0.03, 0.94, 0.03);
+  $dt = 20;
+  $T = 120;
+  $Off_2step = 0.1071;
+  $On_2step = 0.0573;
+  @A = (2, 1, 1, 1, 1, 1);
+  @p_tie_down_by_one = (0.21312, 0.19773, 0.17920, 0.15392, 0.11900, 0.07000);
+  $A_1 = Compute("On");
+  $A_2 = Compute("Off");
+  $A_3 = Compute("Off");
+  $A_4 = Compute("Off");
+  $A_5 = Compute("Off");
+  $A_6 = Compute("Off");
+}
+elsif ($ver == 6) {
+  @pOff = (0.30, 0.63, 0.07);
+  @pOn = (0.04, 0.93, 0.03);
+  $dt = 15;
+  $T = 90;
+  $Off_2step = 0.0931;
+  $On_2step = 0.0567;
+  @A = (2, 2, 2, 1, 1, 1);
+  @p_tie_down_by_one = (0.18428, 0.17003, 0.15413, 0.13638, 0.11130, 0.07000);
+  $A_1 = Compute("On");
+  $A_2 = Compute("On");
+  $A_3 = Compute("On");
+  $A_4 = Compute("Off");
+  $A_5 = Compute("Off");
+  $A_6 = Compute("Off");
+}
+else { #error
+}
+
+$N = $T / $dt;
+$two_dt = 2 * $dt;
+@t_list = ("0") x $N;
+for ($i = 1; $i <= $N; $i++) {
+  $t_list[$N-$i] = $i * $dt;
+}
+
+  
+$OneStep_ans = MultiAnswer( $pOff[2], $pOn[2])->with(
+  singleResult => 1,
+  checker => $vector_checker, $abs_tol => 1e-3);
+
+$TwoStep_ans = MultiAnswer( $Off_2step, $On_2step)->with(
+  singleResult => 1,
+  checker => $vector_checker, abstol => 1e-3);
+
+$OptimalA_ans = MultiAnswer( @A )->with(
+  singleResult => 0,
+  allowBlankAnswers => 1,
+  checker => $on_off_checker);  # should be exact match
+
+# Ask about the probability of winning given this strategy
+$rand_p_ind = random(0, 2, 1);
+$rand_p_time = $t_list[$rand_p_ind];
+
+BEGIN_TEXT
+
+$PAR
+
+Consider the problem of a hockey coach who is behind by one goal near
+the end of a hockey game.  The coach has the option of trading her
+goalie for one more offensive player.  If the coach does this, their
+team iis more likely to score, but also more likely to be scored upon.
+
+$PAR
+
+Your challenge as advisor to the coach is to to determine the optimal
+time to pull the goalie.  You consider the problem starting $T
+seconds away from the end of the game, and dividing this total time into
+$N intervals of $dt seconds each.
+
+$PAR
+
+Your goal is to find the strategy that maximizes the probability that
+you will achieve a $BBOLD tie score or better $EBOLD at the end of the
+game.
+
+\{BeginList("UL") \}
+$ITEM When your goalie is $BBOLD off$EBOLD the ice, in
+each $dt second interval$BR 
+\(p_{\mbox{\tiny they score}}\) = \{$pOff[0]\} and 
+\(p_{\mbox{\tiny you score}}\) = \{$pOff[2]\}.
+$ITEM When your goalie is $BBOLD on$EBOLD the ice, in
+each $dt second interval $BR
+\(p_{\mbox{\tiny they score}}\) = \{$pOn[0]\} and 
+\(p_{\mbox{\tiny you score}}\) = \{$pOn[2]\}.
+\{EndList("UL") \}
+
+$PAR 
+A) At $BBOLD \{ $dt\} seconds $EBOLD before the end of the game, if you are $BBOLD behind by 1 goal$EBOLD, what is the probability that you will end the game with a tie or better?
+
+\{ begintable(3) \}
+\{ row("", "Goalie off", "Goalie on") \}
+\{ row("\(p\)(tie or better at end)", $OneStep_ans->ans_rule(5),$OneStep_ans->ans_rule(5)) \}
+\{ endtable() \}
+
+$PAR 
+B) At $BBOLD \{ $two_dt\} seconds $EBOLD before the end of the game, if you are $BBOLD behind by 1 goal$EBOLD, what is the probability that you will end the game with a tie or better?  
+
+\{ begintable(3) \}
+\{ row("", "Goalie off (all $two_dt seconds)", "Goalie on (all $two_dt seconds)") \}
+\{ row("\(p\)(tie or better at end)", $TwoStep_ans->ans_rule(8),$TwoStep_ans->ans_rule(8)) \}
+\{ endtable() \}
+
+(Hint: these involve two-step transition probabilities: how can you compute them easily using \(P\)?)
+$PAR 
+
+Build a dynamic programming solution for this problem which will identify the optimal action (goalie on or off) on each interval.
+
+$PAR 
+
+C) For a score where you are $BBOLD 1 goal behind $EBOLD at the each
+of the following time points, what is the optimal strategy for that
+interval?
+
+Use the words "On" and "Off" to indicate your strategy for the presence
+or absence of the goalie respectively.
+
+\{ begintable(3) \}
+\{ row("Time to end", @t_list) \}
+\{ row("Optimal action, \(a^*\)", ans_rule(4), ans_rule(4), ans_rule(4), ans_rule(4), ans_rule(4), ans_rule(4)) \}
+\{ endtable() \}
+
+D) If you are $BBOLD $rand_p_time$EBOLD seconds from the end, and
+using your optimal strategy, what is the probability that you will end
+the game with a tie or better?
+$BR
+Prob. of tie or better with $rand_p_time seconds remaining: \{ans_rule(10)\}
+
+
+END_TEXT
+
+# Check answers
+ANS( $OneStep_ans->cmp() );
+
+ANS( $TwoStep_ans->cmp() );
+
+#ANS( $OptimalA_ans->cmp() );
+ANS( $A_1->cmp() );
+ANS( $A_2->cmp() );
+ANS( $A_3->cmp() );
+ANS( $A_4->cmp() );
+ANS( $A_5->cmp() );
+ANS( $A_6->cmp() );
+
+ANS( num_cmp($p_tie_down_by_one[$rand_p_ind], tol => 0.005, tolType => "absolute"));
+
+
+BEGIN_SOLUTION
+$BR $BBOLD SOLUTION:$EBOLD
+$BR
+
+
+END_SOLUTION
+
+
+ENDDOCUMENT();       # This should be the last executable line in the problem.

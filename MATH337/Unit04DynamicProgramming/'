@@ -1,0 +1,214 @@
+
+## DESCRIPTION
+## Operations Research / Linear Algebra
+## ENDDESCRIPTION
+
+## KEYWORDS('steady state', 'eigenvalues' 'eigenvectors')
+## Tagged by aableson
+
+## DBsubject('Linear Algebra')
+## DBchapter('Matrices')
+## DBsection('Eigenvalues')
+## Date('')
+## Author('')
+## Institution('Queens')
+## TitleText1('')
+## EditionText1('')
+## AuthorText1('')
+## Section1('')
+## Problem1('')
+
+DOCUMENT();        # This should be the first executable line in the problem.
+loadMacros(
+        "PGbasicmacros.pl",
+        "PGanswermacros.pl",
+        "PGmatrixmacros.pl",
+	"parserPopUp.pl",
+	"parserMultiAnswer.pl",
+	"MathObjects.pl",
+	"unionLists.pl",
+	"PGauxiliaryFunctions.pl",
+        );
+
+
+ 
+TEXT(beginproblem());    
+Context("Numeric");
+Context()->flags->set(tolerance=>.01);
+$showPartialCorrectAnswers = 1;
+
+# Parameters
+@D = (10.00, 12.00, 8.00, 8.00, 15.00);
+$num_stores = 5;
+$sold_profit = 22.00;
+$unsold_profit = -6.00;
+$unmet_profit = -3.00;
+
+$total_demand = 53;
+$max_supply = 80;
+@f_star_last = (-90.00, -62.00, -34.00, -6.00, 21.99, 49.97, 77.88, 105.64, 133.08, 159.92, 185.76, 210.09, 232.36, 252.06, 268.80, 282.37, 292.76, 300.17, 304.95, 307.55, 308.42, 307.99, 306.64, 304.65, 302.26, 299.60, 296.79, 293.90, 290.95, 287.98, 284.99, 282.00, 279.00, 276.00, 273.00, 270.00, 267.00, 264.00, 261.00, 258.00, 255.00, 252.00, 249.00, 246.00, 243.00, 240.00, 237.00, 234.00, 231.00, 228.00, 225.00, 222.00, 219.00, 216.00, 213.00, 210.00, 207.00, 204.00, 201.00, 198.00, 195.00, 192.00, 189.00, 186.00, 183.00, 180.00, 177.00, 174.00, 171.00, 168.00, 165.00, 162.00, 159.00, 156.00, 153.00, 150.00, 147.00, 144.00, 141.00, 138.00, 135.00);
+$last_opt_f = 308.42;
+$last_opt_s = 20;
+@f_star_sec_last = (-138.00, -110.00, -82.00, -54.00, -26.01, 1.98, 29.96, 57.87, 85.77, 113.54, 141.11, 168.55, 195.39, 222.08, 247.91, 272.83, 297.15, 319.43, 341.50, 361.20, 379.49, 396.23, 410.19, 423.75, 434.14, 443.77, 451.18, 456.97, 461.75, 464.46, 467.06, 467.92, 468.39, 467.97, 466.94, 465.59, 463.65, 461.66, 459.27, 456.80, 454.15, 451.40, 448.60, 445.71, 442.81, 439.87, 436.92, 433.94, 430.96, 427.98, 424.98, 421.99, 418.99, 416.00, 413.00, 410.00, 407.00, 404.00, 401.00, 398.00, 395.00, 392.00, 389.00, 386.00, 383.00, 380.00, 377.00, 374.00, 371.00, 368.00, 365.00, 362.00, 359.00, 356.00, 353.00, 350.00, 347.00, 344.00, 341.00, 338.00, 335.00);
+$sec_last_opt_f = 468.39;
+$sec_last_opt_s = 32;
+
+$x_star = Matrix->new_from_array_ref([[1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 7, 7, 7, 7, 7, 7, 8, 8, 8, 8, 8, 9, 9, 9, 9, 9, 10, 10, 10, 10, 10, 11, 11, 11, 11, 11, 12, 12, 12, 12, 12, 13, 13, 13, 13, 13, 14, 14, 14, 14, 14, 15, 15, 15, 15, 15, 16, 16, 16, 16, 16, 16, 17, 17, 17, 17, 17, 18, 18, 18, 18, 18, 19, 19, 19, 19, 19, 20, 20, 20, 20],
+[1, 1, 1, 2, 2, 3, 3, 3, 3, 4, 4, 5, 5, 5, 5, 6, 6, 6, 6, 6, 7, 7, 7, 7, 8, 8, 9, 9, 9, 9, 10, 10, 10, 10, 11, 11, 11, 11, 12, 12, 12, 12, 13, 13, 13, 14, 14, 14, 14, 15, 15, 15, 15, 16, 16, 16, 16, 17, 17, 17, 17, 18, 18, 18, 18, 19, 19, 20, 20, 20, 20, 21, 21, 21, 21, 22, 22, 22, 22, 22, 23, 23, 23, 23, 24, 24, 24, 24, 25, 25, 26, 26, 26, 26, 27, 27, 27, 27, 28, 28, 28],
+[1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 6, 6, 6, 6, 7, 7, 8, 8, 8, 9, 9, 9, 9, 9, 10, 10, 10, 11, 11, 11, 12, 12, 12, 12, 13, 13, 13, 14, 14, 14, 15, 15, 15, 15, 16, 16, 16, 17, 17, 17, 18, 18, 18, 18, 19, 19, 19, 20, 20, 20, 21, 21, 21, 22, 22, 22, 22, 23, 23, 23, 24, 24, 24, 25, 25, 25, 25, 26, 26, 26, 27, 27, 27, 28, 28, 28, 29, 29, 29, 30, 30],
+[1, 1, 1, 1, 1, 2, 2, 2, 3, 3, 4, 4, 4, 5, 5, 6, 6, 6, 7, 7, 8, 8, 9, 9, 9, 10, 10, 11, 11, 12, 12, 12, 13, 13, 14, 14, 15, 15, 15, 16, 16, 17, 17, 18, 18, 18, 19, 19, 20, 20, 21, 21, 22, 22, 22, 23, 23, 24, 24, 25, 25, 25, 26, 26, 27, 27, 28, 28, 29, 29, 29, 30, 30, 31, 31, 32, 32, 33, 33, 33, 34, 34, 35, 35, 36, 36, 37, 37, 38, 38, 38, 39, 39, 40, 39, 40, 41, 42, 42, 42, 45],
+[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101]]);
+
+# Random elements
+$available_cases = random($total_demand + 2, $max_supply);
+
+$last_store_s =  $D[@D-1] + non_zero_random(-3, 3);
+
+# Max profit - all sales, no losses
+$max_profit = $available_cases * $sold_profit;
+
+# Tables 
+$table_D_start = begintable(8);
+$table_D_row1  = row( "Store ", 1, 2, 3, 4, 5); 
+$table_D_row2  = row( "Expected Demand", @D);
+$table_D_end   = endtable();
+
+# Submission of optimal numbers of cases
+$table_x_start = begintable(8);
+$table_x_row1  = row( "Store ", 1, 2, 3, 4, 5); 
+$table_x_row2  = row( "Cases to assign", ans_rule(6), ans_rule(6),ans_rule(6),ans_rule(6),ans_rule(6));
+$table_x_end   = endtable();
+
+# Computation of optimal assignment
+@x_opt = "0" x $num_stores;
+$s = $available_cases;
+for ($store = 1; $store <= $num_stores; $store++) {
+   $x_opt[$store-1] = $x_star->element($store-1, $s+1);
+   $s = $s - $x_opt[$store-1];
+}
+
+BEGIN_TEXT
+
+A chain of grocery stores has \{$S\} stores served by a single warehouse.
+\{BeginList("UL") \}
+$ITEM A shipment with \{$available_cases\} cases of strawberries arrives at the warehouse,
+and will be distributed to the stores.  
+$ITEM The strawberries will be on
+sale for 4 days, after which they will go bad and be thrown out. 
+$ITEM Based on historical data, the average demand for strawberries over 4 days
+will be:
+\{EndList("UL")\}
+$table_D_start
+$table_D_row1
+$table_D_row2
+$table_D_end
+
+$PAR
+Our overall goal will be to find the distribution of the \{$available_cases\} cases to the stores that will $BBOLD
+  maximize the expected profit on cases sold$EBOLD.
+\{BeginList("UL") \}
+$ITEM Each $BBOLD sold$EBOLD case yields $\{$sold_profit\} profit.
+$ITEM Each $BBOLD unsold$EBOLD case costs $\{ abs($unsold_profit)\} (loss).
+$ITEM Each case which was wanted by customers, but which couldn't be met
+with the assigned supply, costs $\{ abs( $unmet_profit)\} (estimated penalty for associated/future lost sales).
+\{EndList("UL")\}
+
+$PAR 
+
+Starting with the last store, Store \{$num_stores\}, you will use
+dynamic programming to compute the optimal distribution of cases to
+stores.  The following questions will follow your progress through
+that calculation.  
+
+$PAR
+
+A) If you were to sell every case, and have no unmet demand, what
+would your profit be?  (This is an upper limit on your expected profit.)
+$BR
+Profit if all cases were sold: $\{ans_rule(10)\} 
+
+$PAR 
+$PAR  
+B) If \{$last_store_s\} cases were left to assign to the last store, with
+mean demand \{$D[num_stores-1]\}, what would the expected profit from
+that store be?
+$BR
+Expected profit in last store given \{$last_store_s\} cases assigned: 
+$\{ans_rule(10)\} 
+$PAR
+
+C) If we just consider the last store by itself, what would be the optimal number of cases to assign, and what would the resulting profit be?
+$BR
+Optimal number of cases for last store: \{ans_rule(10)\}
+$BR
+Resulting profit:  $\{ans_rule(10)\}
+
+$PAR
+
+D) If we just consider the last $BBOLD two stores$EBOLD by themselves,
+what would be the optimal number of cases to assign (in total) to
+them, and what would the resulting profit be?  $BR Optimal number of
+cases for last two stores: 
+$BR
+Optimal number of cases for last store: \{ans_rule(10)\}
+$BR
+Resulting profit:  $\{ans_rule(10)\}
+
+$PAR
+
+E) Given you have \{$total_cases\} cases to divide between all the
+stores, what way would result in the largest possible profit?
+
+$BR Store 1: 
+$BR Store 2: 
+$BR Store 3: 
+$BR Store 4: 
+$BR Store 5: 
+$BR Expected total profit: 
+
+$PAR
+
+F) If you could have ordered any number of cases to share between
+$BBOLD all $EBOLD of your stores, what number of cases would have been
+optimal, and what would your expected profit have been?
+
+$BR
+$BR
+Optimal number of cases for last two stores: 
+$BR
+Resulting profit: 
+
+
+END_TEXT
+
+# Check answers
+# Maximum profit
+ANS(num_cmp($max_profit, tol => 0.05));
+
+# Profit with last_store_s remaining
+ANS(num_cmp($f_star_last[$last_store_s], tol =>0.05));
+
+# Optimal values for just last store
+ANS(num_cmp($last_opt_s));
+ANS(num_cmp($last_opt_f, tol =>0.05));
+
+# Optimal values for last two stores
+ANS(num_cmp($sec_last_opt_s));
+ANS(num_cmp($sec_last_opt_f, tol =>0.05));
+
+#Optimal solution
+ANS(num_cmp($x_opt[0]));
+ANS(num_cmp($x_opt[1]));
+ANS(num_cmp($x_opt[2]));
+ANS(num_cmp($x_opt[3]));
+ANS(num_cmp($x_opt[4]));
+
+
+BEGIN_SOLUTION
+$BR $BBOLD SOLUTION: $EBOLD
+$BR
+
+END_SOLUTION
+
+
+ENDDOCUMENT();       # This should be the last executable line in the problem.

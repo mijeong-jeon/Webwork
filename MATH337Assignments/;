@@ -1,0 +1,256 @@
+
+## DESCRIPTION
+## Operations Research / Linear Algebra
+## ENDDESCRIPTION
+
+## KEYWORDS('steady state', 'eigenvalues' 'eigenvectors')
+## Tagged by aableson
+
+## DBsubject('Linear Algebra')
+## DBchapter('Matrices')
+## DBsection('Eigenvalues')
+## Date('')
+## Author('')
+## Institution('Queens')
+## TitleText1('')
+## EditionText1('')
+## AuthorText1('')
+## Section1('')
+## Problem1('')
+
+DOCUMENT();        # This should be the first executable line in the problem.
+loadMacros(
+        "PGbasicmacros.pl",
+        "PGchoicemacros.pl",
+        "PGanswermacros.pl",
+        "PGgraphmacros.pl",
+        "PGmatrixmacros.pl",
+	"parserPopUp.pl",
+	"MathObjects.pl",
+        );
+ 
+TEXT(beginproblem());    
+Context("Numeric");
+Context()->flags->set(tolerance=>.01);
+$showPartialCorrectAnswers = 1;
+
+# Amount spent -> percentage popularity change matrix
+$S = 6; # number of states, or 0.... $S-1 are the amounts
+$Nr = 4; # number of regions to split money
+my $B = new Matrix($S,$Nr);
+for ($r = 0; $r < $Nr; $r++) {
+  $B->assign($s, $r, 0);  # initialize first row (0 spent) to 0 improvement
+}
+for ($s = 1; $s < $S; $s++) {
+  for ($r = 0; $r < $Nr; $r++) {
+    $prev = $B[$s-1, $r];
+    $B->assign($s, $r, random(3, 6));
+
+  }
+}
+
+# Define the states, and the shortest path to the end
+@S4_states = ("L", "M");
+%S4_length = ("L" => 3, "M" => 2);
+
+@S3_states = ("I", "J", "K");
+%S3_length = ("I" => 5, "J" => 4, "K"=> 4);
+
+@S2_states = ("E", "F", "G", "H");
+%S2_length = ("E" => 7, "F" => 6, "G"=> 6, "H" => 6);
+
+@S1_states = ("A", "B", "C", "D");
+%S1_length = ("A" => 8, "B" => 9, "C" => 7, "D" => 7);
+
+@S0_states = ("Start");
+%S0_length = ("Start" => 10);
+
+#Hacky: only one of the strings is the 'right' answer, but the second
+# correct value is an alias for the first.
+Context()->strings->add("DHKL"=>{});
+Context()->strings->add("DHKM"=>{alias=>"DHKL"});
+
+# Define the S4 response table
+$table_s4_start = begintable(2);
+$table_s4_row1  = row( " ", "End");
+$table_s4_row2  = row( "L ", ans_rule(6));
+$table_s4_row3  = row( "M ", ans_rule(6));
+$table_s4_end   = endtable();
+
+# Define the S3 response table
+$table_s3_start = begintable(2);
+$table_s3_row1  = row( " ", "End");
+$table_s3_row2  = row( "I", ans_rule(6));
+$table_s3_row3  = row( "J", ans_rule(6));
+$table_s3_row4  = row( "K", ans_rule(6));
+$table_s3_end   = endtable();
+
+# Define the S2 response table
+$table_s2_start = begintable(2);
+$table_s2_row1  = row( " ", "End");
+$table_s2_row2  = row( "E", ans_rule(6));
+$table_s2_row3  = row( "F", ans_rule(6));
+$table_s2_row4  = row( "G", ans_rule(6));
+$table_s2_row5  = row( "H", ans_rule(6));
+$table_s2_end   = endtable();
+
+# Define the S1 response table
+$table_s1_start = begintable(2);
+$table_s1_row1  = row( " ", "End");
+$table_s1_row2  = row( "A", ans_rule(6));
+$table_s1_row3  = row( "B", ans_rule(6));
+$table_s1_row4  = row( "C", ans_rule(6));
+$table_s1_row5  = row( "D", ans_rule(6));
+$table_s1_end   = endtable();
+
+# Define the S0 response table
+$table_s0_start = begintable(2);
+$table_s0_row1  = row( " ", "End");
+$table_s0_row2  = row( "Start", ans_rule(6));
+$table_s0_end   = endtable();
+
+# Define final sequence table
+$table_seq_start = begintable(2);
+$table_seq_row1  = row( "Optimal Path ", ans_rule(6));
+$table_seq_end   = endtable();
+
+# Build the correct answers.
+@S4_soln = ();
+foreach $s (@S4_states) {
+	push(@S4_soln, Compute($S4_length{$s}));
+}
+
+@S3_soln = ();
+foreach $s (@S3_states) {
+	push(@S3_soln, Compute($S3_length{$s}));
+}
+
+@S2_soln = ();
+foreach $s (@S2_states) {
+	push(@S2_soln, Compute($S2_length{$s}));
+}
+
+@S1_soln = ();
+foreach $s (@S1_states) {
+	push(@S1_soln, Compute($S1_length{$s}));
+}
+
+@S0_soln = ();
+foreach $s (@S0_states) {
+	push(@S0_soln, Compute($S0_length{$s}));
+}
+
+$final_seq = String("DHKL");
+
+
+BEGIN_TEXT 
+
+A political candidate's campaign office is deciding how to allocate its advertising budget.
+Based on polling information, estimates have been made about the
+expected increase in popularity of the candidate (in percentage
+points), given the amount spent on advertisting in each of 4 districts
+(regions).  These estimates are indicated in the table below.
+
+\{begintable(7) \}
+\{row("\(t\) (s)" ,0,0.2,0.4,0.6,0.8,1.0) \}
+\{row("\(s\) (ft)",0,$a1,$a2,3.8,6.5,9.6) \}
+\{endtable()\}
+$ECENTER
+
+
+
+
+You should solve this problem on paper using the tableau approach
+shown in class.  To validate your work, you will just be asked for
+subsets of the tableaux to verify your answers.
+
+$PAR
+A) Length of shortest path from $BBOLD L, M $EBOLD to End.  (This is the \(f^*\) column for each tableau.)
+$table_s4_start
+$table_s4_row1
+$table_s4_row2
+$table_s4_row3
+$table_s4_end
+
+$PAR
+B)Length of shortest path from $BBOLD I,J,K $EBOLD to End.
+$table_s3_start
+$table_s3_row1
+$table_s3_row2
+$table_s3_row3
+$table_s3_row4
+$table_s3_end
+
+$PAR
+C)Length of shortest path from $BBOLD E,F,G,H $EBOLD to End.
+$table_s2_start
+$table_s2_row1
+$table_s2_row2
+$table_s2_row3
+$table_s2_row4
+$table_s2_row5
+$table_s2_end
+
+$PAR
+D)Length of shortest path from $BBOLD A,B,C,D $EBOLD to End.
+$table_s1_start
+$table_s1_row1
+$table_s1_row2
+$table_s1_row3
+$table_s1_row4
+$table_s1_row5
+$table_s1_end
+
+$PAR
+E)Length of shortest path from $BBOLD Start $EBOLD to End.
+$table_s0_start
+$table_s0_row1
+$table_s0_row2
+$table_s0_end
+
+$PAR F) Give one path that provides the shortest path through the
+network.  Enter your answer as four letters, e.g. AEIL.  If there are
+multiple paths, simply select one of them.
+$BR
+$table_seq_start
+$table_seq_row1
+$table_seq_end
+
+$PAR 
+Adapted from Hillier and Liebermann.
+
+END_TEXT
+
+# Check answers
+foreach $f (@S4_soln) {
+  ANS( $f->cmp());
+}
+
+foreach $f (@S3_soln) {
+  ANS( $f->cmp());
+}
+
+foreach $f (@S2_soln) {
+  ANS( $f->cmp());
+}
+
+foreach $f (@S1_soln) {
+  ANS( $f->cmp());
+}
+
+foreach $f (@S0_soln) {
+  ANS( $f->cmp());
+}
+
+foreach $f (@seq_soln) {
+  ANS( $f->cmp());
+}
+ANS($final_seq->cmp());
+
+BEGIN_SOLUTION
+
+
+END_SOLUTION
+
+
+ENDDOCUMENT();       # This should be the last executable line in the problem.

@@ -1,0 +1,90 @@
+##DESCRIPTION
+##  Average of a function
+##ENDDESCRIPTION
+
+##KEYWORDS('algebra', 'inequality', 'fraction')
+
+## DBsubject('Algebra')
+## DBchapter('Fundamentals')
+## DBsection('Real Numbers')
+## Date('6/3/2002')
+## Author('')
+## Institution('')
+## TitleText1('Precalculus')
+## EditionText1('3')
+## AuthorText1('Stewart, Redlin, Watson')
+## Section1('1.1')
+## Problem1('22')
+
+########################################################################
+
+DOCUMENT();      
+
+loadMacros(
+   "PGstandard.pl",     # Standard macros for PG language
+   "PGgraphmacros.pl",
+    "MathObjects.pl",
+   #"source.pl",        # allows code to be displayed on certain sites.
+   "PGcourse.pl",      # Customization file for the course
+);
+
+# Print problem number and point value (weight) for the problem
+TEXT(beginproblem());
+
+# Show which answers are correct and which ones are incorrect
+$showPartialCorrectAnswers = 1;
+# Force new images - critical during debugging
+$refreshCachedImages=1;
+
+##############################################################
+#
+#  Setup
+#
+#
+Context("Numeric");
+Context()->variables->add(t => "Real");
+
+$coeff = random(100, 200, 50);
+$total_time = random(1, 2);
+$rate_function = Compute("$coeff * (t+1) * e^(-t)");
+
+##############################################################
+#
+#  Text
+#
+#
+
+Context()->texStrings;
+BEGIN_TEXT
+
+A glass of soda is knocked over and spills out for three seconds
+before someone can put it back upright.  The rate at which the soda is
+spilling during those three seconds can be modeled by the function \[
+f(t) = $rate_function ~~~ \mbox{ for } 0 \le t \le $total_time \]
+where \(t\) is measured in seconds.
+
+END_TEXT
+Context()->normalStrings;
+
+##############################################################
+#
+#  Answers
+#
+#
+
+#ANS($total_consumption->cmp);
+#ANS($average_rate->cmp);
+
+##############################################################
+#
+#  Solutions
+#
+#
+Context()->texStrings;
+
+BEGIN_SOLUTION
+
+END_SOLUTION
+Context()->normalStrings;
+
+ENDDOCUMENT();        

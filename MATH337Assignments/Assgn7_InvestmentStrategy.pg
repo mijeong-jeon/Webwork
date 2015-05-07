@@ -1,0 +1,373 @@
+
+## DESCRIPTION
+## Operations Research / Linear Algebra
+## ENDDESCRIPTION
+
+## KEYWORDS('steady state', 'eigenvalues' 'eigenvectors')
+## Tagged by aableson
+
+## DBsubject('Linear Algebra')
+## DBchapter('Matrices')
+## DBsection('Eigenvalues')
+## Date('')
+## Author('')
+## Institution('Queens')
+## TitleText1('')
+## EditionText1('')
+## AuthorText1('')
+## Section1('')
+## Problem1('')
+
+DOCUMENT();        # This should be the first executable line in the problem.
+loadMacros(
+        "PGbasicmacros.pl",
+        "PGanswermacros.pl",
+        "PGmatrixmacros.pl",
+	"parserPopUp.pl",
+	"parserMultiAnswer.pl",
+	"MathObjects.pl",
+        );
+ 
+TEXT(beginproblem());    
+Context("Numeric");
+Context()->flags->set(tolerance=>.01);
+$showPartialCorrectAnswers = 1;
+
+# Parameters
+$p = random(0.25, 0.45, 0.05);
+$start_amt = random(20,60,10);
+$goal_amt = 100;
+$S = 11;
+
+# *** Compute the solution matrices
+$round = 4;  # really, after all the bets are done.
+$F4max = (new Matrix($S, 1))->clone();  
+$F4max->assign($S,1,1);
+
+# *** Round 3
+$round = 3;
+$F3 = (new Matrix($S, $S))->clone();
+for ($s = 0; $s < $S; $s++) {
+  for ($x = 0; $x < $S; $x++) {  # $x is the amt bet
+      $s_lose = $s - $x;
+      $s_win = $s + 2*$x;
+      if ($s_lose < 0) {  # can't make that bet: probability of final win is zero
+	$F3->assign(($s)+1, ($x)+1, 0);
+  }
+  else  {
+    if ($s_win > 10) {  # if we ever get above 100, it is like having $100
+	  $s_win = 10;
+    }
+    $future_benefit = $p * $F4max->element($s_win+1,1) + 
+      (1-$p)*$F4max->element($s_lose+1, 1);
+    $F3->assign(($s)+1, ($x)+1, $future_benefit);
+  }
+} # next x/decision
+} # next s/state
+$F3max = (new Matrix($S, 1))->clone();
+for ($s = 0; $s < $S; $s++) {
+  $m = 0;
+  for ($x = 0; $x < $S; $x++) {
+    if ($F3->element($s+1, $x+1) > $m) {
+      $m = $F3->element($s+1, $x+1);
+    }
+  } # next x/decision
+  $F3max->assign($s+1,1,$m);
+}
+
+
+# *** Round 2
+$round = 2;
+$F2 = (new Matrix($S, $S))->clone();
+for ($s = 0; $s < $S; $s++) {
+  for ($x = 0; $x < $S; $x++) {  # $x is the amt bet
+      $s_lose = $s - $x;
+      $s_win = $s + 2*$x;
+      if ($s_lose < 0) {  # can't make that bet: probability of final win is zero
+	$F2->assign(($s)+1, ($x)+1, 0);
+  }
+  else  {
+    if ($s_win > 10) {  # if we ever get above 100, it is like having $100
+	  $s_win = 10;
+    }
+    $future_benefit = $p * $F3max->element($s_win+1,1) + 
+      (1-$p)*$F3max->element($s_lose+1, 1);
+    $F2->assign(($s)+1, ($x)+1, $future_benefit);
+  }
+} # next x/decision
+} # next s/state
+$F2max = (new Matrix($S, 1))->clone();
+for ($s = 0; $s < $S; $s++) {
+  $m = 0;
+  for ($x = 0; $x < $S; $x++) {
+    if ($F2->element($s+1, $x+1) > $m) {
+      $m = $F2->element($s+1, $x+1);
+    }
+  } # next x/decision
+  $F2max->assign($s+1,1,$m);
+}
+
+# *** Round 1
+$round = 1;
+$F1 = (new Matrix($S, $S))->clone();
+for ($s = 0; $s < $S; $s++) {
+  for ($x = 0; $x < $S; $x++) {  # $x is the amt bet
+      $s_lose = $s - $x;
+      $s_win = $s + 2*$x;
+      if ($s_lose < 0) {  # can't make that bet: probability of final win is zero
+	$F1->assign(($s)+1, ($x)+1, 0);
+  }
+  else  {
+    if ($s_win > 10) {  # if we ever get above 100, it is like having $100
+	  $s_win = 10;
+    }
+    $future_benefit = $p * $F2max->element($s_win+1,1) + 
+      (1-$p)*$F2max->element($s_lose+1, 1);
+    $F1->assign(($s)+1, ($x)+1, $future_benefit);
+  }
+} # next x/decision
+} # next s/state
+$F1max = (new Matrix($S, 1))->clone();
+for ($s = 0; $s < $S; $s++) {
+  $m = 0;
+  for ($x = 0; $x < $S; $x++) {
+    if ($F1->element($s+1, $x+1) > $m) {
+      $m = $F1->element($s+1, $x+1);
+    }
+  } # next x/decision
+  $F1max->assign($s+1,1,$m);
+}
+
+#*************************** STUDENT SOLUTIONS SETUP *************
+
+# *** Stage 3 Solution ***
+$s = 3; # $30
+$m_s3A = MultiAnswer($F3->element($s+1, 1), $F3->element($s+1, 2), $F3->element($s+1, 3), $F3->element($s+1, 4), $F3->element($s+1, 5))->with(
+  singleResult => 1,
+  checker => sub {
+    my ($correct, $student, $self) = @_;
+      my @correct = @{$correct};
+      my @student = @{$student};
+my $i;
+for ($i = 0; $i < 5; $i++) {
+  if (!defined($student[$i]) || $student[$i] != Compute($correct[$i])) {
+return 0
+}
+}
+return 1;});
+$S3A_fstar = Compute($F3max->element($s+1, 1));
+
+$s = 4; # $40
+$m_s3B = MultiAnswer($F3->element($s+1, 1), $F3->element($s+1, 2), $F3->element($s+1, 3), $F3->element($s+1, 4), $F3->element($s+1, 5))->with(
+  singleResult => 1,
+  checker => sub {
+    my ($correct, $student, $self) = @_;
+      my @correct = @{$correct};
+      my @student = @{$student};
+my $i;
+for ($i = 0; $i < 5; $i++) {
+  if (!defined($student[$i]) || $student[$i] != Compute($correct[$i])) {
+return 0
+}
+}
+return 1;});
+$S3B_fstar = Compute($F3max->element($s+1, 1));
+
+@dollars = ("${DOLLAR}0", 
+"${DOLLAR}10", 
+"${DOLLAR}20", 
+"${DOLLAR}30", 
+"${DOLLAR}40");
+
+# Stage 3 response table
+$table_s3_start = begintable(8);
+$table_s3_row1  = row( "\(S_3\) \ \(X_3\) ", @dollars, "\(f^*\)");
+$table_s3_row2  = row( "${DOLLAR}30", $m_s3A->ans_rule(6),$m_s3A->ans_rule(6),$m_s3A->ans_rule(6),$m_s3A->ans_rule(6),$m_s3A->ans_rule(6),ans_rule(6));
+$table_s3_row3  = row( "${DOLLAR}40", $m_s3B->ans_rule(6),$m_s3B->ans_rule(6),$m_s3B->ans_rule(6),$m_s3B->ans_rule(6),$m_s3B->ans_rule(6),ans_rule(6));
+$table_s3_end   = endtable();
+
+# *** Stage 2 Solution ***
+$s = 3; # $30
+$m_s2A = MultiAnswer($F2->element($s+1, 1), $F2->element($s+1, 2), $F2->element($s+1, 3), $F2->element($s+1, 4), $F2->element($s+1, 5))->with(
+  singleResult => 1,
+  checker => sub {
+    my ($correct, $student, $self) = @_;
+      my @correct = @{$correct};
+      my @student = @{$student};
+my $i;
+for ($i = 0; $i < 5; $i++) {
+  if (!defined($student[$i]) || $student[$i] != Compute($correct[$i])) {
+return 0
+}
+}
+return 1;});
+$S2A_fstar = Compute($F2max->element($s+1, 1));
+
+$s = 4; # $40
+$m_s2B = MultiAnswer($F2->element($s+1, 1), $F2->element($s+1, 2), $F2->element($s+1, 2), $F2->element($s+1, 4), $F2->element($s+1, 5))->with(
+  singleResult => 1,
+  checker => sub {
+    my ($correct, $student, $self) = @_;
+      my @correct = @{$correct};
+      my @student = @{$student};
+my $i;
+for ($i = 0; $i < 5; $i++) {
+  if (!defined($student[$i]) || $student[$i] != Compute($correct[$i])) {
+return 0
+}
+}
+return 1;});
+$S2B_fstar = Compute($F2max->element($s+1, 1));
+
+# Stage 2 response table
+$table_s2_start = begintable(8);
+$table_s2_row1  = row( "\(S_2\) \ \(X_2\) ", @dollars, "\(f^*\)");
+$table_s2_row2  = row( "${DOLLAR}30", $m_s2A->ans_rule(6),$m_s2A->ans_rule(6),$m_s2A->ans_rule(6),$m_s2A->ans_rule(6),$m_s2A->ans_rule(6),ans_rule(6));
+$table_s2_row3  = row( "${DOLLAR}40", $m_s2B->ans_rule(6),$m_s2B->ans_rule(6),$m_s2B->ans_rule(6),$m_s2B->ans_rule(6),$m_s2B->ans_rule(6),ans_rule(6));
+$table_s2_end   = endtable();
+
+# *** Stage 1 Solution ***
+$s = $start_amt/10; # state of start amt 
+$m_s1A = MultiAnswer($F1->element($s+1, 1), $F1->element($s+1, 2), $F1->element($s+1, 3), $F1->element($s+1, 4), $F1->element($s+1, 5))->with(
+  singleResult => 1,
+  checker => sub {
+    my ($correct, $student, $self) = @_;
+      my @correct = @{$correct};
+      my @student = @{$student};
+my $i;
+for ($i = 0; $i < 5; $i++) {
+  if (!defined($student[$i]) || $student[$i] != Compute($correct[$i])) {
+return 0
+}
+}
+return 1;});
+$S1A_fstar = Compute($F1max->element($s+1, 1));
+
+#*** Final answer
+$final_prob = Compute($F1max->element($s+1, 1));
+
+# Stage 1 response table
+$table_s1_start = begintable(8);
+$table_s1_row1  = row( "\(S_1\) \ \(X_1\) ", @dollars, "\(f^*\)");
+$table_s1_row2  = row( "${DOLLAR}$start_amt", $m_s1A->ans_rule(6),$m_s1A->ans_rule(6),$m_s1A->ans_rule(6),$m_s1A->ans_rule(6),$m_s1A->ans_rule(6),ans_rule(6));
+$table_s1_end   = endtable();
+
+
+
+
+BEGIN_TEXT 
+$BR
+$PAR
+A gambler can win a game at a casino with probability \(p = \) $p.  
+$BR
+Each round, he can bet any multiple of $10, between $0 and
+his current balance.
+$BR
+  - If he wins, he triples the amount he bet.
+$BR
+  - If he loses, he loses his bet.
+$BR
+  E.g. Suppose the gambler has $20, and bets it all. If he wins the round, he will have $60; if he loses the round, he will have $0 (be broke).
+
+$PAR If the gambler starts with $$start_amt, find a betting strategy
+  at each round that maximimizes his probability of reaching
+  $$goal_amt after 3 rounds of betting, along with the probability of
+  this strategy resulting in final success (reaching $100 or greater)
+  or failure (not reaching that goal by the end of 3 rounds).
+
+$PAR
+
+You should solve this problem using the tableau approach, with:
+$BR
+  - \(S_n\) being the gambler's balance at the start of round \(n\);
+$BR
+  - \(X_n\) being the amount bet in round \(n\); and
+$BR
+  - \(f_n(S_n, X_n)\) being the probability that the 
+gambler will reach $goal_amt between the current round
+and finishing the 4th bet.
+
+$PAR
+  To validate your work, you will be asked to complete subsets of
+the tableaux to verify your answers.
+
+$PAR 
+A) Probability of winning, before betting in Round 3. Each entry should be the probability of reaching ${DOLLAR}$goal_amt after round 3, given a balance of \(S_3\), and the decision to bet \(X_3\) funds in Round 3.
+$table_s3_start
+$table_s3_row1
+$table_s3_row2
+$table_s3_row3
+$table_s3_end
+$BR
+If a bet is impossible (e.g. a ${DOLLAR}40 bet when you 
+only have ${DOLLAR}30, use
+the probability/\(f\) of zero for that decision.
+$PAR 
+B) Probability of winning before betting in Round 2. Each entry should be the probability of reaching ${DOLLAR}$goal_amt after round 3, given a balance of \(S_2\), and the decision to bet \(X_2\) funds in Round 2.
+$table_s2_start
+$table_s2_row1
+$table_s2_row2
+$table_s2_row3
+$table_s2_end
+
+$BR
+C) Probability of winning, given the starting amout of ${DOLLAR}$start_amt, and a bet in the first round of \(X_1\). 
+$table_s1_start
+$table_s1_row1
+$table_s1_row2
+$table_s1_end
+
+D) The probability that the gambler will reach ${DOLLAR}$goal_amt
+								  after 3 rounds of betting is: \{ans_rule(6)\}
+
+
+END_TEXT
+
+# Check answers
+
+# Stage 3
+ANS( $m_s3A->cmp() );
+ANS( $S3A_fstar->cmp() );
+ANS( $m_s3B->cmp() );
+ANS( $S3B_fstar->cmp() );
+
+# Stage 3
+ANS( $m_s2A->cmp() );
+ANS( $S2A_fstar->cmp() );
+ANS( $m_s2B->cmp() );
+ANS( $S2B_fstar->cmp() );
+
+# Stage 3
+ANS( $m_s1A->cmp() );
+ANS( $S1A_fstar->cmp() );
+
+# Final answer
+ANS( $final_prob->cmp() );
+
+
+
+BEGIN_SOLUTION
+
+	   $SOL
+
+Here are the (unannotated) intermediate probability tableaux at each round.
+$BR
+  - rows = cash at the beginning of round \(n\), and
+$BR
+- columns = amount to bet at this round.
+$BR
+  Note that the first/row column represent \(S_n\) = 0 and  \(X_n\) = 0 respectively.
+$PAR
+	   At round 3, 
+  \{display_matrix($F3) \}
+$PAR
+	   At round 2, 
+	   \{display_matrix($F2)\}
+$PAR
+	   At round 1, 
+	   \{display_matrix($F1)\}
+
+END_SOLUTION
+
+
+ENDDOCUMENT();       # This should be the last executable line in the problem.

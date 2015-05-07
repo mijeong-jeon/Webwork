@@ -1,0 +1,63 @@
+## DESCRIPTION
+## Transition probability formalism 
+## ENDDESCRIPTION
+
+## DBsubject('Probability')
+## DBchapter('Distributions')
+## DBsection('Markov Chains')
+## Date('1/21/2012')
+## Author('Alan Ableson')
+## Institution('Queens University')
+## Section1()
+## Problem1()
+
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGbasicmacros.pl",
+"PGauxiliaryFunctions.pl",
+"MathObjects.pl",
+"PGanswermacros.pl",
+"parserRadioButtons.pl",
+"contextFraction.pl",
+"unionLists.pl",
+);
+
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+
+Context("Numeric");
+
+# Set lambda and mu
+
+$lambda = list_random(0.5, 0.8, 1.2, 2.5, 5.6, 7.9);
+$mu = list_random(1.2, 1.5, 1.8, 2.0) * $lambda;
+$mu = ceil($mu * 10)/10;  # round up one decimal
+
+
+
+
+BEGIN_TEXT
+
+$PAR
+
+Compute the following properties 
+\{BeginList("OL")\}
+$ITEM first item
+\{EndList("OL")\}
+
+
+
+END_TEXT
+
+
+BEGIN_SOLUTION
+${PAR}SOLUTION:$PAR
+
+
+END_SOLUTION
+
+ENDDOCUMENT();       # This should be the last executable line in the problem.

@@ -1,0 +1,85 @@
+#DESCRIPTION
+# Domain and range given a graph
+#ENDDESCRIPTION
+
+#KEYWORDS('graphs', 'domain', 'range', 'functions')
+## tagged by GH
+
+## DBsubject('Calculus')
+## DBchapter('1 A Library of Functions')
+## DBsection('1.1 Functions and Change')
+## Problem('38')
+## Date('26/03/2012')
+## Author('Gina Hochban')
+## Institution('Queen's University')
+## TitleText1('Calculus')
+## EditionText1('5th Edition')
+## AuthorText1('Hughes-Hallett')
+
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PGstandard.pl",
+"MathObjects.pl",
+"PGchoicemacros.pl",
+"parserPopUp.pl",
+"parserNumberWithUnits.pl",
+"hhAdditionalMacros.pl",
+"PG.pl",
+"PGbasicmacros.pl",,
+"PGanswermacros.pl",
+"PGauxiliaryFunctions.pl",
+"PGgraphmacros.pl",
+"extraAnswerEvaluators.pl"
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+
+$popupStory1 = PopUp([("a repulsive force", "an attractive force")], "an attractive force");
+$popupStory2 = PopUp([("a repulsive force", "an attractive force")], "a repulsive force");
+$popupStory3 = PopUp([("Yes", "No")],  "Yes");
+$popupStory4 = PopUp([(
+"As the atoms are pulled apart, a force repels them apart, and as they are pushed closer together, they are attracted together.",
+
+"As the atoms are pulled apart, a force attracts them back together, and as they are pushed closer together, they repel apart.")],  
+
+"As the atoms are pulled apart, a force attracts them back together, and as they are pushed closer together, they repel apart.");
+
+$bk="black";
+
+# FEQ (Format EQuations) cleans up the writing of the functions (see FEQ in PGbasicmacros)
+
+# define function and domain
+$f = FEQ("4*0.5((0.5/x)^(12)-(0.5/x)^6) for x in <0,2> using color:$bk and weight:2");
+
+#set graph dimensions, axes 
+$graphf = init_graph(0,-1,2,5,'axes'=>[0,0]);
+
+($fRef) = plot_functions( $graphf,$f);
+
+#label axes
+$graphf->lb(new Label(1.75,0.25,'r','black','left','bottom'),
+            new Label(0.525,0.2,'a','black','left','bottom'),
+            new Label(0.25,4.5,'F','black','left','bottom'));
+BEGIN_TEXT
+
+$BR
+The force, \(F\), between two atoms depends on the distance \(r\) separating them. See the graph below. A positive \(F\) represents a repulsive force; a negative \(F\) represents an attractive force. $BR$BR
+(a) What happens to the force if the atoms start with \(r = a\) and are $BR
+(i) Pulled slightly further apart? The force will be \{ $popupStory1->menu() \} $BR
+(ii) Pushed slightly closer together? \{ $popupStory2->menu() \} 
+$BR$BR
+
+(b) The atoms are said to be in stable equilibrium if the force between them is zero and the atoms tend to return to the equilibrium after a minor disturbance. 
+$BR Does \(r = a\) represent a stable equilibrium? \{ $popupStory3->menu() \} $BR Why? \{ $popupStory4->menu() \} $BR$BR
+
+\{ image(insertGraph($graphf), width=>200, height=>200) \}
+
+END_TEXT
+
+#ANSWERS
+ANS($popupStory1->cmp,$popupStory2->cmp,$popupStory3->cmp,$popupStory4->cmp);
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

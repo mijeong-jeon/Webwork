@@ -1,0 +1,66 @@
+
+## DESCRIPTION
+## Calculus: Functions and models
+## ENDDESCRIPTION
+
+## KEYWORDS('calculus', 'integration')
+## Tagged by LD
+
+## DBsubject('Calculus')
+## Date('12/05/2011')
+## Author('Alan Ableson')
+## Institution('Queen's University')
+
+
+## TitleText1('Calculus')
+## EditionText1('X')
+## AuthorText1('Hughes-Hallett')
+## Section1('XXX')
+## Problem1('XX')
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros("PG.pl",
+           "PGbasicmacros.pl",
+           "PGanswermacros.pl",
+"MathObjects.pl",
+"PGauxiliaryFunctions.pl");
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+Context("Numeric");
+Context()->variables->add(r=>'Real');
+Context()->flags->set(
+  tolerance=>0.001,
+  tolType=>"relative"
+);
+
+# Evaluation of a circle city density/total
+$k = list_random(2000, 3000, 4000, 5000);
+$rmax = Real(list_random(200, 300, 500));
+
+# Evaluate the integral of
+# dA * rho 
+# = (2 * pi * r dr) * $k (1 + r^2)
+# 2 $k pi * (r/1+r^2) 
+# Integral is (substitution)
+$F = Formula("$k pi ln(1+r^2)");
+$TotalPop = Real($F->eval(r=>$rmax) - $F->eval(r=>0));
+
+BEGIN_TEXT
+
+The density of oil in a circular oil slick on the surface of the ocean is given by
+\[ \delta(r) = \frac{$k }{1 + r^2}\]
+in \(\mbox{kg/m}^2\), where \(r\) is the distance in meters from the center of the oil slick.
+
+$PAR
+Given that the slick has a radius of $rmax m, find the total mass of oil in the slick. 
+
+$BR
+Total mass of oil: \{ans_rule(10)\} kg
+
+END_TEXT
+
+ANS($TotalPop->cmp);
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

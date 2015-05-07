@@ -1,0 +1,159 @@
+#DESCRIPTION
+##  Calculus: Linear and separable differential equations
+##ENDDESCRIPTION
+
+
+## DBsubject(Differential equations)
+## DBchapter(Introductory concepts)
+## DBsection(Classifications of differential equations)
+## Date(06/12/2011)
+## Institution(University of Minnesota)
+## Author(Justin Sukiennik)
+## MLT(classify_separable)
+## MLTleader(1)
+## Level(2)
+## MO(1)
+## TitleText1('Calculus: Concepts and Contexts')
+## AuthorText1('Stewart')
+## EditionText1('4 Custom UMTYMP Ed.')
+## Section1('9.6')
+## Problem1('')
+## KEYWORDS('calculus', 'differential equations', 'linear equations', 'separable equations')
+
+#####################################################################
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+  "PGstandard.pl",
+  "MathObjects.pl",
+  "parserPopUp.pl",
+  "PGcourse.pl",
+  "PG.pl",
+  "PGbasicmacros.pl",
+  "PGchoicemacros.pl",
+  "PGanswermacros.pl",
+  "PGauxiliaryFunctions.pl",
+);
+
+#####################################################################
+TEXT(beginproblem());
+
+$showPartialCorrectAnswers = 0;
+
+#####################################################################
+
+Context("Numeric");
+
+$a = random(1,2,1);
+
+if ($a==1){
+$f1 = '\frac{dy}{dx}+e^x y ';
+$popup1 = PopUp(['choose one','Separable', 'Linear', 'Both', 'Neither'], 'Neither');
+}
+if ($a==2){
+$f1 = '\frac{dy}{dx}+e^x y^2 ';
+$popup1 = PopUp(['choose one','Separable', 'Linear', 'Both', 'Neither'], 'Separable');
+}
+
+$b = random(1,2,1);
+
+if ($b==1){
+$f2 = 'y + \sin x';
+$popup2 = PopUp(['choose one','Separable', 'Linear', 'Both', 'Neither'], 'Linear');
+}
+if ($b==2){
+$f2 = 'y + e^x \sin x ';
+$popup2 = PopUp(['choose one','Separable', 'Linear', 'Both', 'Neither'], 'Linear');
+}
+
+$c = random(1,2,1);
+
+if ($c==1){
+$f3 = '\ln x - x^2 y';
+$popup3 = PopUp(['choose one','Separable', 'Linear', 'Both', 'Neither'], 'Linear');
+}
+if ($c==2){
+$f3 = 'y \ln x - x^2 y';
+$popup3 = PopUp(['choose one','Separable', 'Linear', 'Both', 'Neither'], 'Both');
+}
+
+$popup4 = PopUp(['choose one','Separable', 'Linear', 'Both', 'Neither'], 'Neither');
+
+# Higher order part
+$tf = new_select_list();
+$tf->rf_print_q(~~&pop_up_list_print_q);
+$tf -> ra_pop_up_list( [
+        No_answer => 'choose one',
+        '1Linear' => '1st order Linear',
+        '2Linear' => '2nd order Linear',
+        '3Linear' => '3rd order Linear',
+        '4Linear' => '4th order Linear',
+        '5Linear' => '5th order Linear',
+        '1Nonlinear' => '1st order Nonlinear',
+        '2Nonlinear' => '2nd order Nonlinear',
+        '3Nonlinear' => '3rd order Nonlinear',
+        '4Nonlinear' => '4th order Nonlinear',
+        '5Nonlinear' => '5th order Nonlinear',
+    ] );
+
+$tf -> qa ( # set up the questions
+        "\(\displaystyle t^2\frac{d^2y}{dt^2}+t\frac{dy}{dt} +2y=\sin t \)",
+        "2Linear",
+        "\(\displaystyle  \frac{d^4y}{dt^4} +\frac{d^3y}{dt^3} +\frac{d^2y}{dt^2}+\frac{dy}{dt}=1\)",
+        "4Linear",
+        "\(\displaystyle \frac{dy}{dt}+ty^2=0\)",
+        "1Nonlinear",
+        "\(\displaystyle  \frac{d^2y}{dt^2}+\sin(t+y)=\sin t \)",
+        "2Nonlinear",
+        '\(\displaystyle  ( 1+y^2)\frac{d^2y}{dt^2}+t\frac{dy}{dt}+y=e^t \)',
+        '2Nonlinear',
+        '\(\displaystyle \frac{d^3y}{dt^3} +t\frac{dy}{dt}+(cos^2(t))y=t^3\)',
+        '3linear',
+        "\(y''-y+y^2=0\)",
+        '2Nonlinear',
+        "\(y''-y+t^2 = 0\)",
+        '2Linear'
+      
+);   # remember every statement has to end with a semi-colon.
+
+$tf ->choose(4);
+
+#####################################################################
+
+Context()->texStrings;
+BEGIN_TEXT
+(a) Determine whether each first-order differential equation is $BITALIC separable, $EITALIC $BITALIC linear, $EITALIC $BITALIC both, $EITALIC or $BITALIC neither. $EITALIC $PAR
+$HR
+\{$popup1->menu\} $BBOLD 1. $EBOLD \(\displaystyle $f1 = x^2y^2 \) $PAR
+\{$popup2->menu\} $BBOLD 2. $EBOLD \(\displaystyle $f2 = x^3 y' \) $PAR
+\{$popup3->menu\} $BBOLD 3. $EBOLD \(\displaystyle $f3 = x y' \) $PAR
+\{$popup4->menu\} $BBOLD 4. $EBOLD \(\displaystyle \frac{dy}{dx} + \cos y = \tan x \) $PAR
+$HR
+END_TEXT
+
+#####################################################################
+
+ANS($popup1->cmp);
+ANS($popup2->cmp);
+ANS($popup3->cmp);
+ANS($popup4->cmp);
+
+####
+
+
+BEGIN_TEXT
+
+(b) Determine whether or not each equation is linear, and its order:
+$BR
+\{$tf-> print_q \}
+
+$BBOLD Notes:$EBOLD  $BITALIC You only have two attempts at this problem.$EITALIC
+$BR
+$EBOLD  $BITALIC You do $BBOLD not $EBOLD need to submit any written work for this problem: just answer
+it in Webwork.
+$HR
+END_TEXT
+
+ANS(str_cmp( $tf->ra_correct_ans )   ) ;
+ENDDOCUMENT();        # This should be the last executable line in the problem.

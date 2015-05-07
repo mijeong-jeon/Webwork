@@ -1,0 +1,84 @@
+
+## DESCRIPTION
+## Calculus: Functions and models
+## ENDDESCRIPTION
+
+## KEYWORDS('calculus', 'functions','implicit', 'differentiation', 'tangent line');
+## Tagged by LD
+
+## DBsubject('Calculus')
+## DBchapter('Differentiation')
+## DBsection('Implicit Differentation')
+## Date('05/23/2012')
+## Author('Alan Ableson')
+## Institution('Queen's University')
+
+
+## TitleText1('Calculus')
+## EditionText1('5')
+## AuthorText1('Hughes-Hallett')
+## Section1('3.7')
+## Problem1('23')
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros("PG.pl",
+           "PGbasicmacros.pl",
+           "PGanswermacros.pl",
+	   "MathObjects.pl",
+	   "contextFraction.pl",
+	   "PGauxiliaryFunctions.pl");
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+
+Context("Numeric");
+
+$current_depth = list_random(16, 25, 36, 49, 64);
+$init_depth = $current_depth + random(4, 10);
+$t0 = random(2, 4);
+# Equation is L = (C - kt)^2
+# current depth = L(0), so 
+$C = sqrt($current_depth);
+# Next point is (-t0, init_depth), so 
+$k = (sqrt($init_depth) - $C)/($t0);
+$ans = Real("$C / $k");
+
+BEGIN_TEXT
+
+$PAR 
+
+Water in a barrel (upright cylinder) is leaking out at a rate
+proportional to the square root of the depth of the water.  
+
+$PAR
+
+If the water level was $init_depth cm $t0 minutes ago, and is
+at $current_depth cm now, how many more minutes (from now) will it
+take for the barrel to be empty?
+
+$PAR
+Time to empty: \{ans_rule(10)\} minutes.
+
+END_TEXT
+ANS( $ans->cmp() );
+
+SOLUTION(EV3(<<'END_SOLUTION'));
+$BR$BBOLD Solution:$EBOLD
+$BR
+The differential equation for the water level, \(L\) is 
+\[ \frac{dL}{dt} = -k \sqrt{L} \].
+$PAR
+Solving this by separation of variables, being careful with handling the "+C" 
+that appears after integration, gives
+\[ L = (C-kt)^2 \]
+
+The value of \(C\) and \(k\) can be found by using the data points
+$BR \( (-$t0, $init_depth) \) and \( (0, $current_depth) \).
+$PAR
+Once the values of \(C\) and \(k\) have been found, the root of the quadratic
+corresponds to \(L = 0\), and that occurs when \( t = C/k\).
+
+END_SOLUTION
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

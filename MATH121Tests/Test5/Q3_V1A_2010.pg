@@ -1,0 +1,70 @@
+
+## DESCRIPTION
+## Calculus: Functions and models
+## ENDDESCRIPTION
+
+## KEYWORDS('calculus', 'integration')
+## Tagged by LD
+
+## DBsubject('Calculus')
+## Date('12/05/2011')
+## Author('Alan Ableson')
+## Institution('Queen's University')
+
+
+## TitleText1('Calculus')
+## EditionText1('X')
+## AuthorText1('Hughes-Hallett')
+## Section1('XXX')
+## Problem1('XX')
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros("PG.pl",
+           "PGbasicmacros.pl",
+           "PGanswermacros.pl",
+	   "parserImplicitEquation.pl",
+	   "unorderedAnswer.pl",
+"MathObjects.pl",
+"PGauxiliaryFunctions.pl");
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+
+# Sketch contours
+$i = random(0, 3); # random function selection
+if ($i == 0)  {
+   $func = "xy"  ;
+      $zlevels = "0, 1, 2, 3";
+}
+elsif ($i == 1) {
+         $func = "x-y^2"  ;
+      	 $zlevels = "0, 1, 2, 3, 4";
+}
+elsif ($i == 1) {
+         $func = "x^2+y"  ;
+      	 $zlevels = "0, 1, 2, 3, 4";
+}
+else {
+  $func = "(y-x)^2"  ;
+  $zlevels = "0, 1, 2, 3, 4";
+}
+
+
+BEGIN_TEXT
+
+Consider the two-variable function \[ z = f(x,y) = $func \]
+
+$PAR
+On your solution sheet, draw \(xy\) axes, and then draw the contours of \(f(x,y)\) corresponding  to \(z = $zlevels\). 
+$BR
+Clearly label the axes, and indicate the scale.  Also indicate clearly which contour line
+is associated with which \(z\) value.
+$BR 
+$BBOLD All your work for this problem should be on your scan-in sheet.  There is
+no Webwork answer to submit. $EBOLD
+
+END_TEXT
+
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

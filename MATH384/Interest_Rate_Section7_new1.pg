@@ -1,0 +1,51 @@
+##DESCRIPTION
+##  MATH 384: Theory of Interest 
+##ENDDESCRIPTION
+
+##KEYWORDS('real reat' 'inflation rate')
+
+## DBsubject('MATH384')
+## DBchapter('Chapter 1: Interest Rate Measurement')
+## DBsection('real and inflation rate')
+## Date('8/1/2014')
+## Author('Ping Li')
+## Institution('QUEENS UNIVERSITY')
+## TitleText1('MATH 384')
+## EditionText1()
+## Section1('1.7')
+## Problem1('new')
+
+########################################################################
+
+DOCUMENT();      
+
+loadMacros(
+   "PGstandard.pl",     # Standard macros for PG language
+   "MathObjects.pl",
+   #"source.pl",        # allows code to be displayed on certain sites.
+   #"PGcourse.pl",      # Customization file for the course
+);
+
+
+TEXT(&beginproblem);
+
+$n = random(1.99,2.09,0.01);
+$m = $n-0.1;
+
+$ans = (-2*$a+sqrt(4*$a^2-4*$a*($a+54)))/(2*$a)-1;
+&ANS(num_cmp($ans));
+
+
+TEXT(EV2(<<EOT));
+
+A loaf of bread cost \(\$\)$n today, while the same brand of bread was 
+ selling for \(\$\)$m 
+
+$BR
+r = \{ans_rule(20)\}
+$BR
+
+EOT
+
+ENDDOCUMENT();
+

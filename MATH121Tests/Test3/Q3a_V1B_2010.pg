@@ -1,0 +1,56 @@
+# Modified from problem library
+##DESCRIPTION
+##KEYWORDS('integrals', 'exponentials', 'substitution', 'substitution rule')
+##Use the substitution rule to evaluate the integral
+##ENDDESCRIPTION
+
+## DBsubject('Calculus')
+## DBchapter('Integrals')
+## DBsection('Antiderivatives')
+## Date('6/3/2002')
+## Author('')
+## Institution('')
+## TitleText1('Calculus: Early Transcendentals')
+## EditionText1('6')
+## AuthorText1('Stewart')
+## Section1('')
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"PGauxiliaryFunctions.pl",
+"parserFormulaUpToConstant.pl"
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+Context("Numeric");
+
+# Formula is $k x^$c
+# Interval is x=$a..($a+$len)
+
+$k = random(2,6,1);
+$c = random(2,4,1);
+
+$a = random(0, 1.1, 1);
+$len = random(2, 3, 1);
+$b = $a + $len;
+$c_p_1 = $c + 1;
+$f = Formula("$k x^($c_p_1)/$c_p_1");
+$answer = Formula($f->substitute(x=>$b) - $f->substitute(x=>$a));
+
+TEXT(EV2(<<EOT));
+
+Evaluate the indefinite integral.
+$BR \[ \int_{$a}^{$b} $k x^{$c} dx \]
+$BR $BR \{ans_rule( 30) \}
+$BR
+EOT
+
+ANS($answer->cmp());
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

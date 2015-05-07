@@ -1,0 +1,60 @@
+## DESCRIPTION
+## Transition probability formalism 
+## ENDDESCRIPTION
+
+## DBsubject('Probability')
+## DBchapter('Distributions')
+## DBsection('Markov Chains')
+## Date('1/21/2012')
+## Author('Alan Ableson')
+## Institution('Queens University')
+## Section1()
+## Problem1()
+
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGbasicmacros.pl",
+"PGauxiliaryFunctions.pl",
+"MathObjects.pl",
+"PGanswermacros.pl",
+"parserRadioButtons.pl",
+
+);
+
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+
+Context("Numeric");
+
+$radio = RadioButtons(
+[ "The sum of each column must equal 1.", 
+"The sum of each row must equal 1.",
+"The sum of all values in the matrix must equal 1.",
+],# correct answer
+ "The sum of each row must equal 1.",
+);
+
+BEGIN_TEXT
+$PAR 
+If \( P \) represents a transition probability matrix for a stationary Markov chain, which of the following statements must be true about \( P \)?
+ $BR
+\{ $radio->buttons() \}
+
+END_TEXT
+
+ANS($radio->cmp());
+
+BEGIN_SOLUTION
+${PAR}SOLUTION:$PAR
+
+The values in each row represent the probability of transition from 
+state \(i\) to each possible new state.    Each row then represents a different conditional starting state.  Once a starting state is decided (or a row is picked), then the sum of the probabilities over all the possible new states must be 1.  This means that the sum of the elements in each row must equal 1.
+
+Context()->normalStrings;
+END_SOLUTION
+
+ENDDOCUMENT();       # This should be the last executable line in the problem.

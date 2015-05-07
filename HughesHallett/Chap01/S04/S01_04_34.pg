@@ -1,0 +1,61 @@
+#DESCRIPTION
+# Logarithmic functions
+#ENDDESCRIPTION
+
+#KEYWORDS('functions', 'logarithmic')
+## tagged by GH
+
+## DBsubject('Calculus')
+## DBchapter('1 A Library of Functions')
+## DBsection('1.4 Logarithmic Functions')
+## Problem('34')
+## Date('01/05/2012')
+## Author('Gina Hochban')
+## Institution('Queen's University')
+## TitleText1('Calculus')
+## EditionText1('5th Edition')
+## AuthorText1('Hughes-Hallett')
+
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PGstandard.pl",
+"MathObjects.pl",
+"PGchoicemacros.pl",
+"parserPopUp.pl",
+"parserNumberWithUnits.pl",
+"hhAdditionalMacros.pl",
+"PG.pl",
+"PGbasicmacros.pl",,
+"PGanswermacros.pl",
+"PGauxiliaryFunctions.pl",
+"extraAnswerEvaluators.pl"
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+
+#initial conditions
+$a = random(1,9,1);
+$b = random(1,9,1);
+
+#answers
+$C = $a;
+$alpha = ln($b/$C);
+$y2 = $C*exp(($alpha*2));
+
+BEGIN_TEXT
+
+The exponential function \(y(x) = C e^{\alpha x}\) satisfies the conditions \(y(0) = $a\) and \(y(1)=$b\).
+$PAR
+\(a)\) Find the constant \(C\): \{ans_rule(15)\}$BR
+\(b)\) Find the constant \(\alpha\): \{ans_rule(15)\}$BR
+\(c)\) What is \(y(2)\)? \{ans_rule(15)\}$BR
+
+END_TEXT
+
+#ANSWERS
+ANS(fun_cmp($C), fun_cmp($alpha), fun_cmp($y2));
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

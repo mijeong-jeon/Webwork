@@ -1,0 +1,77 @@
+## DESCRIPTION
+## Calculus: Functions and models
+## ENDDESCRIPTION
+
+## KEYWORDS('limits', 'infinite', '121Test1')
+## Tagged by LD
+
+## DBsubject('Calculus')
+## DBchapter('Functions and Models')
+## DBsection('Exponential Functions')
+## Date('10/30/2011')
+## Author('Alan Ableson')
+## Institution("Queen\'s University")
+
+## TitleText1("Calculus")
+## EditionText1("5")
+## AuthorText1("Hughes-Hallett")
+## Section1("1.8")
+## Problem1("37")
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros("PG.pl",
+"PGbasicmacros.pl",
+"PGcourse.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"MathObjects.pl",
+"Parser.pl",
+"parserPopUp.pl",
+"PGauxiliaryFunctions.pl",
+"QUpolynomialmacros.pl"
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+
+Context("Interval");
+
+# Flip a coin:
+# 1) k in the numerator
+# 2) k in the denominator
+$coin_toss = random(0, 1, 1);
+
+$pow = random(2, 4, 1);
+$num_leading_coeff = random(2, 6, 1);
+$den_leading_coeff = random(2, 6, 1);
+if ($coin_toss == 0) {
+$num = Queens::CreateRandomPolynomial($pow-1, 0, 1, 5);
+$den = Queens::CreateRandomPolynomial($pow, $den_leading_coeff, 1, 5);
+$num = "$num_leading_coeff x^{k} + " . $num->TeX;
+$den = $den->TeX;
+$ans = Compute("(-inf, $pow]");
+}
+else {
+$num = Queens::CreateRandomPolynomial($pow, $num_leading_coeff, 1, 5);
+$den = Queens::CreateRandomPolynomial($pow-1, 0, 1, 5);
+$num = $num->TeX;
+$den = "$den_leading_coeff x^{k} +" . $den->TeX;
+$ans = Compute("[$pow, inf)");
+}
+$func_str = "\frac{$num}{$den}";
+
+
+
+BEGIN_TEXT
+
+Find all values of \(k\) for which the limit below exists.
+
+\[ \lim_{ x \rightarrow \infty } $func_str \] 
+\(k \) must be in the interval \{ans_rule(15) \}
+$BR
+Use \{ helpLink("interval notation") \}.
+END_TEXT
+ANS($ans->cmp);
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

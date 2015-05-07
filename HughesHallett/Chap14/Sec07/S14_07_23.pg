@@ -1,0 +1,166 @@
+#DESCRIPTION
+# Infering derivative info from contour diagrams 
+#ENDDESCRIPTION
+
+#KEYWORDS('graphs', 'derivative', 'shape')
+## tsuda tagged and PAID on 2-20-2004
+
+## DBsubject('Calculus')
+## DBchapter('Applications of Differentiation')
+## DBsection('How Derivatives Affect the Shape of a Graph')
+## Date('6/3/2002')
+## Author('')
+## Institution('')
+## TitleText1('Calculus: Early Transcendentals')
+## EditionText1('6')
+## AuthorText1('Stewart')
+## Section1('4.3')
+## Problem1('5,6,8,29,30')
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"PGauxiliaryFunctions.pl",
+"PGgraphmacros.pl",
+"parserPopUp.pl",
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 0;
+
+# Initialize the graph
+$N = 5;
+$Nsq = $N*$N;
+$gr = init_graph(-1, -1, $Nsq+1, $Nsq+1);
+
+$dir = random(0, 1); # 0 = vertical, 1 = horizontal contours
+$order = random(0, 1);  # 0 = incr, 1 = decr
+$spacing = random(0, 1);  # 0 = incr, 1 = decr
+
+@c1 = ("") x $n;
+# Set the x or y coord spacing of contours
+for ($i = 0; $i < $N; $i++) {
+  if ($spacing == 0) {
+     $c1[$i] = $i**2;
+  } else {
+    $c1[$N-$i-1] = $Nsq - ($i**2);
+  }
+}
+
+# Set the contour values
+@contour_z = ("") x $n;
+for ($i = 0; $i < $N; $i++) {
+  if ($order == 0) {
+     $contour_z[$i] = $i+1
+  } else {
+    $contour_z[$i] = ($N - $i);
+  }
+}
+
+for ($i = 0; $i < $N; $i++) {
+  if ($dir == 0) 	{
+    $gr->moveTo($c1[$i], 0);
+    $gr->lineTo($c1[$i],  $Nsq, 'black');
+    $gr->lb( new Label($c1[$i], -0.5,$contour_z[$i],
+      'black','center','middle'));
+  } else {
+    $gr->moveTo(0, $c1[$i]);
+    $gr->lineTo($Nsq, $c1[$i], 'black');
+    $gr->lb( new Label(-0.5, $c1[$i],$contour_z[$i],
+      'black','center','middle'));
+  }
+}
+
+# label for point
+$i = 2;
+$gr->lb( new Label($c1[$i], $c1[$i],'P',
+      'black','bottom','right'));
+$gr->stamps( closed_circle($c1[$i],$c1[$i],'blue') );
+
+# *** Answers ***
+@options = ('Positive', 'Negative', 'Zero');
+$f_ans = 'Positive';
+
+# first derivative
+if ($dir == 0) {
+   $fy_ans = 'Zero';
+   if ($order == 0) { $fx_ans = 'Positive';   } else { $fx_ans = 'Negative';}
+
+} else {
+   $fx_ans = 'Zero';
+   if ($order == 0) { $fy_ans = 'Positive';   } else { $fy_ans = 'Negative';}
+}
+
+# second derivative
+if ($dir == 0) {
+   $fyy_ans = 'Zero';
+   $fxy_ans = 'Zero';
+   if ($order == 0 && $spacing == 0) { $fxx_ans = 'Negative';   } 
+   elsif ($order == 1 && $spacing == 0) { $fxx_ans = 'Positive';   } 
+   elsif ($order == 0 && $spacing == 1) { $fxx_ans = 'Positive';   } 
+   else { $fxx_ans = 'Negative';}
+
+} else {
+   $fxx_ans = 'Zero';
+   $fxy_ans = 'Zero';
+   if ($order == 0 && $spacing == 0) { $fyy_ans = 'Negative';   } 
+   elsif ($order == 1 && $spacing == 0) { $fyy_ans = 'Positive';   } 
+   elsif ($order == 0 && $spacing == 1) { $fyy_ans = 'Positive';   } 
+   else { $fyy_ans = 'Negative';}
+}
+
+$popupf = PopUp([@options], $f_ans);
+$popupfx = PopUp([@options], $fx_ans);
+$popupfy = PopUp([@options], $fy_ans);
+$popupfxx = PopUp([@options], $fxx_ans);
+$popupfyy = PopUp([@options], $fyy_ans);
+$popupfxy = PopUp([@options], $fxy_ans);
+
+
+BEGIN_TEXT
+
+Consider the contour diagram for \(z = f(x,y)\) shown below.
+
+$PAR
+
+\{ image(insertGraph($gr), width=>200, height=>200) \}
+
+$BR
+Note: you can click on the graph for a larger view.
+$PAR
+
+Determine whether the following values related to \(f(x,y)\) at the point \(P\) are
+positive, negative, or zero.
+
+$BR
+\( \displaystyle f(x,y) \): \{ $popupf->menu() \}
+$BR
+\( \displaystyle f_x(x,y) \): \{ $popupfx->menu() \}
+$BR
+\( \displaystyle f_y(x,y) \): \{ $popupfy->menu() \}
+$BR
+\( \displaystyle f_{xx}(x,y) \): \{ $popupfxx->menu() \}
+$BR
+\( \displaystyle f_{yy}(x,y) \): \{ $popupfyy->menu() \}
+$BR
+\( \displaystyle f_{xy}(x,y) \): \{ $popupfxy->menu() \}
+
+
+
+
+
+END_TEXT
+
+ANS( $popupf->cmp() );
+ANS( $popupfx->cmp() );
+ANS( $popupfy->cmp() );
+ANS( $popupfxx->cmp() );
+ANS( $popupfyy->cmp() );
+ANS( $popupfxy->cmp() );
+
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

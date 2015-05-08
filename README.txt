@@ -235,3 +235,6 @@ $envir.  I'm trying that.
 
 Worked!!!!
 
+---
+
+Testing the ssh key for GitHub

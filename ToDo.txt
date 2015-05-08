@@ -6,3 +6,5 @@ Unit05MarkovDecisionProcesses/MachineMaintenanceIntro
 Calculus/Unit01_Functions/q_001.pg is messed up, and testing it seems
 to not work very well.  I don't know what to do with it, but I've
 dropped it from the corresponding Self-test for now.
+
+Check up on some of the MATH_121_Test files: those have been used for 4 years running now...

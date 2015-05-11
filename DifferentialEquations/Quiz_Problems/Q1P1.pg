@@ -1,0 +1,33 @@
+# DESCRIPTION
+# Problem 1 from the Fall 2012 MTHE 225 Quiz 1
+
+DOCUMENT();
+
+loadMacros(
+"PGstandard.pl",
+"MathObjects.pl",
+"parserFormulaUpToConstant.pl"
+);
+
+Context("Numeric");
+
+$showPartialCorrectAnswers = 1;
+
+$aa = random(1,5,1);
+$dydx = Formula("$aa / (x^2 - $aa * x)");
+$y = FormulaUpToConstant("ln|x - $aa|-ln|x|");
+
+TEXT(beginproblem());
+Context()->texStrings;
+BEGIN_TEXT
+Solve the differential equation
+\[\frac{dy}{dx} = $dydx\].
+$PAR
+\(y = \) \{ans_rule(20) \}
+END_TEXT
+
+Context()->normalStrings;
+
+ANS( $y->cmp() );
+
+ENDDOCUMENT();

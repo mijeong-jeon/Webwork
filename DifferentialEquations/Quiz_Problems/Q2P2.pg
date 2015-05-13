@@ -1,0 +1,41 @@
+# DESCRIPTION
+# Problem 2 from the Fall 2012 MTHE 225 Quiz 2
+
+DOCUMENT();
+
+loadMacros(
+"PGstandard.pl",
+"MathObjects.pl",
+"parserFormulaUpToConstant.pl"
+);
+
+Context("Numeric");
+
+$showPartialCorrectAnswers = 1;
+
+Context()->variables->add(y=>'Real',t=>'Real');
+
+$aa = random(7, 9, 1);
+$bb = $aa - 10;
+$co1 = 2 * $aa - 10;
+$co2 = $aa * $bb;
+
+$diffEq = "y^{\,\prime\prime} + $co1 y^{\,\prime} + $co2 y = 0"; #TeX
+$c1 = Formula("(1 / (1 - $aa/$bb))");
+$c2 = Formula("(($aa/$bb)/($aa/$bb - 1))");
+$y = Formula("$c1 * e^($aa - $aa * t) + $c2 * e^(-$bb * t + $bb)");
+
+TEXT(beginproblem());
+Context()->texStrings;
+BEGIN_TEXT
+Solve the initial value problem where \( $diffEq = \), \( y(1) = 1 \), and
+\( y'(1) = 0 \). Use \( t \) as the independent variable.
+$PAR
+\( y = \) \{ans_rule(20) \}
+END_TEXT
+
+Context()->normalStrings;
+
+ANS ( $y->cmp() );
+
+ENDDOCUMENT();

@@ -1,0 +1,33 @@
+# DESCRIPTION
+# Problem 2 from the Fall 2012 MTHE 225 Quiz 2
+
+DOCUMENT();
+
+loadMacros(
+"PGstandard.pl",
+"MathObjects.pl"
+);
+
+Context("Numeric");
+
+$showPartialCorrectAnswers = 1;
+
+Context()->variables->add(t=>'Real');
+
+$aa = random(1, 5, 1);
+$diffEq = "t \frac{dx}{dt} + (t + 1)x = $aa t"; #TeX
+$x = Formula("-$aa/t + $aa");
+
+TEXT(beginproblem());
+Context()->texStrings;
+BEGIN_TEXT
+Solve the initial value problem where \( $diffEq \) and \( x(1) = 0 \).
+$PAR
+\(x = \) \{ans_rule(20) \}
+END_TEXT
+
+Context()->normalStrings;
+
+ANS ( $x->cmp() );
+
+ENDDOCUMENT();

@@ -1,0 +1,40 @@
+# DESCRIPTION
+# Problem 1 from the Fall 2012 MTHE 225 Quiz 3
+
+DOCUMENT();
+
+loadMacros(
+"PGstandard.pl",
+"MathObjects.pl",
+"parserFormulaUpToConstant.pl"
+);
+
+Context("Numeric");
+
+$showPartialCorrectAnswers = 1;
+
+Context()->variables->add(u=>'Real');
+
+$aa = random(-1, 1, 2);
+
+if ( $aa == 1 ) {
+    $diffEq = "u^{\,\prime\prime\prime} + u^{\,\prime\prime} - u^{\,\prime} - u = 0";
+    $u = Formula("2e^x - e^(-x) * x");
+} else {
+    $diffEq = "u^{\,\prime\prime\prime} - u^{\,\prime\prime} - u^{\,\prime} + u = 0"; #TeX
+    $u = Formula("e^x * (x + 1) + e^(-x)");
+}
+
+TEXT(beginproblem());
+Context()->texStrings;
+BEGIN_TEXT
+Solve the initial value problem \( $diffEq \), \( u(0) = 2 \) , \( u'(0) = 1 \) , \( u''(0) = 4 \) .
+$PAR
+\( u = \) \{ans_rule(20) \}
+END_TEXT
+
+Context()->normalStrings;
+
+ANS ( $u->cmp() );
+
+ENDDOCUMENT();

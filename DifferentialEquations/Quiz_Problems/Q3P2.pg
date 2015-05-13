@@ -1,0 +1,46 @@
+# DESCRIPTION
+# Problem 2 from the Fall 2012 MTHE 225 Quiz 3
+
+DOCUMENT();
+
+loadMacros(
+"PGstandard.pl",
+"MathObjects.pl",
+);
+
+Context("Numeric");
+Context()->flags->set(
+    tolerance => 0.001,
+    tolType => "absolute",
+);
+
+$showPartialCorrectAnswers = 1;
+
+Context()->variables->add(y=>'Real');
+
+$aa = random(2, 5, 1);
+$aap1 = $aa + 1;
+
+$diffEq = "$aa y^{\,\prime\prime} + $aap1 y^{\,\prime} + y = \sin{(x)}"; # TeX
+
+$c1 = Formula("$aa^2 / ($aa^3 - $aa^2 + $aa - 1)");
+$c2 = Formula("(-1/2) * (1 / ($aa - 1))");
+$c3 = Formula("(1 - $aa) / (2 * $aa^2 + 2)");
+$c4 = Formula("-(1 + $aa) / (2 * $aa^2 + 2)");
+
+$y = Formula("$c1 * e^(-x/$aa) + $c2 * e^(-x) + $c3 * sin(x) + $c4 * cos(x)");
+
+TEXT(beginproblem());
+Context()->texStrings;
+BEGIN_TEXT
+Solve the initial value problem where \( $diffEq \), \( y(0) = 0 \), 
+\( y'(0) = 0 \) .
+$PAR
+\( y = \) \{ans_rule(20) \}
+END_TEXT
+
+Context()->normalStrings;
+
+ANS ( $y->cmp() );
+
+ENDDOCUMENT();

@@ -1,0 +1,36 @@
+# DESCRIPTION
+# Problem 2 from the Fall 2012 MTHE 225 Quiz 
+
+DOCUMENT();
+
+loadMacros(
+"PGstandard.pl",
+"MathObjects.pl"
+);
+
+Context("Numeric");
+
+$showPartialCorrectAnswers = 1;
+
+Context()->variables->add(y=>'Real',t=>'Real');
+$aa = random(2,4,1);
+$a2p1 = $aa**2 + 1;
+
+$diffEq = "y^{\,\prime\prime} + 2y^{\,\prime} + $a2p1 y = 0"; # TeX
+
+$y = Formula("($aa * e^(-t) * cos($aa * t) + 2 * e^(-t) * sin($aa * t)) / $aa");
+
+TEXT(beginproblem());
+Context()->texStrings;
+BEGIN_TEXT
+Using the Laplace transform, solve:
+\( $diffEq \), \(y(0) = 1\), \(y'(0) = 1 \).
+$PAR
+\( y(t) = \) \{ans_rule(20) \}
+END_TEXT
+
+Context()->normalStrings;
+
+ANS( $y->cmp() );
+
+ENDDOCUMENT();

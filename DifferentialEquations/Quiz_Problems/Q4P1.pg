@@ -1,0 +1,36 @@
+# DESCRIPTION
+# Problem 1 from the Fsll 2012 MTHE 225 Quiz 4
+
+DOCUMENT();
+
+loadMacros(
+"PGstandard.pl",
+"MathObjects.pl",
+"contextPiecewiseFunction.pl"
+);
+
+Context("PiecewiseFunction");
+
+$showPartialCorrectAnswers = 1;
+
+Context()->variables->add(t=>'Real', s=>'Real');
+
+$f = PiecewiseFunction("0 <= t < 1" => "t", "t >= 1" => "1");
+
+$L = Formula("1 / s^2 - e^(-s) / s^2");
+
+TEXT(beginproblem());
+Context()->texStrings;
+
+BEGIN_TEXT
+Find the Laplace transform of the following function:
+\[ f(t) = $f \]
+$PAR
+\( \mathcal{L} \lbrace f(t) \rbrace (s) = \) \{ans_rule(20) \}
+END_TEXT
+
+Context()->normalStrings;
+
+ANS ($L->cmp());
+
+ENDDOCUMENT();

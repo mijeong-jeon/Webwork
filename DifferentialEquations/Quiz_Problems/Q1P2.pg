@@ -22,7 +22,7 @@ $y = Formula("1 / (e^x * (x - 1) + (1 + (1 / $aa)))");
 TEXT(beginproblem());
 Context()->texStrings;
 BEGIN_TEXT
-Solve the initial value problem where \(\frac{dy}{dx} = $dydx\) and \( y(0) = $aa \).
+Solve the initial value problem where \(\displaystyle \frac{dy}{dx} = $dydx\) and \( y(0) = $aa \).
 $PAR
 \(y = \) \{ans_rule(20) \}
 END_TEXT

@@ -1,0 +1,84 @@
+
+DOCUMENT();  
+
+loadMacros(
+"PGstandard.pl",
+"parserRadioButtons.pl",
+"MathObjects.pl",
+);
+
+$a = random(-3, -1);
+$b = random(2, 5);
+while ($b == $a)  {
+      $b = random(2, 5);
+}
+
+$m = random(2, 4); # mass
+$c = -1*$a * 2 * $m;
+$k = ($b**2 + $a**2) * $m; 
+
+$case = random(1, 2);
+if ($case == 1) {  # practical resonsance
+   $w = $b;
+   $behaviour = "Practical resonance";
+   $graph = "SteadyState-HighAmplitude";
+} 
+elsif ($case == 2) { # too high a frequency
+    $w = $b*$b;
+   $behaviour = "No resonance present";
+   $graph = "SteadyState-LowAmplitude";
+}
+
+$homogeneous_classification = RadioButtons(
+    [ "Undamped", "Underdamped", "Critically damped", "Overdamped" ],
+    "Underdamped",
+    last => [ "Undamped", "Underdamped", "Critically damped", "Overdamped" ]);
+
+$system_behaviour = RadioButtons(
+    [ "Resonance", "Near-resonance (beats)", "Practical resonance", "No resonance present."],
+    $behaviour, 
+    last => [ "Resonance", "Near-resonance (beats)", "Practical resonance", "No resonance present."]);
+
+$system_graph = RadioButtons(
+    [ "Linear growth in amplitude over time.", "Sinusoidal amplitudes, quite high relative to the applied force.", "Steady state oscillations, quite large in amplitude relative to the applied force.", "Steady state oscillations, small amplitude relative to the applied force."],
+    $graph,     
+    last => [ "Linear growth in amplitude over time.", "Sinusoidal amplitudes, quite high relative to the applied force.", "Steady state oscillations, quite large in amplitude relative to the applied force.", "Steady state oscillations, small amplitude relative to the applied force."],
+    labels => ["Resonance", "Beats", "SteadyState-HighAmplitude","SteadyState-LowAmplitude"]);
+
+
+BEGIN_TEXT
+
+$PAR
+Consider the differential equation for a forced spring/mass system, with
+\[m y'' + c y' + ky = \cos(\omega t) \]
+
+For a particular system, $BR
+- \(m = $m\) kg, $BR
+- \(c = $c\) N/(m/s),  $BR
+- \(k = $k\) N/m, and $BR
+- \(\omega\) = $w rad/s. $BR  
+
+
+$PAR
+(a) Classify the homogeneous part of this spring/mass system by its unforced behaviour.  
+$BR
+\{ $homogeneous_classification->buttons() \}
+
+$PAR
+(b) Classify the behaviour if the external force \(F_{ext} = \cos( $w t)\) is included.   
+$BR
+\{ $system_behaviour->buttons() \}
+$PAR 
+(c) What description below best describes the graph of the position of the mass over time?
+$BR
+\{ $system_graph->buttons() \}
+
+END_TEXT
+
+$showPartialCorrectAnswers = 0;
+
+ANS( $homogeneous_classification->cmp() );
+ANS( $system_behaviour->cmp() );
+ANS( $system_graph->cmp() );
+
+ENDDOCUMENT();

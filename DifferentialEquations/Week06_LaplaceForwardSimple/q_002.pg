@@ -1,0 +1,54 @@
+
+## DESCRIPTION
+## Differential Equations: Laplace Transforms
+## ENDDESCRIPTION
+
+## Tagged by cmd6a 3/10/06
+
+## DBsubject(Differential equations)
+## DBchapter(Laplace transforms)
+## DBsection(Basic transformations)
+## Institution(ASU)
+## MLT(forward_07)
+## MLTleader(1)
+## Level(3)
+
+DOCUMENT() ;        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"MathObjects.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"PGauxiliaryFunctions.pl",
+"PGasu.pl",
+"AnswerFormatHelp.pl",
+"PGunion.pl",
+);
+
+TEXT(beginproblem()) ;
+$showPartialCorrectAnswers = 1;
+Context()->variables->add(s => "Real");
+
+$a = random(2,9);
+$b = list_random(-4, -3, -2, 2, 3, 4);
+$c = random(2, 9);
+$k = random(2, 6);
+
+$ans1 = Formula("$a/(s-($b)) + $c * $k/(s^2 + $k^2)"); 
+
+
+TEXT(EV2(<<EOT));
+
+Evaluate the transform 
+\[ {\mathcal L} \left\lbrace $a e^{$b t} + $c \sin($k t) \right\rbrace \]
+$BR
+\(F(s)= \) \{ ans_rule(40) \}.
+
+
+EOT
+
+ANS(fun_cmp($ans1,vars=>["s"] )) ;
+ENDDOCUMENT() ;        # This should be the last executable line in the problem.
+

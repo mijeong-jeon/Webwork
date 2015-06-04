@@ -1,0 +1,53 @@
+
+## DESCRIPTION
+## Differential Equations: Laplace Transforms
+## ENDDESCRIPTION
+
+## Tagged by cmd6a 3/10/06
+
+## DBsubject(Differential equations)
+## DBchapter(Laplace transforms)
+## DBsection(Basic transformations)
+## Institution(ASU)
+## MLT(forward_07)
+## MLTleader(1)
+## Level(3)
+
+DOCUMENT() ;        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"MathObjects.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"PGauxiliaryFunctions.pl",
+"PGasu.pl",
+"AnswerFormatHelp.pl",
+"PGunion.pl",
+);
+
+TEXT(beginproblem()) ;
+$showPartialCorrectAnswers = 1;
+Context()->variables->add(s => "Real");
+
+$a = list_random(-4, -3, -2, 2, 3, 4);
+$c = random(2,9);
+$n = random(2, 4);
+
+$ans1 = Formula("$c * ($n !  / ( s-($a))^($n + 1)) "); 
+
+
+TEXT(EV2(<<EOT));
+
+Evaluate the transform 
+\[ {\mathcal L} \left\lbrace $c t^$n e^{$a t}  \right\rbrace \]
+$BR
+\(F(s)= \) \{ ans_rule(40) \}.
+
+
+EOT
+
+ANS(fun_cmp($ans1,vars=>["s"] )) ;
+ENDDOCUMENT() ;        # This should be the last executable line in the problem.
+

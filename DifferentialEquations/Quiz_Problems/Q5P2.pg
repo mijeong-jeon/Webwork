@@ -1,0 +1,34 @@
+# DESCRIPTION
+# Problem 2 from the Fall 2012 MTHE Quiz 5
+
+DOCUMENT();
+
+loadMacros(
+"PGstandard.pl",
+"MathObjects.pl");
+
+Context("Numeric");
+
+$showPartialCorrectAnswers - 1;
+
+Context()->variables->add(t=>'Real',y=>'Real');
+$aa = random(2, 5, 1);
+
+$diffeq = "ty^{\,\prime\prime} - ty^{\,\prime} + y = $aa"; # TeX
+$y = Formula("$aa - t");
+
+TEXT(beginproblem());
+Context()->texStrings;
+BEGIN_TEXT
+
+Solve the initial value problem \( $diffeq \), \( y(0) = $aa \), \(y'(0) = -1 \).
+$PAR
+\( y = \) \{ans_rule(20) \}
+
+END_TEXT
+
+Context()->normalStrings;
+
+ANS( $y->cmp());
+
+ENDDOCUMENT();

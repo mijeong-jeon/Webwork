@@ -1,0 +1,44 @@
+# DESCRIPTION
+# Problem 1 from the Fall 2012 MTHE Quiz 5
+
+DOCUMENT();
+
+loadMacros(
+"PGstandard.pl",
+"MathObjects.pl");
+
+Context("Numeric")->functions->add(
+  u => {
+    class => 'Parser::Legacy::Numeric',
+    perl => 'Parser::Legacy::Numeric::do_step'
+  },
+);
+Context()->flags->set(
+	tolerance => 0.001,
+	tolType => "absolute");
+
+$showPartialCorrectAnswers = 1;
+
+Context()->variables->add(t=>'Real',s=>'Real');
+$aa = random(2, 5, 1);
+$aasq = $aa ** 2;
+
+$laplace = "\mathcal{L}^{-1} \lbrace \frac{e^{-s}}{s^2 (s + $aa)} \rbrace (t)";
+
+$inv = Formula("(e^(-$aa * (t - 1)) / $aasq - 1 / $aasq + (t - 1) / $aa)u(t - 1)");
+
+TEXT(beginproblem());
+Context()->texStrings;
+BEGIN_TEXT
+
+Find \( $laplace \). Use \( u \) to denote the Heaviside step function.
+$PAR
+\( $laplace  = \) \{ans_rule(20) \}
+
+END_TEXT
+
+Context()->normalStrings;
+
+ANS( $inv->cmp() );
+
+ENDDOCUMENT();

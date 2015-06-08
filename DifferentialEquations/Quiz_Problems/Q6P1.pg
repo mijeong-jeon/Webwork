@@ -1,0 +1,85 @@
+## Question 1 from the 2012 MTHE Quiz #6
+
+##############################
+#  Initialization
+
+DOCUMENT();
+
+loadMacros(
+"PGstandard.pl",
+"MathObjects.pl",
+"AnswerFormatHelp.pl",
+"unionLists.pl"
+);
+
+TEXT(beginproblem());
+
+##############################
+#  Setup
+
+Context("Matrix");
+$M = Matrix([0,6,0],[1,0,1],[1,1,0]);
+
+Context("Vector")->variables->add(
+t=>"Real"
+);
+
+$y0 = ColumnVector("6 * t - 7","-t + 1","-6 * t");
+$c = ColumnVector("6 * t", 6, "-5 * t");
+$column = random(1,3,1);
+
+if ( $column == 1 ) {
+	$Y = ColumnVector("6 * e^(-t)", "-e^(-t)", "-5 * e^(-t)");
+	$Yp = ColumnVector("-6 * e^(-t)", "e^(-t)", "5 * e^(-t)");
+} elsif( $column == 2 ) {
+	$Y = ColumnVector("-3 * e^(-2 * t)", "e^(-2 * t)", "e^(-2 * t)");
+	$Yp = ColumnVector("6 * e^(-2 * t)", "-2 * e^(-2 * t)", "-2 * e^(-2 * t)");
+} else {
+	$Y = ColumnVector("2 * e^(3 * t)", "e^(3 * t)", "e^(3 * t)");
+	$Yp = ColumnVector("6 * e^(3 * t)", "3 * e^(3 * t)", "3 * e^(3 * t)");
+}
+
+$y0p = ColumnVector(6, -1, -6);
+
+##############################
+#  Main text
+
+Context()->texStrings;
+BEGIN_TEXT
+\{ BeginList("OL",type=>"a") \}
+
+$ITEM Verify that \( \boldsymbol{Y}(t) = $Y \) is a solution to 
+\( \boldsymbol{\vec{y}}^{\,\prime} (t) = $M \boldsymbol{\vec{y}}(t) \) by 
+substituting it into the differential equation. (Enter the terms in the order 
+given.)
+$BR
+\{ ans_rule(20) \}
+=
+\{ ans_rule(20) \}.
+\{ AnswerFormatHelp("vectors") \}
+
+$ITEMSEP
+$ITEM Verify that \( \boldsymbol{\vec{y}}_0 (t) = $y0 \) is a particular 
+solution to 
+\[ \boldsymbol{\vec{y}}^{\,\prime} (t) = $M \boldsymbol{\vec{y}} (t) + $c \] 
+by substituting it into the differential equation. (Enter the terms in the 
+order given.) 
+$BR
+\{ ans_rule(20) \}
+=
+\{ ans_rule(20) \}
+\{ AnswerFormatHelp("vectors") \}
+END_TEXT
+Context()->normalStrings;
+
+##############################
+#  Answers
+
+$showPartialCorrectAnswers = 1;
+
+ANS( $Yp->cmp() );
+ANS( $Yp->cmp() );
+ANS( $y0p->cmp() );
+ANS( $y0p->cmp() );
+
+ENDDOCUMENT();

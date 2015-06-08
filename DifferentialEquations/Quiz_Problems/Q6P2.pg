@@ -1,0 +1,59 @@
+## Question 2 from the 2012 MTHE Quiz #6
+
+##############################
+#  Initialization
+
+DOCUMENT();
+
+loadMacros(
+"PGstandard.pl",
+"MathObjects.pl",
+"AnswerFormatHelp.pl"
+);
+
+TEXT(beginproblem());
+
+##############################
+#  Setup
+
+Context("Matrix");
+$A = Matrix([6,-3],[2,1]);
+
+Context("Vector")->variables->add(
+t=>"Real"
+);
+
+$x01 = random(-10, 10, 1);
+$x02 = random(-10, 10, 1);
+$x0 = ColumnVector($x01, $x02);
+
+$c3 = -2 * $x01 + 3 * $x02;
+$c4 = $x01 - $x02;
+
+$x = ColumnVector("$c3 * e^(3 * t) + 3 * $c4 * e^(4 * t)","$c3 * e^(3 * t) + 2 * $c4 * e^(4 * t)");
+
+##############################
+#  Main Text
+
+Context()->texStrings;
+BEGIN_TEXT
+
+Solve the initial value problem 
+\(\boldsymbol{\vec{x}}^{\,\prime} (t) = \boldsymbol{A} \boldsymbol{\vec{x}} (t) \) 
+where \(A = $A \) and \( \boldsymbol{\vec{x}}(0) = $x0 \). Use \( t \) as the 
+independent variable.
+$BR
+\( \boldsymbol{\vec{x}}(t) = \) \{ ans_rule(20) \}
+\{ AnswerFormatHelp("vectors") \}
+
+END_TEXT
+Context()->normalStrings;
+
+##############################
+#  Answer
+
+$showPartialCorrectAnswers = 1;
+
+ANS( $x->cmp() );
+
+ENDDOCUMENT();

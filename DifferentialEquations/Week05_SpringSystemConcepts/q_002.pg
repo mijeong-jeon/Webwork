@@ -35,9 +35,9 @@ $homogeneous_classification = RadioButtons(
     last => [ "Undamped", "Underdamped", "Critically damped", "Overdamped" ]);
 
 $system_behaviour = RadioButtons(
-    [ "Resonance", "Near-resonance (beats)", "Practical resonance", "No resonance present."],
+    [ "Resonance", "Near-resonance (beats)", "Practical resonance", "No resonance present"],
     $behaviour, 
-    last => [ "Resonance", "Near-resonance (beats)", "Practical resonance", "No resonance present."]);
+    last => [ "Resonance", "Near-resonance (beats)", "Practical resonance", "No resonance present"]);
 
 $system_graph = RadioButtons(
     [ "Linear growth in amplitude over time.", "Sinusoidal amplitudes, quite high relative to the applied force.", "Steady state oscillations, quite large in amplitude relative to the applied force.", "Steady state oscillations, small amplitude relative to the applied force."],

@@ -49,7 +49,7 @@ $num1 = $num2 * random(2,4,1);
 #  Main text
 
 BEGIN_TEXT
-Simplify the following expression so that there is only one \(x\) factor, only \(y\) factor, and one constant.  Arrange your expression so that all exponents are positive.  (e.g "1/(x^2)" instead of "x^(-2)")
+Simplify the following expression so that there is only one \(a\) factor, only \(b\) factor, and one constant.  Arrange your expression so that all exponents are positive.  (e.g "1/(a^2)" instead of "a^(-2)")
 $PAR
 \( \displaystyle  \left( \frac{$num1 $var[0]^{$n1}$var[1]^{$n2}}{$num2 $var[0]^{$m1}$var[1]^{$m2}}\right)^{$e} \) =  \{ ans_rule(20) \}
 END_TEXT

@@ -1,0 +1,86 @@
+##############################
+#  Initialization
+
+DOCUMENT();
+
+loadMacros(
+"PGstandard.pl",
+"MathObjects.pl",
+"AnswerFormatHelp.pl",
+"unionLists.pl"
+);
+
+TEXT(beginproblem());
+
+##############################
+#  Setup
+
+Context("Matrix");
+$aa = random(2, 5, 1);
+$M = Matrix([1, -$aa, $aa], [-$aa, 1, $aa], [$aa, $aa, 1]);
+$r1 = 1 - 2* $aa;
+$r2 = $aa + 1;
+
+Context("Vector")->variables->add(
+t=>"Real"
+);
+
+$y0 = ColumnVector("5*t + 1", "2*t", "4*t + 2");
+$c = ColumnVector("-2*$aa*t - 2*$aa -5*t + 4", "($aa - 2)*(t - 1)", "-7*$aa*t - $aa - 4*t + 2")->reduce;
+$column = random(1,3,1);
+
+if ( $column == 1 ) {
+	$Y = ColumnVector("e^($r2 * t)", "0", "e^($r2 * t)");
+	$Yp = $r2 * $Y;
+} elsif( $column == 2 ) {
+	$Y = ColumnVector("-e^($r2 * t)", "e^($r2 * t)", "0");* 
+	$Yp = $r2 * $Y;
+} else {
+	$Y = ColumnVector("-e^($r1 * t)", "-e^{$r1 * t}", "e^{$r1 * t}");
+	$Yp = $r1 * $Y;
+}
+
+$y0p = ColumnVector(5, 2, 4);
+
+##############################
+#  Main text
+
+Context()->texStrings;
+BEGIN_TEXT
+\{ BeginList("OL",type=>"a") \}
+
+$ITEM Verify that \( \boldsymbol{Y}(t) = $Y \) is a solution to 
+\( \boldsymbol{\vec{y}}^{\,\prime} (t) = $M \boldsymbol{\vec{y}}(t) \) by 
+substituting it into the differential equation. (Enter the terms in the order 
+given.)
+$BR
+\{ ans_rule(20) \}
+=
+\{ ans_rule(20) \}.
+\{ AnswerFormatHelp("vectors") \}
+
+$ITEMSEP
+$ITEM Verify that \( \boldsymbol{\vec{y}}_0 (t) = $y0 \) is a particular 
+solution to 
+\[ \boldsymbol{\vec{y}}^{\,\prime} (t) = $M \boldsymbol{\vec{y}} (t) + $c \] 
+by substituting it into the differential equation. (Enter the terms in the 
+order given.) 
+$BR
+\{ ans_rule(20) \}
+=
+\{ ans_rule(20) \}
+\{ AnswerFormatHelp("vectors") \}
+END_TEXT
+Context()->normalStrings;
+
+##############################
+#  Answers
+
+$showPartialCorrectAnswers = 1;
+
+ANS( $Yp->cmp() );
+ANS( $Yp->cmp() );
+ANS( $y0p->cmp() );
+ANS( $y0p->cmp() );
+
+ENDDOCUMENT();

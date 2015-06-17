@@ -1,0 +1,61 @@
+##############################
+#  Initialization
+
+DOCUMENT();
+
+loadMacros(
+"PGstandard.pl",
+"MathObjects.pl",
+"AnswerFormatHelp.pl"
+);
+
+TEXT(beginproblem());
+
+##############################
+#  Setup
+
+Context("Matrix")->variables->add(
+t=>"Real"
+);
+
+$choice = random(0,3,1);
+
+if ( $choice == 0 ) {
+	$A = Matrix([-3,-1],[2,-1]);
+	$x0 = ColumnVector(0,1);
+	$x = ColumnVector("-e^(2*t) * sin(t)","e^(-2*t) * (cos(t) + sin(t))");
+} elsif( $choice == 1 ) {
+	$A = Matrix([3,-2],[4,-1]);
+	$x0 = ColumnVector(0,1);
+	$x = ColumnVector("-e^t * sin(2*t)","e^t * (cos(2*t) - sin(2*t))");
+} elsif( $choice == 2 ){
+	$A = Matrix([-1,-4],[1,-1]);
+	$x0 = ColumnVector(2,0);
+	$x = ColumnVector("2*e^-t * cos(2*t)","e^(-t) * sin(2*t)");
+} else {
+	$A = Matrix([2, -5],[1,-2]);
+	$x0 = ColumnVector(5,2);
+	$x = ColumnVector("5 * cos(t)","2*cos(t) + sin(t)");
+}
+
+##############################
+#  Main text
+
+Context()->texStrings;
+BEGIN_TEXT
+Solve \( \boldsymbol{\vec{x}}^{\,\prime}(x) = \boldsymbol{A} \boldsymbol{\vec{x}}(x) \)
+where \( \boldsymbol{A} = $A \) and \(\boldsymbol{\vec{x}}(0) = $x0 \).
+$BR
+\( \boldsymbol{\vec{x}}(x) = \) \{ ans_rule(20) \} \{ AnswerFormatHelp("vectors") \}
+
+END_TEXT	
+Context()->normalStrings;
+
+##############################
+#  Answers
+
+$showPartialCorrectAnswers = 1;
+
+ANS( $x->cmp() );
+
+ENDDOCUMENT();

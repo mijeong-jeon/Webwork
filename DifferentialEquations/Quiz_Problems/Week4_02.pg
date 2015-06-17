@@ -1,0 +1,76 @@
+# DESCRIPTION
+# Problem 1 from the Fall 2012 MTHE 225 Quiz 3
+
+DOCUMENT();
+
+loadMacros(
+"PGstandard.pl",
+"MathObjects.pl",
+"parserFormulaUpToConstant.pl"
+);
+
+Context("Numeric");
+
+$showPartialCorrectAnswers = 1;
+
+Context()->variables->add(u=>'Real');
+
+$m = list_random(1200, 1600, 1900);
+
+$w = 80; # rad/s
+
+# w = sqrt(k/m), so k = w^2 * m
+$k = Compute("($w/60*2*pi)^2 * $m");
+
+# Change in frequency due to damping 
+$w2_rpm = 77;
+$w2 = ${w2_rpm}/60*2*pi; # rad/s
+#w2 = (0.5)* sqrt(4*k/m - c^2)
+# Solving for c:
+$c = Compute("sqrt(4*$k/$m - 4*$w2**2)*$m");
+
+# Decay is exponential with exp(-c/(2m) t)
+# Solving 0.01 = exp(-c/(2m) *t)
+# ln(0.01)*(-2m/c)
+$t_dissipate = log(0.01)*(-2*$m/$c);
+
+TEXT(beginproblem());
+Context()->texStrings;
+BEGIN_TEXT
+  In a simplified model of a car, we can visualize the car as a single mass supported by a (collective) single spring and (collective) dashpot/damper.  The differential equation for this system is given by
+\[ m y'' + c y' + k y = 0 \]
+
+$PAR
+
+(a) A car with a mass of $m kg is being repaired.  During the repairs,
+it is jumped on by a small child, kind of like a trampoline.  If the
+dampers are disconnected (so the oscillations are undamped),
+the car frame oscillates at 80 cycles per minute after being jumped
+on.  What is the effective spring constant \(k\) for the car?
+
+$BR
+\( k = \) \{ans_rule(20) \} N/m
+$BR
+Careful with the units: 60 oscillations per minute = 1 oscillation per second = \(2 \pi\) radians per second.
+$PAR
+
+(b) The car is then repaired (dampers re-attached).  When it
+  passes over a bump, the resulting damped vibrations have a frequency
+  of $w2_rpm cycles per minute.  What is the value of the damping coefficient \(c\)?
+$BR
+\( c = \) \{ans_rule(20) \} N/(m/s) 
+
+$PAR (c) How long would it take for the damped vibrations induced by
+the bump to be reduced to 1% of their initial amplitude?
+
+$PAR
+\( t = \) \{ans_rule(20) \} seconds
+END_TEXT
+
+Context()->normalStrings;
+
+ANS ( $k->cmp() );
+ANS ( $c->cmp() );
+ANS ( $t_dissipate->cmp() );
+
+ENDDOCUMENT();

@@ -1,0 +1,102 @@
+
+
+## DESCRIPTION
+## Differential Equations: Laplace Transforms
+## ENDDESCRIPTION
+
+## Tagged by cmd6a 3/10/06
+
+## DBsubject(Differential equations)
+## DBchapter(Laplace transforms)
+## DBsection(Basic transformations)
+## Institution(ASU)
+## MLT(forward_07)
+## MLTleader(1)
+## Level(3)
+
+DOCUMENT() ;        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"MathObjects.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"PGauxiliaryFunctions.pl",
+"PGasu.pl",
+"AnswerFormatHelp.pl",
+"PGunion.pl",
+"parserFunction.pl"
+);
+
+TEXT(beginproblem()) ;
+
+# Part (a)
+$showPartialCorrectAnswers = 1;
+Context()->variables->add(s => "Real");
+
+$a = random(2,9);
+$b = list_random(-4, -3, -2, 2, 3, 4);
+$c = random(2, 9);
+$k = random(2, 6);
+
+$ans1 = Formula("$a/(s-($b)) + $c * $k/(s^2 + $k^2)"); 
+
+TEXT(EV2(<<EOT));
+
+(a) Evaluate the transform shown below.
+
+$BR
+\(F(s)= \displaystyle {\mathcal L} \left\lbrace $a e^{$b t} + $c \sin($k t) \right\rbrace  = \)
+\{ ans_rule(40) \}.
+
+EOT
+
+# Part (b)
+
+Context("Numeric");
+Context()->variables->are(
+t=>"Real",
+s=>"Real"
+);
+
+# Redefine the Heaviside function so the answer checker will work on [-1,1].
+parserFunction("h(t)" => "1.5 * cos(e*t) + 5*pi/3 + arctan(t)");
+
+$a = random(1, 4, 1);
+do { $b = random(1, 4, 1); } until ( $b != $a );
+$c = random(1, 9, 1);
+do { $d = non_zero_random(-5, 5, 1); } until ($d != $b );
+
+$Fs = Formula("($c*s+(-$c*$a + $d))/(s^2 -2*$a*s +($a^2 + $b^2))")->reduce;
+
+$ans2 = Compute("$c*e^($a*t)*cos($b*t) + $d/$b*e^($a*t)*sin($b*t)")->reduce;
+
+
+#############################
+#  Main text1
+
+Context()->texStrings;
+TEXT(EV2(<<EOT));
+$PAR
+(b) Evaluate the inverse Laplace transform shown below. 
+$BR
+$BR
+\( \displaystyle f(t) = {\mathcal L}^{-1} \left\lbrace $Fs \right\rbrace = \)
+\{ ans_rule(50) \}
+
+EOT
+
+Context()->normalStrings;
+
+
+##############################
+#  Answer evaluation
+
+$showPartialCorrectAnswers = 1;
+
+ANS(fun_cmp($ans1,vars=>["s"] )) ;
+ANS($ans2->cmp() );
+
+ENDDOCUMENT() ;        # This should be the last executable line in the problem.
+

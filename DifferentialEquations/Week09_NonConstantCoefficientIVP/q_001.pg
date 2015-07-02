@@ -50,5 +50,6 @@ END_TEXT
 
 ANS($y_coeff->cmp());
 ANS($rhs->cmp());
+ANS($solution->cmp());
 ENDDOCUMENT() ;        # This should be the last executable line in the problem.
 

@@ -1,0 +1,58 @@
+##################################
+#  Initialization
+
+DOCUMENT();
+
+loadMacros(
+"PGstandard.pl",
+"PGmatrixmacros.pl",
+"MathObjects.pl",
+"parserMultiAnswer.pl",
+);
+
+
+TEXT(beginproblem());
+
+$ans = Formula("1");
+
+Context("Vector");
+Context()->variables->add(t => 'Real');
+
+$v = Compute("e^(2t) * <3, 4, 5>");
+$v_at_0 = Vector($v->eval(t => 0));
+$v_at_2 = $v->eval(t => 2);
+@v_at_0_arr = $v_at_0->value;
+
+#####################################
+#  Setup 1
+
+Context("Matrix");
+
+Context()->texStrings;
+BEGIN_TEXT
+
+\(\vec{v}(t) = $v\)
+$BR
+\(\vec{v}(0) = $v_at_0\)
+$BR
+\(\vec{v}(2) = $v_at_2\)
+$BR
+At \(t=0\) as an array: \{@v_at_0_arr \}
+$BR 
+First component at \(t=0\):\{$v_at_0_arr[0] \}
+
+$PAR
+Enter \(e^{2t} \times \langle 3, 4, 5\rangle\): \{ ans_rule(20) \}
+
+END_TEXT
+Context()->normalStrings;
+
+
+##################################
+#  Answer evaluation 1
+
+$showPartialCorrectAnswers = 1;
+
+ANS( $ans->cmp() );
+
+ENDDOCUMENT(); 

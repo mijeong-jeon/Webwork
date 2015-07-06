@@ -28,7 +28,7 @@ Context()->variables->add(s => "Real", t => "Real");
 
 $a = random(3, 6);
 $y_coeff = Formula("3/s - s/3");
-$rhs = Formula("$a/(3s)");
+$rhs = Formula("-$a/(3s^2)");
 $solution = Formula("$a/2 t^2");
 
 BEGIN_TEXT

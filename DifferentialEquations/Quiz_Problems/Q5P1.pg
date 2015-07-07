@@ -31,7 +31,7 @@ TEXT(beginproblem());
 Context()->texStrings;
 BEGIN_TEXT
 
-Find \( $laplace \). Use \( u \) to denote the Heaviside step function.
+Find \( $laplace \). Use \( u(t-a) \) to denote a Heaviside step function.
 $PAR
 \( $laplace  = \) \{ans_rule(20) \}
 

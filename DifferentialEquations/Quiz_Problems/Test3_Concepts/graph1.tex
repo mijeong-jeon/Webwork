@@ -1,0 +1,14 @@
+\documentclass{standalone}
+\usepackage[pdf]{pstricks}
+\usepackage{pst-all}
+\begin{document}
+\psset{algebraic}
+ \psset{xunit=1.6cm,yunit=4cm}
+\begin{pspicture}[](-1,-0.2)(7.5, 1.2)
+\psaxes[Dx=1,Dy=0.2]{-}(0,0)(0,0)(7.5,1.15)[$t$ (s),0][F_{\mbox{ext}}(t)$, 90]        %creates axes
+{\psset{yunit=0.2,xunit=0.5}
+\psgrid[subgriddiv=1, gridcolor=black,griddots=10,gridwidth=1.0pt,gridlabels=0pt](0,0)(0,0)(14,5)
+}
+\psline[linecolor=blue,linewidth=2\pslinewidth]{->}(0,1)(2,0)(2,1)(4,0)(4,1)(6,0)(6,1)(6.5,0.75)
+\end{pspicture}
+\end{document}

@@ -1,0 +1,88 @@
+## DESCRIPTION
+## Differential Equations: Laplace Transforms
+## ENDDESCRIPTION
+
+## Tagged by cmd6a 3/10/06
+
+## DBsubject(Differential equations)
+## DBchapter(Laplace transforms)
+## DBsection(Basic transformations)
+## Institution(ASU)
+## MLT(forward_07)
+## MLTleader(1)
+## Level(3)
+
+DOCUMENT() ;        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"MathObjects.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"PGauxiliaryFunctions.pl",
+"PGasu.pl",
+"AnswerFormatHelp.pl",
+"PGunion.pl",
+"parserFunction.pl"
+);
+
+TEXT(beginproblem()) ;
+
+$showPartialCorrectAnswers = 1;
+Context()->variables->add(t => "Real");
+
+$m = list_random(0.25, 0.5, 2);
+
+
+$case = random(1, 3);
+if ($case ==1 ) {
+$period = 2;
+$image_name = "graph1.png";
+}
+elsif ($case == 2) {
+$period = 3;
+$image_name = "graph2.png";
+}
+else {
+$period = 5;
+$image_name = "graph3.png";
+}
+
+# Period = 2pi*\sqrt(m/k) so
+# so  sqrt(k) =  = 2 pi \sqrt(m)/period
+$k = Formula("4 pi^2 $m/($period)^2");
+Context()->texStrings;
+TEXT(EV2(<<EOT));
+
+Consider the spring mass system defined by the differential equation
+\[m y'' + k y = F_{ext}(t)\]  
+
+If \( m = $m\) kg, and the periodic \(F_{ext}(t)\) shown 
+on the graph below is applied as an external force,
+what value of \(k\) will result in the mass showing ever-increasing amplitude oscillations over time?
+$BR If no choice of \(k\) will produce this result, put zero in Webwork, 
+and explain your rationale on your written submission.
+$PAR
+
+\(k = \) \{ans_rule(10)\}  N/m
+
+$PAR
+\{ image( "Test3_Concepts/${image_name}", width=>600, 
+extra_html_tags=>'alt="Graph of a function."' ) \} 
+
+EOT
+
+ANS($k->cmp());
+
+Context()->normalStrings;
+
+
+##############################
+#  Answer evaluation
+
+$showPartialCorrectAnswers = 1;
+
+
+ENDDOCUMENT() ;        # This should be the last executable line in the problem.
+

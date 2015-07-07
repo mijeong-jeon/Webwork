@@ -1,0 +1,163 @@
+##################################
+#  Initialization
+
+DOCUMENT();
+
+loadMacros(
+"PGstandard.pl",
+"PGmatrixmacros.pl",
+"MathObjects.pl",
+"parserMultiAnswer.pl",
+);
+
+
+TEXT(beginproblem());
+
+
+
+#####################################
+#  Setup 1
+
+Context("Matrix");
+
+$choice = random(0,2,1);
+
+if ( $choice == 0 ) {
+    $A = Matrix([1, 0, 0], [2, 1, -2], [3, 2, 1]);
+    $lambda1 = Complex(1, 2);
+    $v1 = Vector(0, i, 1);
+    $lambda2 = Complex(1, -2);
+    $v2 = Vector(0, -(i), 1);
+    $lambda3 = Real(1);
+    $v3 = Vector(2, -3, 2);
+} elsif( $choice  == 1) {
+    $A = Matrix([-3, 0, 2], [1, -1, 0], [-2, -1, 0]);
+    $lambda1 = Real(-2);
+    $v1 = Vector(2, -2, 1);
+    $lambda2 = Complex(-1, sqrt(2));
+    $v2 = (1/3) * Vector(2 - i * sqrt(2), -(i) * (-(i) + sqrt(2)), 3);
+    $lambda3 = Complex(-1, -sqrt(2));
+    $v3 = (1/3) * Vector(2 + i * sqrt(2), i * (i + sqrt(2)), 3);
+} elsif( $choice == 2) {
+    $A = Matrix([1, 2, -1], [0, 1, 1], [0, -1, 1]);
+    $lambda1 = Complex(1, 1);
+    $v1 = Vector(-2 + i, -(i), 1);
+    $lambda2 = Complex(1, -1);
+    $v2 = Vector(-2 - (i), i, 1);
+    $lambda3 = Real(1);
+    $v3 = Vector(1, 0, 0);
+
+}
+
+$multians1 = MultiAnswer($lambda1, $v1, $lambda2, $v2, $lambda3, $v3)->with(
+    singleResult => 1,
+    checkTypes => 1,
+    allowBlankAnswers => 1,
+    checker => sub {
+        my ($correct, $student, $answerHash ) = @_;
+        my @c = @{$correct};
+	      my @s = @{$student};
+
+        Value::Error("Your vectors are parallel") if
+           $c[1]->typeMatch($s[1]) 
+        && $c[3]->typeMatch($s[3])
+        && $c[5]->typeMatch($s[5])
+        && (($s[1]->isParallel ($s[3])) == 1 || ($s[1]->isParallel ($s[5])) == 1 || ($s[3]->isParallel ($s[5])) == 1);
+
+        if (   $c[0]->typeMatch($s[0])
+            && $c[1]->typeMatch($s[1])
+            && ($s[1] != Vector(0,0,0))
+            && (Vector($A * $s[1]) == $s[0] * $s[1])
+           )
+        { $flag1 = 1; }
+
+        if (   $c[2]->typeMatch($s[2])
+            && $c[3]->typeMatch($s[3])
+            && ($s[3] != Vector(0,0,0))
+            && (Vector($A * $s[3]) == $s[2] * $s[3])
+           )
+        { $flag2 = 1; }
+
+        if (   $c[4]->typeMatch($s[4])
+            && $c[5]->typeMatch($s[5])
+            && ($s[5] != Vector(0,0,0))
+            && (Vector($A * $s[5]) == $s[4] * $s[5])
+           )
+        { $flag3 = 1; }
+
+        if ($flag1==1 && $flag2 ==1 && $flag3==1) {
+           return 1;
+        } elsif ($flag1 == 1 && $flag2 == 2) {
+           Value::Error("The eigenpairs { lambda1, v1 } and {lambda2, v2} are correct")
+        } elsif ($flag1 == 1 && $flag3 == 3) {
+           Value::Error("The eigenpairs { lambda1, v1 } and {lambda3, v3} are correct")
+        } elsif ($flag2 == 2 && $flag3 == 3) {
+           Value::Error("The eigenpairs { lambda2, v2 } and {lambda3, v3} are correct")
+        } elsif ($flag1 == 1) {
+           Value::Error("The eigenpair { lambda1, v1 } is correct");
+        } elsif ($flag2 == 1) {
+           Value::Error("The eigenpair { lambda2, v2 } is correct");
+        } elsif ($flag3 == 1 ){
+           Value::Error("The eigenpair { lambda3, v3 } is correct");
+        }else{
+              Value::Error("None of the eigenpairs are correct");
+        }
+       
+    }
+);
+
+
+
+
+
+
+#####################################
+#  Main text 1
+
+Context()->texStrings;
+BEGIN_TEXT
+Consider the linear system
+$PAR
+\[ 
+\displaystyle
+\boldsymbol{ \vec{y}^{\,\prime} }
+=
+$A
+\boldsymbol{\vec{y}}.
+\]
+$BR
+$BR
+Find the eigenvalues and eigenvectors for the coefficient matrix.
+$BCENTER
+\{ 
+mbox(
+[
+'\( \lambda_1 = \) ',
+$multians1->ans_rule(5),
+', \( \boldsymbol{\vec{v}_1} =  \) ', 
+$multians1->ans_rule(10),
+', and \( \lambda_2 = \) ',
+$multians1->ans_rule(5),
+', \( \boldsymbol{\vec{v}_2} =  \) ', 
+$multians1->ans_rule(10),
+', and \( \lambda_3 = \) ',
+$multians1->ans_rule(5),
+', \( \boldsymbol{\vec{v}_3} =  \) ', 
+$multians1->ans_rule(10),
+],
+allowbreaks=>'yes'
+) 
+\}
+$ECENTER
+END_TEXT
+Context()->normalStrings;
+
+
+##################################
+#  Answer evaluation 1
+
+$showPartialCorrectAnswers = 1;
+
+ANS( $multians1->cmp() );
+
+ENDDOCUMENT(); 

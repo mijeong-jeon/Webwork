@@ -16,20 +16,32 @@ TEXT(beginproblem());
 
 
 #####################################
-#  Setup 1
+#  Setup
 
-Context("Matrix");
+Context("Matrix")->variables->add(
+t=>"Real"
+);
 
-$choice = random(0,3,1);
+#$choice = random(0,3,1);
+$choice = 0;
 
 if ( $choice == 0 ) {
     $A = Matrix([1,1,2],[1,2,1],[2,1,1]);
     $lambda1 = Real("4");
     $v1 = Vector(1,1,1);
+    $y1 = Vector("(1/6) * e^(-t) * (3 + e^(2*t) + 2 * e^(5*t))", 
+                 "(1/3) * e^t * (-1 + e^(3*t))", 
+                 "(1/6) * e^(-t) * (-3 + e^(2*t) + 2 * e^(5 * t))");
     $lambda2 = Real("-1");
     $v2 = Vector(-1,0,1);
+    $y2 = (1/3) * Vector("e^t * (-1 + e^(3 * t))",
+                         "e^t * (2 + e^(3 * t))",
+                         "e^t * (-1 + e^(3 * t))");
     $lambda3 = Real("1");
     $v3 = Vector(1,-2,1);
+    $y3 = (1/3) * Vector("(1/2) * e^(-t) * (-3 + e^(2 * t) + 2 * e^(5 * t))",
+                         "e^t * (-1 + e^(3 * t))",
+                         "(1/2) * e^(-t) * (3 + e^(2 * t) + 2 * e^(5 * t))");
 } elsif( $choice  == 1) {
     $A = Matrix([1,1,2],[0,2,2],[-1,1,3]);
     $lambda1 = Real("3");
@@ -56,6 +68,8 @@ if ( $choice == 0 ) {
     $v3 = Vector(-1,4,1);
 }
 
+# First answer checker. Checks eigenvalue-eigenvector pairs for coefficient
+# matrix.
 $multians1 = MultiAnswer($lambda1, $v1, $lambda2, $v2, $lambda3, $v3)->with(
     singleResult => 1,
     checkTypes => 1,
@@ -63,14 +77,18 @@ $multians1 = MultiAnswer($lambda1, $v1, $lambda2, $v2, $lambda3, $v3)->with(
     checker => sub {
         my ($correct, $student, $answerHash ) = @_;
         my @c = @{$correct};
-	      my @s = @{$student};
+	    my @s = @{$student};
 
+        # Make sure vectors are not parallel
         Value::Error("Your vectors are parallel") if
            $c[1]->typeMatch($s[1]) 
         && $c[3]->typeMatch($s[3])
         && $c[5]->typeMatch($s[5])
-        && (($s[1]->isParallel ($s[3])) == 1 || ($s[1]->isParallel ($s[5])) == 1 || ($s[3]->isParallel ($s[5])) == 1);
+        && (($s[1]->isParallel ($s[3])) == 1 || 
+            ($s[1]->isParallel ($s[5])) == 1 || 
+            ($s[3]->isParallel ($s[5])) == 1);
 
+        # Make sure eigenvalue-eigenvector pairs work.
         if (   $c[0]->typeMatch($s[0])
             && $c[1]->typeMatch($s[1])
             && ($s[1] != Vector(0,0,0))
@@ -92,6 +110,7 @@ $multians1 = MultiAnswer($lambda1, $v1, $lambda2, $v2, $lambda3, $v3)->with(
            )
         { $flag3 = 1; }
 
+        # Return errors for wrong answers.
         if ($flag1==1 && $flag2 ==1 && $flag3==1) {
            return 1;
         } elsif ($flag1 == 1 && $flag2 == 2) {
@@ -113,7 +132,89 @@ $multians1 = MultiAnswer($lambda1, $v1, $lambda2, $v2, $lambda3, $v3)->with(
     }
 );
 
+# Second answer checker. Checks eigenvalue-eigenvector pairs for solutions.
+$multians2 = MultiAnswer($lambda1, $y1, $lambda2, $y2, $lambda3, $y3)->with(
+    singleResult => 1,
+    checkTypes => 1,
+    allowBlankAnswers => 1,
+    checker => sub {
+        my ($correct, $student, $answerHash ) = @_;
+        my @c = @{$correct};
+        my @s = @{$student};
 
+        # Evaluate vectors at t = 0
+        $c1_eval = $c[1]->eval(t=>0);
+        $c3_eval = $c[3]->eval(t=>0);
+        $c5_eval = $c[5]->eval(t=>0);
+
+        $s1_eval = $s[1]->eval(t=>0);
+        $s3_eval = $s[3]->eval(t=>0);
+        $s5_eval = $s[5]->eval(t=>0);
+
+        # Get first component of student answers and normalize
+        $s1_1 = $s1_array[0] . i;
+        $s1_1_eval = $s1_1->eval(t=>0);
+        $s1_1_norm = $s1_1 / $s1_1_eval;
+
+        $s3_1 = $s3_array[0] . i;
+        $s3_1_eval = $s3_1->eval(t=>0);
+        $s3_1_norm = $s3_1 / $s3_1_eval;
+
+        $s5_1 = $s5_array[0] . i;
+        $s5_1_eval = $s5_1->eval(t=>0);
+        $s5_1_norm = $s5_1 / $s5_1_eval
+
+        # Check for parallel vectors
+        Value::Error("Your vectors are parallel") if
+           $c1_eval->typeMatch($s1_eval) 
+        && $c3_eval->typeMatch($s3_eval)
+        && $c5_eval->typeMatch($s5_eval)
+        && (($s1_eval->isParallel ($s3_eval)) == 1 || 
+            ($s1_eval->isParallel ($s5_eval)) == 1 || 
+            ($s3_eval->isParallel ($s5_eval)) == 1);
+
+        # Make sure eigenvalue-eigenvector pairs work.
+        if (   $c[0]->typeMatch($s[0])
+            && $c1_eval->typeMatch($s1_eval)
+            && ($s1_eval != Vector(0,0,0))
+            && (Vector($A * $s1_eval) == $s[0] * $s1_eval)
+           )
+        { $flag1 = 1; }
+
+        if (   $c[2]->typeMatch($s[2])
+            && $c3_eval->typeMatch($s3_eval)
+            && ($s3_eval != Vector(0,0,0))
+            && (Vector($A * $s3_eval) == $s[2] * $s3_eval)
+           )
+        { $flag2 = 1; }
+
+        if (   $c[4]->typeMatch($s[4])
+            && $c5_eval->typeMatch($s5_eval)
+            && ($s5_eval != Vector(0,0,0))
+            && (Vector($A * $s5_eval) == $s[4] * $s5_eval)
+           )
+        { $flag3 = 1; }
+
+        if ($flag1==1 && $flag2 ==1 && $flag3==1) {
+           return 1;
+        } elsif ($flag1 == 1 && $flag2 == 2) {
+           Value::Error("The eigenpairs { lambda1, y1 } and {lambda2, y2} are correct")
+        } elsif ($flag1 == 1 && $flag3 == 3) {
+           Value::Error("The eigenpairs { lambda1, y1 } and {lambda3, y3} are correct")
+        } elsif ($flag2 == 2 && $flag3 == 3) {
+           Value::Error("The eigenpairs { lambda2, y2 } and {lambda3, y3} are correct")
+        } elsif ($flag1 == 1) {
+           Value::Error("The eigenpair { lambda1, y1 } is correct");
+        } elsif ($flag2 == 1) {
+           Value::Error("The eigenpair { lambda2, y2 } is correct");
+        } elsif ($flag3 == 1 ){
+           Value::Error("The eigenpair { lambda3, y3 } is correct");
+        }else{
+              Value::Error("None of the eigenpairs are correct");
+        }
+       
+    }
+);
 
 
 
@@ -156,6 +257,31 @@ allowbreaks=>'yes'
 ) 
 \}
 $ECENTER
+
+Find the solution eigenvectors corresponding to the eigenvalues found above.
+
+$BCENTER
+\{ 
+mbox(
+[
+'\( \lambda_1 = \) ',
+$multians2->ans_rule(5),
+', \( \boldsymbol{\vec{y}_1} =  \) ', 
+$multians2->ans_rule(10),
+', and \( \lambda_2 = \) ',
+$multians2->ans_rule(5),
+', \( \boldsymbol{\vec{y}_2} =  \) ', 
+$multians2->ans_rule(10),
+', and \( \lambda_3 = \) ',
+$multians2->ans_rule(5),
+', \( \boldsymbol{\vec{y}_3} =  \) ', 
+$multians2->ans_rule(10),
+],
+allowbreaks=>'yes'
+) 
+\}
+$ECENTER
+
 END_TEXT
 Context()->normalStrings;
 
@@ -166,5 +292,6 @@ Context()->normalStrings;
 $showPartialCorrectAnswers = 1;
 
 ANS( $multians1->cmp() );
+ANS( $multians2->cmp() );
 
 ENDDOCUMENT(); 

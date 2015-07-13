@@ -24,34 +24,67 @@ $choice = random(0,2,1);
 
 if ( $choice == 0 ) {
     $A = Matrix([1, 0, 0], [2, 1, -2], [3, 2, 1]);
+
     $lambda1 = Complex(1, 2);
-    $v1 = Vector(0, i, 1);
+    $v1_x = Complex(0, 0);
+    $v1_y = Complex(0, 1);
+    $v1_z = Complex(1, 0);
+    $v1 = Vector($v1_x, $v1_y, $v1_z);
+
     $lambda2 = Complex(1, -2);
-    $v2 = Vector(0, -(i), 1);
+    $v2_x = Complex(0, 0);
+    $v2_y = Complex(0, -1);
+    $v2_z = Complex(1, 0);
+    $v2 = Vector($v2_x, $v2_y, $v2_z);
+
     $lambda3 = Real(1);
-    $v3 = Vector(2, -3, 2);
+    $v3_x = Complex(2, 0);
+    $v3_y = Complex(-3, 0);
+    $v3_z = Complex(2, 0);
+    $v3 = Vector($v3_x, $v3_y, $v3_z);
+
 } elsif( $choice  == 1) {
     $A = Matrix([-3, 0, 2], [1, -1, 0], [-2, -1, 0]);
+
     $lambda1 = Real(-2);
-    $v1 = Vector(2, -2, 1);
+    $v1_x = Complex(2, 0);
+    $v1_y = Complex(-2, 0);
+    $v1_z = Complex(1, 0);
+    $v1 = Vector($v1_x, $v1_y, $v1_z);
+
     $lambda2 = Complex(-1, sqrt(2));
-$ve1 = Complex(2, -sqrt(2));
-$ve2 = Complex(-1,  -sqrt(2));
-$ve3 = Complex(3, 0);
-#    $v2 = (1/3) * Vector(2 - i * sqrt(2), -(i) * (-(i) + sqrt(2)), 3);
-    $v2 = (1/3) * Vector($ve1, $ve2, $ve3);
+    $v2_x = Complex(2, -sqrt(2));
+    $v2_y = Complex(-1,  -sqrt(2));
+    $v2_z = Complex(3, 0);
+    $v2 = (1/3) * Vector($v2_x, $v2_y, $v2_z);
+
     $lambda3 = Complex(-1, -sqrt(2));
-#    $v3 = (1/3) * Vector(2 + i * sqrt(2), i * (i + sqrt(2)), 3);
-$v3 = $v2;
+    $v3_x = Complex(2, sqrt(2));
+    $v3_y = Complex(-1, sqrt(2));
+    $v3_z = Complex(3, 0);
+    $v3 = (1/3) * Vector($v3_x, $v3_y, $v3_z);
+
+
 } elsif( $choice == 2) {
     $A = Matrix([1, 2, -1], [0, 1, 1], [0, -1, 1]);
-    $lambda1 = Complex(1, 1);
-    $v1 = Vector(-2 + i, -(i), 1);
-    $lambda2 = Complex(1, -1);
-    $v2 = Vector(-2 - (i), i, 1);
-    $lambda3 = Real(1);
-    $v3 = Vector(1, 0, 0);
 
+    $lambda1 = Complex(1, 1);
+    $v1_x = Complex(-2, 1);
+    $v1_y = Complex(0, -1);
+    $v1_z = Complex(1, 0);
+    $v1 = Vector($v1_x, $v1_y, $v1_z);
+
+    $lambda2 = Complex(1, -1);
+    $v2_x = Complex(-2, -1);
+    $v2_y = Complex(0, 1);
+    $v2_z = Complex(1, 0);
+    $v2 = Vector($v2_x, $v2_y, $v2_z);
+
+    $lambda3 = Real(1);
+    $v3_x = Complex(1, 0);
+    $v3_y = Complex(0, 0);
+    $v3_z = Complex(0, 0);
+    $v3 = Vector($v3_x, $v3_y, $v3_z);
 }
 
 $multians1 = MultiAnswer($lambda1, $v1, $lambda2, $v2, $lambda3, $v3)->with(
@@ -121,7 +154,7 @@ $multians1 = MultiAnswer($lambda1, $v1, $lambda2, $v2, $lambda3, $v3)->with(
 
 Context()->texStrings;
 BEGIN_TEXT
-\[v_2 = $v2\]
+
 $PAR
 Consider the linear system
 $PAR
@@ -135,27 +168,28 @@ $A
 $BR
 $BR
 Find the eigenvalues and eigenvectors for the coefficient matrix.
+
 $BCENTER
-\{ 
-mbox(
-[
-'\( \lambda_1 = \) ',
-$multians1->ans_rule(5),
-', \( \boldsymbol{\vec{v}_1} =  \) ', 
-$multians1->ans_rule(10),
-', and \( \lambda_2 = \) ',
-$multians1->ans_rule(5),
-', \( \boldsymbol{\vec{v}_2} =  \) ', 
-$multians1->ans_rule(10),
-', and \( \lambda_3 = \) ',
-$multians1->ans_rule(5),
-', \( \boldsymbol{\vec{v}_3} =  \) ', 
-$multians1->ans_rule(10),
-],
-allowbreaks=>'yes'
-) 
-\}
+
+\( \lambda_1 = \)
+\{ $multians1->ans_rule(15) \}
+\( \boldsymbol{\vec{v}_1} =  \)
+\{ $multians1->ans_rule(35) \}
+$BR
+
+and \( \lambda_2 = \)
+\{ $multians1->ans_rule(15) \}
+\( \boldsymbol{\vec{v}_2} =  \)
+\{ $multians1->ans_rule(35) \}
+$BR
+
+and \( \lambda_3 = \)
+\{ $multians1->ans_rule(15) \}
+\( \boldsymbol{\vec{v}_3} =  \)
+\{ $multians1->ans_rule(35) \}
+
 $ECENTER
+
 END_TEXT
 Context()->normalStrings;
 

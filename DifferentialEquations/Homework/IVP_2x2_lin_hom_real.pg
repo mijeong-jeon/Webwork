@@ -47,7 +47,8 @@ BEGIN_TEXT
 Solve \( \boldsymbol{\vec{x}}^{\,\prime}(x) = \boldsymbol{A} \boldsymbol{\vec{x}}(x) \)
 where \( \boldsymbol{A} = $A \) and \(\boldsymbol{\vec{x}}(0) = $x0 \).
 $BR
-\( \boldsymbol{\vec{x}}(x) = \) \{ ans_rule(20) \} \{ AnswerFormatHelp("vectors"). \} Enter vectors using angle braces, \(\langle\) and \(\rangle\).
+\( \boldsymbol{\vec{x}}(x) = \) \{ ans_rule(20) \} 
+Enter vectors using angle braces, \(\langle\) and \(\rangle\).
 
 END_TEXT
 Context()->normalStrings;

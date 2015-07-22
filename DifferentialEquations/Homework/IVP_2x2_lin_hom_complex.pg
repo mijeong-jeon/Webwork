@@ -28,7 +28,7 @@ if ( $choice == 0 ) {
 	$A = Matrix([3,-2],[4,-1]);
 	$x0 = ColumnVector(0,1);
 	$x = Vector("-e^t * sin(2*t)","e^t * (cos(2*t) - sin(2*t))");
-} else( $choice == 2 ){
+} else {
 	$A = Matrix([-1,-4],[1,-1]);
 	$x0 = ColumnVector(2,0);
 	$x = Vector("2*e^(-t) * cos(2*t)","e^(-t) * sin(2*t)");

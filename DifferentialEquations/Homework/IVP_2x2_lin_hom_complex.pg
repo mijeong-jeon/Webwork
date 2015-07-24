@@ -44,10 +44,10 @@ if ( $choice == 0 ) {
 
 Context()->texStrings;
 BEGIN_TEXT
-Solve \( \boldsymbol{\vec{x}}^{\,\prime}(x) = \boldsymbol{A} \boldsymbol{\vec{x}}(x) \)
+Solve \( \boldsymbol{\vec{x}}^{\,\prime}(t) = \boldsymbol{A} \boldsymbol{\vec{x}}(t) \)
 where \( \boldsymbol{A} = $A \) and \(\boldsymbol{\vec{x}}(0) = $x0 \).
 $BR
-\( \boldsymbol{\vec{x}}(x) = \) \{ ans_rule(80) \} \{ AnswerFormatHelp("vectors") \}
+\( \boldsymbol{\vec{x}}(t) = \) \{ ans_rule(80) \} \{ AnswerFormatHelp("vectors") \}
 $PAR
 Input Examples: $BR
 "e^(5t)  sin(t) <1, 2>", or $BR

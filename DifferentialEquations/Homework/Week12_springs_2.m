@@ -1,6 +1,6 @@
 % Week12_Springs1
-% two-mass, 3 spring system
-A = @(m, k, c) (1/m)*[0,1,0,0; -2*k, -c, k, 0; 0,0,0,1; k, 0, -2*k, -c];
+% 2 mass, 2 spring system
+A = @(m, k, c) (1/m)*[0,1,0,0; -2*k, -c, k, 0; 0,0,0,1; k, 0, -k, -c];
 m = 1;
 
 % Case 1

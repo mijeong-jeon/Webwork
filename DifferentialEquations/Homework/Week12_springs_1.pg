@@ -1,0 +1,122 @@
+##############################
+#  Initialization
+
+DOCUMENT();
+
+loadMacros(
+"PGstandard.pl",
+"MathObjects.pl",
+"AnswerFormatHelp.pl",
+"Parser.pl",
+);
+
+TEXT(beginproblem());
+
+##############################
+#  Setup
+
+Context("Matrix");
+#Context("Complex");
+
+$matrix_choice = random(0,1,1);
+
+if ( $matrix_choice == 0 ) {
+   $m = 1;  $k = 4;  $c = 1; 
+   $val1 =  Complex(-0.5, 3.24);
+   $val1_text = $val1->Re . " \pm " . $val1->Im . " i";
+   $val2 =  Complex(-0.5, 1.93);
+   $val2_text = $val2->Re . " \pm " . $val2->Im . " i";
+
+   $vec1 = ColumnVector(Complex(-0.028, - 0.194), 
+     Complex(0.679, 0),
+     Complex(0.028, 0.194), 
+     Complex(-0.679, 0));
+     $fast_soln = Vector(-0.194, 0.194);
+   $vec2 = ColumnVector(Complex(-0.79, -0.306),
+     Complex(0.633, 0),
+     Complex(-0.079, -0.306), 
+     Complex(0.633, 0));
+     $slow_soln = Vector(-0.306, -0.306);
+} elsif ($matrix_choice == 1) {
+   $m = 1;  $k = 6;  $c = 2; 
+   $val1 =  Complex(-1, 4.12);
+   $val1_text = $val1->Re . " \pm " . $val1->Im . " i";
+   $val2 =  Complex(-1, 2.24);
+   $val2_text = $val2->Re . " \pm " . $val2->Im . " i";
+
+   $vec1 = ColumnVector(
+     Complex(0.038, 0.158),
+     Complex( -0.688 , 0.0000),
+     Complex( -0.038, - 0.158),
+     Complex( 0.688, 0.0000));
+     $fast_soln = Vector(0.158, -0.158);
+   $vec2 = ColumnVector(
+     Complex( -0.109, - 0.244),
+     Complex(0.655, + 0.0000),
+     Complex(-0.109, - 0.244),
+     Complex( 0.655, + 0.0000));
+     $slow_soln = Vector(-0.244, -0.244);
+} 
+
+$mode_choice = random(0, 1, 1);
+if ($mode_choice == 0) {
+   $mode_text = "fast";
+   $soln = $fast_soln; 
+   $freq = $val1->Im;
+} else {
+   $mode_text = "slow";
+   $soln = $slow_soln; 
+   $freq = $val2->Im;
+}
+
+
+##############################
+#  Main text
+
+Context()->texStrings;
+BEGIN_TEXT
+Consider the double mass/triple spring system shown below.
+$BR
+\{ image( "two_mass_three_spring.png" ) \} - click to expand.
+$BR
+Both springs have spring constants \(k\)$, and both masses have mass \(m\);
+each spring is subject to a damping force of \(F_{\mbox{friction}} =
+-c x'\) (friction proportional to velocity).
+
+$BR
+We can write the resulting system of second-order DEs as a $BBOLD first$EBOLD-order system, 
+\( \boldsymbol{\vec{w}}^{\,\prime}(t) = \boldsymbol{A} \boldsymbol{\vec{w}}(t) \), with
+
+\( \vec{w} = \langle x_1, x_1', x_2, x_2' \rangle^T\)
+$PAR
+For values of \(k = $k\), \(m = $m\) and \(c = $c\), the resulting eigenvalues and 
+eigenvectors of \(A\)  are
+$BR \(\lambda_{1,2} = $val1_text \),  
+\( ~~\vec{v}_{1} = $vec1 \) and
+$BR \(\lambda_{3,4} = $val2_text \),  
+\( ~~\vec{v}_{3} = $vec2 \).
+
+$PAR 
+(a) Find a set of initial $BBOLD displacements$EBOLD \(x_1(0), x_2(0)\) that will
+lead to the $BBOLD $mode_text  $EBOLD mode of oscillation for this sytem.  Assume that the initial velocities wil be zero.
+$PAR
+\( \langle x_1(0), x_2(0) \rangle = \) \{ ans_rule(30) \} 
+$BR
+Enter your answer using angle braces, \(\langle\) and \(\rangle\).
+$PAR
+(b) At what frequency will the masses be oscillating in this mode?
+$BR
+Frequency = \{ ans_rule(15)\} rad/s
+
+END_TEXT
+Context()->normalStrings;
+
+##############################
+#  Answers
+
+$showPartialCorrectAnswers = 1;
+
+ANS( $soln->cmp(parallel=>1) );
+ANS ($freq->cmp() );
+
+ENDDOCUMENT();

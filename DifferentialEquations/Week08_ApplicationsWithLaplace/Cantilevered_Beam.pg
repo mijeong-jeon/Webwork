@@ -1,0 +1,103 @@
+##############################
+#  Initialization
+
+DOCUMENT();
+
+loadMacros(
+	"PGstandard.pl",
+	"MathObjects.pl",
+	"unionLists.pl");
+
+TEXT(beginproblem());
+
+##############################
+#  Setup
+
+Context("Numeric")->functions->add(
+	u => {
+		class => 'Parser::Legacy::Numeric',
+		perl => 'Parser::Legacy::Numeric::do_step'
+		},
+		);
+
+$l = 2;
+$E = 9 * 10^9;
+$I = 4.1 * 10^(-5);
+
+$p = Formula("1500 * (u(x) - u(x - 1))");
+
+$a = 750 / ($E * $I);
+$b = -1500 / ($E * $I);
+
+$diff_eq = "EI y^{(4)} (x) = p(x)";
+
+$first = Formula("(62.5 / ($E * $I)) * x^4 + ($a / 2) * x^2 + ($b / 6) * x^3");
+$second = Formula("-(62.5 / ($E * $I)) * (x - 1)^4");
+
+$y = Formula("$first * u(x) + $second * u(x - 1)");
+
+$end = Formula("$first + $second");
+$tip_deflection = $end->eval(x=>$l);
+
+##############################
+#  Main text
+
+Context()->texStrings;
+BEGIN_TEXT
+\{ BeginList("OL",type=>"a") \}
+
+Consider the cantilevered beam shown below.
+
+The deformation of this beam is determined by
+\[ $diff_eq \] 
+where \( p(x) \) is the load at \( x \) given in units of \( N/m \) .
+
+$ITEMSEP
+$ITEM Write out \( p(x) \) using the Heaviside step function (denote it with 
+\( u(x-a) \)) .
+
+$BR
+
+\( p(x) = \) \{ans_rule(35) \}
+
+$ITEMSEP
+
+$ITEM Predict the shape of the beam under this load, for a \( 2 \times 10 \) wood
+beam: \( I = 4.1 \times 10^{-5} m^{-4} \), and \( E = 9 \times 10^9 N/m \) 
+(again using the Heaviside step function denoted by \( u(x-a) \).)
+
+$BR
+Use the boundary conditions
+$BR
+
+- \( y(0) = 0 \), \(y'(0) = 0 \) - fixed position and slope at left end, and
+$BR
+- \( y''(2) = 0 \), \( y'''(2) = 0 \) - no stress or moment at right end.
+
+$BR
+
+Hint: the algebra will likely be easier if you keep \( EI \) as a constant
+multiplier as long as possible, rather than putting in the numerical values.
+
+$BR
+
+\( y(x) = \) \{ans_rule(35) \}
+
+$ITEMSEP
+
+$ITEM How far down is the tip of the beam deflected from horizontal?
+
+$BR
+
+\( y = \) \{ans_rule(20) \}
+
+END_TEXT
+
+##############################
+#  Answers
+
+ANS( $p->cmp() );
+ANS( $y->cmp() );
+ANS( $tip_deflection->cmp() );
+
+ENDDOCUMENT();

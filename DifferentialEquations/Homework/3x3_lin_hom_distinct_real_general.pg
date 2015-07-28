@@ -142,6 +142,8 @@ $multians2 = MultiAnswer($lambda1, $y1, $lambda2, $y2, $lambda3, $y3)->with(
         my @c = @{$correct};
         my @s = @{$student};
 
+        Context("Vector");
+
         # Evaluate vectors at t = 0
         $c1_eval = $c[1]->eval(t=>0);
         $c3_eval = $c[3]->eval(t=>0);
@@ -152,17 +154,17 @@ $multians2 = MultiAnswer($lambda1, $y1, $lambda2, $y2, $lambda3, $y3)->with(
         $s5_eval = $s[5]->eval(t=>0);
 
         # Get first component of student answers and normalize
-        $s1_1 = $s1_array[0] . i;
-        $s1_1_eval = $s1_1->eval(t=>0);
+        my $s1_1 = $s[1] . i;
+        $s1_1_eval = $s1_1->substitute(t=>0);
         $s1_1_norm = $s1_1 / $s1_1_eval;
 
-        $s3_1 = $s3_array[0] . i;
-        $s3_1_eval = $s3_1->eval(t=>0);
+        my $s3_1 = $s[3] . i;
+        $s3_1_eval = $s3_1->substitute(t=>0);
         $s3_1_norm = $s3_1 / $s3_1_eval;
 
-        $s5_1 = $s5_array[0] . i;
-        $s5_1_eval = $s5_1->eval(t=>0);
-        $s5_1_norm = $s5_1 / $s5_1_eval
+        my $s5_1 = $s[5] . i;
+        $s5_1_eval = $s5_1->substitute(t=>0);
+        $s5_1_norm = $s5_1 / $s5_1_eval;
 
         # Check for parallel vectors
         Value::Error("Your vectors are parallel") if
@@ -178,6 +180,7 @@ $multians2 = MultiAnswer($lambda1, $y1, $lambda2, $y2, $lambda3, $y3)->with(
             && $c1_eval->typeMatch($s1_eval)
             && ($s1_eval != Vector(0,0,0))
             && (Vector($A * $s1_eval) == $s[0] * $s1_eval)
+            && ($s1_1_norm == Formula(e^($s[0] * t)))
            )
         { $flag1 = 1; }
 
@@ -185,6 +188,7 @@ $multians2 = MultiAnswer($lambda1, $y1, $lambda2, $y2, $lambda3, $y3)->with(
             && $c3_eval->typeMatch($s3_eval)
             && ($s3_eval != Vector(0,0,0))
             && (Vector($A * $s3_eval) == $s[2] * $s3_eval)
+            && ($s3_1_norm == Formula(e^($s[2] * t)))
            )
         { $flag2 = 1; }
 
@@ -192,6 +196,7 @@ $multians2 = MultiAnswer($lambda1, $y1, $lambda2, $y2, $lambda3, $y3)->with(
             && $c5_eval->typeMatch($s5_eval)
             && ($s5_eval != Vector(0,0,0))
             && (Vector($A * $s5_eval) == $s[4] * $s5_eval)
+            && ($s5_1_norm == Formula(e^($s[4] * t)))
            )
         { $flag3 = 1; }
 

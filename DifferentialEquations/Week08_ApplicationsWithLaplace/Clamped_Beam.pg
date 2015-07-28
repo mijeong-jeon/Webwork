@@ -26,8 +26,8 @@ $I = 4.1 * 10^(-5);
 
 $p = Formula("1500 * (u(x) - u(x - 1))");
 
-$a = 750 / ($E * $I);
-$b = -1500 / ($E * $I);
+$a = 343.75 / ($E * $I);
+$b = -1218.75 / ($E * $I);
 
 $diff_eq = "EI y^{(4)} (x) = p(x)";
 
@@ -36,8 +36,7 @@ $second = Formula("-(62.5 / ($E * $I)) * (x - 1)^4");
 
 $y = Formula("$first * u(x) + $second * u(x - 1)");
 
-$end = Formula("$first + $second");
-$tip_deflection = $end->eval(x=>$l);
+$max_deflection = $first->eval(x=>0.89);
 
 ##############################
 #  Main text
@@ -46,7 +45,7 @@ Context()->texStrings;
 BEGIN_TEXT
 \{ BeginList("OL",type=>"a") \}
 
-Consider the cantilevered beam shown below.
+Consider the beam shown below.
 
 The deformation of this beam is determined by
 \[ $diff_eq \] 
@@ -72,7 +71,7 @@ $BR
 
 - \( y(0) = 0 \), \(y'(0) = 0 \) - fixed position and slope at left end, and
 $BR
-- \( y''(2) = 0 \), \( y'''(2) = 0 \) - no stress or moment at right end.
+- \( y(2) = 0 \), \( y'(2) = 0 \) - fixed position and slope at right end.
 
 $BR
 
@@ -85,9 +84,10 @@ $BR
 
 $ITEMSEP
 
-$ITEM How far down is the tip of the beam deflected from horizontal?
+$ITEM The maximum deflection of this beam occurs at approximately 
+\( x = 0.98m \). What is the deflection of the beam from the horizontal here?
 
-$BR
+$BR 
 
 \( y = \) \{ans_rule(20) \}
 
@@ -100,6 +100,6 @@ $showPartialCorrectAnswers = 1;
 
 ANS( $p->cmp() );
 ANS( $y->cmp() );
-ANS( $tip_deflection->cmp() );
+ANS( $max_deflection->cmp() );
 
 ENDDOCUMENT();

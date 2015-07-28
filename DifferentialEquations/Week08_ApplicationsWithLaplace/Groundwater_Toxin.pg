@@ -1,0 +1,62 @@
+##############################
+#  Initialization
+
+DOCUMENT();
+
+loadMacros(
+	"PGstandard.pl",
+	"MathObjects.pl",
+	"unionLists.pl");
+
+TEXT(beginproblem());
+
+##############################
+#  Setup
+
+Context("Numeric");
+
+$diff_eq = "-D c''(x) + vc'(x) = f(x)";
+
+$conc_v_0 = Formula("(70 / 300) * x");
+
+$conc_v_1 = Formula("-(70 / (e^3 - 1)) * (1 - e^(x / 100))");
+
+##############################
+#  Main text
+
+Context()->texStrings;
+BEGIN_TEXT
+\{ BeginList("OL",type=>"a") \}
+
+Consider the diffusion and water transport of a toxin in groundwater, governed
+by
+\[ $diff_eq \]
+
+$ITEMSEP
+$ITEM Find the concentration function \( c(x) \) given \( c(0) = 0 ppm \),
+\( c(300) = 70 ppm \), \(v = 0 m/s \) and \( f(x) = 0 \). Use 
+\( D = 10^{-8} m^2 / s \).
+
+$BR
+
+\( c(x) = \) \{ans_rule(20) \}
+
+$ITEMSEP
+$ITEM Find the updated concentration function \( c(x) \) if we change the water
+velocity to \(v = 10^{-10} m/s \).
+
+$BR
+
+\( c(x) = \) \{ans_rule(20) \}
+
+END_TEXT
+
+##############################
+#  Answers
+
+$showPartialCorrectAnswers = 1;
+
+ANS( $conc_v_0->cmp() );
+ANS( $conc_v_1->cmp() );
+
+ENDDOCUMENT();

@@ -20,23 +20,25 @@ Context("Numeric")->functions->add(
 		},
 		);
 
-$l = 2;
-$E = 9 * 10^9;
-$I = 4.1 * 10^(-5);
+$l = 3;
+$E = 9 * 10**9;
+$I = 4.1 * 10**(-5);
+$EI = $E * $I;
 
-$p = Formula("1500 * (u(x) - u(x - 1))");
+$choice = 0;
 
-$a = 343.75 / ($E * $I);
-$b = -1218.75 / ($E * $I);
+if ( $choice == 0 ){
+	$p = Formula("1500 * (u(x) - u(x - 1))");
+	$diff_eq = "EI y^{(4)} (x) = p(x)";
+	$first = Formula("(-125 / (54 * $EI)) * (-99 * x^2 + 98 * x^3 - 27 * x^4)");
+	$second = Formula("(-125 / (54 * $EI)) * (27 - 108 * x + 162 * x^2 - 108 * x^3 + 27 * x^4)");
+	$y = Formula("$first * u(x) + $second * u(x - 1)");
+	$max_loc = 1.20;
+	$max_deflection = $first->eval(x=>$max_loc);
+}
 
-$diff_eq = "EI y^{(4)} (x) = p(x)";
 
-$first = Formula("(62.5 / ($E * $I)) * x^4 + ($a / 2) * x^2 + ($b / 6) * x^3");
-$second = Formula("-(62.5 / ($E * $I)) * (x - 1)^4");
 
-$y = Formula("$first * u(x) + $second * u(x - 1)");
-
-$max_deflection = $first->eval(x=>0.89);
 
 ##############################
 #  Main text
@@ -61,7 +63,7 @@ $BR
 
 $ITEMSEP
 
-$ITEM Predict the shape of the beam under this load, for a \( 2 \times 10 \) wood
+$ITEM Predict the shape of the beam under this load, for a \( $l \times 10 \) wood
 beam: \( I = 4.1 \times 10^{-5} m^{-4} \), and \( E = 9 \times 10^9 N/m \) 
 (again using the Heaviside step function denoted by \( u(x-a) \).)
 
@@ -85,7 +87,7 @@ $BR
 $ITEMSEP
 
 $ITEM The maximum deflection of this beam occurs at approximately 
-\( x = 0.98m \). What is the deflection of the beam from the horizontal here?
+\( x = $max_loc m \). What is the deflection of the beam from the horizontal here?
 
 $BR 
 

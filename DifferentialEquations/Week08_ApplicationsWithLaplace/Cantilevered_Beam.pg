@@ -20,23 +20,39 @@ Context("Numeric")->functions->add(
 		},
 		);
 
-$l = 2;
-$E = 9 * 10^9;
-$I = 4.1 * 10^(-5);
+$l = 3;
+$base_E = random(8.5, 9.5, 0.1);
+$E = $base_E * 10**9;
+$I = 4.1 * 10**(-5);
+$EI = $E * $I;
 
-$p = Formula("1500 * (u(x) - u(x - 1))");
+$choice = random(0,2,1);
 
-$a = 750 / ($E * $I);
-$b = -1500 / ($E * $I);
+if ( $choice == 0 ){
+	$p = Formula("1500 * (u(x) - u(x - 1))");
+	$first = Formula("(-125 / (2 * $EI)) * (-x^4 - 6 * x^2 + 4 * x^3)");
+	$second = Formula("(-125 / (2 * $EI)) * (1 - 4 * x + 6 * x^2 - 4 * x^3 + x^4)");
+	$y = $first * Formula("u(x)") + $second * Formula("u(x - 1)");
+	$end = $first + $second;
+} elsif ( $choice == 1 ){
+	$p = Formula("1500 * (u(x - 1) - u(x - 2))");
+	$first = Formula("(125 / (2 * $EI)) * (18 * x^2 - 4 * x^3)");
+	$second = Formula("(125 / (2 * $EI)) * (1 - 4 * x + 6 * x^2 - 4 * x^3 + x^4)");
+	$third = Formula("(125 / (2 * $EI)) * (-16 + 32 * x - 24 * x^2 + 8 * x^3 - x^4)");
+	$y = $first + $second * Formula("u(x - 1)") + $third * Formula("u(x - 2)");
+	$end = $first + $second + $third;
+} elsif ( $choice == 2 ){
+	$p = Formula("1500 * (u(x - 2) - u(x - 3))");
+	$first = Formula("(125 / (2 * $EI)) * (30 * x^2 - 4 * x^3)");
+	$second = Formula("(125 / (2 * $EI)) * (16 - 32 * x + 24 * x^2 - 8 * x^3 + x^4)");
+	$third = Formula("(125 / (2 * $EI)) * (-81 + 108 * x - 54 * x^2 + 12 * x^3 - x^4)");
+	$y = $first + $second * Formula("u(x - 2)") + $third * Formula("u(x - 3)");
+	$end = $first + $second + $third;
+}
+
 
 $diff_eq = "EI y^{(4)} (x) = p(x)";
 
-$first = Formula("(62.5 / ($E * $I)) * x^4 + ($a / 2) * x^2 + ($b / 6) * x^3");
-$second = Formula("-(62.5 / ($E * $I)) * (x - 1)^4");
-
-$y = Formula("$first * u(x) + $second * u(x - 1)");
-
-$end = Formula("$first + $second");
 $tip_deflection = $end->eval(x=>$l);
 
 ##############################
@@ -62,8 +78,8 @@ $BR
 
 $ITEMSEP
 
-$ITEM Predict the shape of the beam under this load, for a \( 2 \times 10 \) wood
-beam: \( I = 4.1 \times 10^{-5} m^{-4} \), and \( E = 9 \times 10^9 N/m \) 
+$ITEM Predict the shape of the beam under this load, for a \( $l \times 10 \) wood
+beam: \( I = 4.1 \times 10^{-5} m^{-4} \), and \( E = $base_E \times 10^9 N/m \) 
 (again using the Heaviside step function denoted by \( u(x-a) \).)
 
 $BR

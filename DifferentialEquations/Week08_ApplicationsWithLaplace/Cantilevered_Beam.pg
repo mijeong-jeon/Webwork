@@ -19,6 +19,7 @@ Context("Numeric")->functions->add(
 		perl => 'Parser::Legacy::Numeric::do_step'
 		},
 		);
+Context()->variables->set(x=>{limits=>[0,3]});
 
 $l = 3;
 $base_E = random(8.5, 9.5, 0.1);

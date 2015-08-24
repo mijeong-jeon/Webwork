@@ -19,25 +19,36 @@ Context("Numeric")->functions->add(
 		perl => 'Parser::Legacy::Numeric::do_step'
 		},
 		);
+Context()->variables->set(x=>{limits=>[0,3]});
 
 $l = 3;
-$E = 9 * 10**9;
+$base_E = random(8.5, 9.5, 0.1);
+$E = $base_E * 10**9;
 $I = 4.1 * 10**(-5);
 $EI = $E * $I;
 
-$choice = 0;
+$choice = random(0,1,1);
 
 if ( $choice == 0 ){
 	$p = Formula("1500 * (u(x) - u(x - 1))");
-	$diff_eq = "EI y^{(4)} (x) = p(x)";
 	$first = Formula("(-125 / (54 * $EI)) * (-99 * x^2 + 98 * x^3 - 27 * x^4)");
 	$second = Formula("(-125 / (54 * $EI)) * (27 - 108 * x + 162 * x^2 - 108 * x^3 + 27 * x^4)");
 	$y = Formula("$first * u(x) + $second * u(x - 1)");
+	$full = $first + $second;
 	$max_loc = 1.20;
-	$max_deflection = $first->eval(x=>$max_loc);
+	$max_deflection = $full->eval(x=>$max_loc);
+} elsif ( $choice == 1 ){
+	$p = Formula("1500 * (u(x - 1) - u(x - 2))");
+	$first = Formula("(125 / (6 * $EI)) * (13 * x^2 - 6 * x^3)");
+	$second = Formula("(125 / (6 * $EI)) * (3 - 12 * x + 18 * x^2 - 12 * x^3 + 3 * x^4)");
+	$third = Formula("(125 / (6 * $EI)) * (-48 + 96 * x - 72 * x^2 + 24 * x^3 - 3 * x^4)");
+	$y = Formula("$first + $second * u(x - 1) + $third * u(x - 2)");
+	$middle = $first + $second;
+	$max_loc = 1.50;
+	$max_deflection = $middle->eval(x=>$max_loc);
 }
 
-
+$diff_eq = "EI y^{(4)} (x) = p(x)";
 
 
 ##############################

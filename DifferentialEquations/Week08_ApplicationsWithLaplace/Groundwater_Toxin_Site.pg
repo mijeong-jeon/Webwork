@@ -1,0 +1,97 @@
+##############################
+#  Initialization
+
+DOCUMENT();
+
+loadMacros(
+	"PGstandard.pl",
+	"MathObjects.pl",
+	"unionLists.pl");
+
+TEXT(beginproblem());
+
+##############################
+#  Setup
+
+Context("Numeric")->functions->add(
+	u => {
+		class => 'Parser::Legacy::Numeric',
+		perl => 'Parser::Legacy::Numeric::do_step'
+		},
+		);
+
+$diff_eq = "-D c''(x) + vc'(x) = f(x)";
+$D = 10**(-8);
+$v = 10**(-10);
+$F_exp = random(-9, -6, 1);
+$F0 = 10**$F_exp;
+$F0_by_D = 10**($F_exp + 8);
+$choice = random(0,1,1);
+
+if ( $choice == 0 ){
+	$start = 100;
+	$finish = 110;
+	$toxin = Formula("($F0 / 10) * (u(x - 100) - u(x - 110))");
+	$first = Formula("13 * x");
+	$second = Formula("-10000 + 200 * x - x^2");
+	$third = Formula("12100 - 220 * x + x^2");
+	$conc_v_0 = Formula("($F0_by_D / 20) * ($first + u(x - 100) * $second + u(x - 110) * $third)");
+} elsif ( $choice == 1 ){
+	$start = 200;
+	$finish = 210;
+	$toxin = Formula("($F0 / 10) * (u(x - 200) - u(x - 210))");
+	$first = Formula("19 * x");
+	$second = Formula("-120000 + 1200 * x - x^2");
+	$third = Formula("132300 - 1260 * x + 3 * x^2");
+	$conc_v_0 = Formula("($F0_by_D / 60) * ($first + u(x - 200) * $second + u(x - 210) * $third)");
+}
+
+
+##############################
+#  Main text
+
+Context()->texStrings;
+BEGIN_TEXT
+
+
+Consider the diffusion and water transport of a toxin in groundwater, governed
+by
+\[ $diff_eq \]
+where
+$BR
+- \( v \) is the interstitial velocity of water through the ground, and
+$BR
+- \( D \) is the diffusion coefficient of the ground layer.
+$BR
+- \( f(x) \) represents the toxin inflow.
+
+\{ BeginList("OL",type=>"a") \}
+
+$ITEMSEP
+$ITEM Find the function \( f(x) \) for a toxin inflow located between 
+\( $start m \) and \( $finish m \), of strength \( 10^{$F_exp} ppm \frac{m^2}{s}  \) using 
+the Heaviside step function (denote it with \( u(x-a) \)) .
+
+$BR
+
+\( f(x) = \) \{ans_rule(30) \}
+
+$ITEMSEP
+$ITEM Find the concentration function \( c(x) \) given \( c(0) = 0 ppm \),
+\( c(300) = 0 ppm \), and \(v = 0 m/s \). Use \( D = 10^{-8} m^2 / s \). Again, denote the Heaviside step function with \( u(x-a) \).
+
+$BR
+
+\( c(x) = \) \{ans_rule(30) \}
+
+END_TEXT
+
+##############################
+#  Answers
+
+$showPartialCorrectAnswers = 1;
+
+ANS( $toxin->cmp() );
+ANS( $conc_v_0->cmp() );
+
+ENDDOCUMENT();

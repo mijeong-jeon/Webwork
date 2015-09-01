@@ -15,11 +15,18 @@ TEXT(beginproblem());
 
 Context("Numeric");
 
+$D = 10**(-8);
+$v_exp = random(-11, -9, 1);
+$v = 10**($v_exp);
+$v_by_D = 10**($v_exp + 8);
+$cond_point = random(200, 400, 10);
+$cond_conc = random(50, 90, 5);
+
 $diff_eq = "-D c''(x) + vc'(x) = f(x)";
 
-$conc_v_0 = Formula("(70 / 300) * x");
+$conc_v_0 = Formula("$cond_conc / $cond_point * x");
 
-$conc_v_1 = Formula("-(70 / (e^3 - 1)) * (1 - e^(x / 100))");
+$conc_v_1 = Formula("($cond_conc * (exp($v_by_D * x) - 1)) / (exp($cond_point * $v_by_D) - 1)");
 
 ##############################
 #  Main text
@@ -34,20 +41,20 @@ by
 
 $ITEMSEP
 $ITEM Find the concentration function \( c(x) \) given \( c(0) = 0 ppm \),
-\( c(300) = 70 ppm \), \(v = 0 m/s \) and \( f(x) = 0 \). Use 
+\( c($cond_point) = $cond_conc ppm \), \(v = 0 m/s \) and \( f(x) = 0 \). Use 
 \( D = 10^{-8} m^2 / s \).
 
 $BR
 
-\( c(x) = \) \{ans_rule(20) \}
+\( c(x) = \) \{ans_rule(30) \}
 
 $ITEMSEP
 $ITEM Find the updated concentration function \( c(x) \) if we change the water
-velocity to \(v = 10^{-10} m/s \).
+velocity to \(v = 10^{$v_exp} m/s \).
 
 $BR
 
-\( c(x) = \) \{ans_rule(20) \}
+\( c(x) = \) \{ans_rule(30) \}
 
 END_TEXT
 

@@ -48,6 +48,32 @@ if ( $choice == 0 ){
 	$max_deflection = $middle->eval(x=>$max_loc);
 }
 
+$ans1 = $p->with(
+		limits=>[0.0, $l],
+		test_at => [[0.0 + $l_10th],
+					[0.0 + 2 * $l_10th],
+					[0.0 + 3 * $l_10th],
+					[0.0 + 4 * $l_10th],
+					[0.0 + 5 * $l_10th],
+					[0.0 + 6 * $l_10th],
+					[0.0 + 7 * $l_10th],
+					[0.0 + 8 * $l_10th],
+					[0.0 + 9 * $l_10th]],
+		num_points=>9);
+
+$ans2 = $y->with(
+		limits=>[0.0, $l],
+		test_at => [[0.0 + $l_10th],
+					[0.0 + 2 * $l_10th],
+					[0.0 + 3 * $l_10th],
+					[0.0 + 4 * $l_10th],
+					[0.0 + 5 * $l_10th],
+					[0.0 + 6 * $l_10th],
+					[0.0 + 7 * $l_10th],
+					[0.0 + 8 * $l_10th],
+					[0.0 + 9 * $l_10th]],
+		num_points=>9);
+
 $diff_eq = "EI y^{(4)} (x) = p(x)";
 
 
@@ -111,8 +137,8 @@ END_TEXT
 
 $showPartialCorrectAnswers = 1;
 
-ANS( $p->cmp() );
-ANS( $y->cmp() );
+ANS( $ans1->cmp() );
+ANS( $ans2->cmp() );
 ANS( $max_deflection->cmp() );
 
 ENDDOCUMENT();

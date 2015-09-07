@@ -19,9 +19,9 @@ Context("Numeric")->functions->add(
 		perl => 'Parser::Legacy::Numeric::do_step'
 		},
 		);
-Context()->variables->set(x=>{limits=>[0,3]});
 
 $l = 3;
+$l_10th = $l / 10.0;
 $base_E = random(8.5, 9.5, 0.1);
 $E = $base_E * 10**9;
 $I = 4.1 * 10**(-5);
@@ -50,6 +50,32 @@ if ( $choice == 0 ){
 	$y = $first + $second * Formula("u(x - 2)") + $third * Formula("u(x - 3)");
 	$end = $first + $second + $third;
 }
+
+$ans1 = $p->with(
+		limits=>[0.0, $l],
+		test_at => [[0.0 + $l_10th],
+					[0.0 + 2 * $l_10th],
+					[0.0 + 3 * $l_10th],
+					[0.0 + 4 * $l_10th],
+					[0.0 + 5 * $l_10th],
+					[0.0 + 6 * $l_10th],
+					[0.0 + 7 * $l_10th],
+					[0.0 + 8 * $l_10th],
+					[0.0 + 9 * $l_10th]],
+		num_points=>9);
+
+$ans2 = $y->with(
+		limits=>[0.0, $l],
+		test_at => [[0.0 + $l_10th],
+					[0.0 + 2 * $l_10th],
+					[0.0 + 3 * $l_10th],
+					[0.0 + 4 * $l_10th],
+					[0.0 + 5 * $l_10th],
+					[0.0 + 6 * $l_10th],
+					[0.0 + 7 * $l_10th],
+					[0.0 + 8 * $l_10th],
+					[0.0 + 9 * $l_10th]],
+		num_points=>9);
 
 
 $diff_eq = "EI y^{(4)} (x) = p(x)";
@@ -115,8 +141,8 @@ END_TEXT
 
 $showPartialCorrectAnswers = 1;
 
-ANS( $p->cmp() );
-ANS( $y->cmp() );
+ANS( $ans1->cmp() );
+ANS( $ans2->cmp() );
 ANS( $tip_deflection->cmp() );
 
 ENDDOCUMENT();

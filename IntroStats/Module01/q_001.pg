@@ -17,7 +17,7 @@ loadMacros(
 TEXT(beginproblem());
 $showPartialCorrectAnswers = 1;
 
-$dataset_choice = 3;
+$dataset_choice = random(1, 5);
 if ($dataset_choice == 1) {
   $excel_filename = "Module01/CarbonDioxideGrassUptake.xlsx";
   $num_observational_units = Compute("42");
@@ -50,6 +50,8 @@ elsif ($dataset_choice == 5) {
   $excel_filename = "Module01/USArrestRates.xlsx";
   $num_observational_units = Compute("50");
   $num_variables = Compute("5");
+  $median_variable = "Murder"; 
+  $median_value = Compute("7.25");
 }
 
 
@@ -75,5 +77,20 @@ EOT
 ANS($num_observational_units->cmp() );
 ANS($num_variables->cmp() );
 ANS($median_value->cmp() );
+
+BEGIN_SOLUTION
+$PAR 
+
+In the standard file format we will be using in this course, the
+number of observational units is the number of rows of data.  
+<br />
+(If you are looking at the row numbers in Excel, don't forget to subtract one row for the header in the first line.)
+$PAR  The number of variables will be the number of columns.  
+$PAR
+The median of a column can be computed either in Excel or R.
+$BR
+Sample:  
+
+END_SOLUTION
 
 ENDDOCUMENT();        # This should be the last executable line in the problem.

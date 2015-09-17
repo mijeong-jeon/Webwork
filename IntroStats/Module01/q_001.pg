@@ -17,26 +17,34 @@ loadMacros(
 TEXT(beginproblem());
 $showPartialCorrectAnswers = 1;
 
-$dataset_choice = 5;
+$dataset_choice = 3;
 if ($dataset_choice == 1) {
   $excel_filename = "Module01/CarbonDioxideGrassUptake.xlsx";
   $num_observational_units = Compute("42");
   $num_variables = Compute("4");
+  $median_variable = "CO2Uptake"; 
+  $median_value = Compute("37.15");
 }
 elsif ($dataset_choice == 2) {
   $excel_filename = "Module01/CarStoppingDistances.xlsx";
   $num_observational_units = Compute("50");
   $num_variables = Compute("2");
+  $median_variable = "StoppingDistance"; 
+  $median_value = Compute("36");
 }
 elsif ($dataset_choice == 3) {
   $excel_filename = "Module01/DepartmentAttitudeSurvey.xlsx";
   $num_observational_units = Compute("30");
   $num_variables = Compute("5");
+  $median_variable = "OverallRating"; 
+  $median_value = Compute("65.5");
 }
 elsif ($dataset_choice == 4) {
   $excel_filename = "Module01/LoblollyPines.xlsx";
   $num_observational_units = Compute("36");
   $num_variables = Compute("3");
+  $median_variable = "TreeHeight"; 
+  $median_value = Compute("34.64");
 }
 elsif ($dataset_choice == 5) {
   $excel_filename = "Module01/USArrestRates.xlsx";
@@ -49,17 +57,23 @@ TEXT(EV2(<<EOT));
 $BR
 Find the following properties of this \{ htmlLink("${htmlURL}$excel_filename", "Excel dataset (.xlsx)")\}.
 $PAR
-How many observational units are in the sample?
+a) How many observational units are in the sample?
 $BR
 \{ans_rule(8)\} observational units.
 $PAR
-How many variables are there in the Excel dataset?
+b) How many variables are there in the Excel dataset?
 $BR
 \{ans_rule(8)\} variables.
+
+$PAR
+c) What is the median of the variable labelled $median_variable? 
+$BR
+\{ans_rule(10)\} is the median vaule
 EOT
 
 #ANSWERS
 ANS($num_observational_units->cmp() );
 ANS($num_variables->cmp() );
+ANS($median_value->cmp() );
 
 ENDDOCUMENT();        # This should be the last executable line in the problem.

@@ -1,0 +1,59 @@
+#DESCRIPTION
+# Number of variables/sample size
+#ENDDESCRIPTION
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"PGauxiliaryFunctions.pl",
+"PGgraphmacros.pl",
+"extraAnswerEvaluators.pl"
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+
+$dataset_choice = 5;
+if ($dataset_choice == 1) {
+  $excel_filename = "Module01/CarbonDioxideGrassUptake.xlsx";
+  $num_observational_units = Compute("42");
+  $num_variables = Compute("4");
+}
+elsif ($dataset_choice == 2) {
+  $excel_filename = "Module01/CarStoppingDistances.xlsx";
+  $num_observational_units = Compute("50");
+  $num_variables = Compute("2");
+}
+elsif ($dataset_choice == 3) {
+  $excel_filename = "Module01/DepartmentAttitudeSurvey.xlsx";
+  $num_observational_units = Compute("30");
+  $num_variables = Compute("5");
+}
+elsif ($dataset_choice == 4) {
+  $excel_filename = "Module01/LoblollyPines.xlsx";
+  $num_observational_units = Compute("36");
+  $num_variables = Compute("3");
+}
+elsif ($dataset_choice == 5) {
+  $excel_filename = "Module01/USArrestRates.xlsx";
+  $num_observational_units = Compute("50");
+  $num_variables = Compute("5");
+}
+
+
+TEXT(EV2(<<EOT));
+$BR
+Find the following properties of this \{ htmlLink("${htmlURL}$excel_filename", "Excel dataset (.xlsx)")\}.
+$PAR
+What would be the appropriate R input command for this .csv file? 
+EOT
+
+#ANSWERS
+ANS($num_observational_units->cmp() );
+ANS($num_variables->cmp() );
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

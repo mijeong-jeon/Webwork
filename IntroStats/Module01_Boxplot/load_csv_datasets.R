@@ -1,13 +1,13 @@
 # 
 MyData = read.csv("CarbonDioxideGrassUptake.csv", colClasses=c('factor', 'factor', 'numeric', 'numeric'))
 #MyData = read.csv(file.choose(), colClasses=c('factor', 'factor', 'numeric', 'numeric'))
-x = MyData$CO2Concentration
+x = MyData$Plant
 y = MyData$CO2Uptake
-plot(x, y, xlab = "CO2 Concentration", ylab="CO2 Uptake")
+boxplot(y~x, xlab = "Treatment", ylab="CO2 Uptake")
 
 
-MyData = read.csv("CarStoppingDistances.csv", colClasses=c('numeric', 'numeric'))
+MyData = read.csv("LoblollyPines.csv", colClasses=c('factor', 'numeric', 'numeric'))
 #MyData = read.csv(file.choose(), colClasses=c('factor', 'factor', 'numeric', 'numeric'))
-x = MyData$CarSpeed
-y = MyData$StoppingDistance
-plot(x, y, xlab = "Car Speed", ylab="Stopping Distance")
+x = MyData$SeedSource
+y = MyData$TreeHeight
+boxplot(y~x, xlab = "Seed Source", ylab="Tree Height")

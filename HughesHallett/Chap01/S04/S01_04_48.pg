@@ -34,12 +34,16 @@ loadMacros(
 );
 
 TEXT(beginproblem());
-$showPartialCorrectAnswers = 1;
+$showPartialCorrectAnswers = 1;   
+Context()->variables->add(t => "Real");
+Context()->variables->remove("x");
 
 #initial conditions
 $initial = list_random(90, 100, 110, 120);
 $percent = list_random(15,16,17,18,19);
 $decimal = $percent/100;
+$function = Formula("$initial * e^(-$decimal t)");
+$half_life = Compute("ln(1/2)/(-$decimal)");
 
 BEGIN_TEXT
 
@@ -53,6 +57,8 @@ $BR
 END_TEXT
 
 #ANSWERS
-ANS(fun_cmp("$initial e^(-$decimal t)", vars=>('t')), fun_cmp(ln(1/2)/(-$decimal)));
+#ANS(fun_cmp("$initial e^(-$decimal t)", vars=>('t')), fun_cmp(ln(1/2)/(-$decimal)));
+ANS($function->cmp() );
+ANS($half_life->cmp() );
 
 ENDDOCUMENT();        # This should be the last executable line in the problem.

@@ -1,0 +1,115 @@
+#DESCRIPTION
+# Number of variables/sample size
+#ENDDESCRIPTION
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"MathObjects.pl",
+"PGauxiliaryFunctions.pl",
+"extraAnswerEvaluators.pl",
+"parserRadioButtons.pl",
+"parserMultiAnswer.pl",
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 0;  # all multiple choice; don't allow that much guessing
+
+$excel_filename = "Module01/CarbonDioxideGrassUptake.xlsx";
+
+Context("Numeric");
+
+@opts = (
+"Regular Canadian viewers of MSNBC news programming.",
+"All at-least-weekly Canadian viewers of MSNBC news programming.",
+"All at-least-weekly Canadian viewers of MSNBC news programming who watch using Bell satellite.",
+"Regular Canadian viewers of MSNBC news programming who watch using Bell satellite.",
+);
+$ideal_population = RadioButtons([$opts[0], $opts[1], $opts[2], $opts[3]], 
+$opts[0],
+maxLabelSize => 80);
+
+@opts = (
+"All at-least-weekly Canadian viewers of MSNBC news programming who watch using Bell satellite.",
+"Regular Canadian viewers of MSNBC news programming.",
+"All at-least-weekly Canadian viewers of MSNBC news programming.",
+"Regular Canadian viewers of MSNBC news programming who watch using Bell satellite.",
+);
+$actual_population = RadioButtons([$opts[0], $opts[1], $opts[2], $opts[3]], 
+$opts[0],
+maxLabelSize => 80);
+
+@opts = (
+"Viewer age",
+"Hours of MSNBC watched per week",
+"Fraction of all viewers who watch MSNBC",
+);
+$variable_of_interest = RadioButtons([$opts[0], $opts[1], $opts[2]],
+$opts[0],
+maxLabelSize => 80);
+
+Context()->texStrings;
+BEGIN_TEXT 
+$BITALIC Source: McGrave$EITALIC
+$PAR
+
+According to $BITALIC USA Today $EITALIC (Dec 30, 1999), the average
+age of viewers of MSNBC cable television news programming is 50 years
+old.  A Canadian network exective thinks this might not be true in
+Canada, and believes that the average age of these viewers in Canada
+is significantly less than 50 years old.
+
+$PAR To validate her hypothesis, the Canadian executive obtains a list
+of Bell satellite subscribers who included MSNBC in their channel
+package, and then conducts a phone poll of 2,000 of these subscribers
+across Canada.  Anyone called who reports not watching MSNBC news
+programming at least once a week is left out of the survey; in the end
+287 respondents watch MSNBC news programming at least weekly, and report their ages as
+part of the survey.
+
+$PAR
+a) What is the target population of interest?
+$BR
+\{ $ideal_population->buttons() \}
+
+$PAR
+b) What is the actual population for this study?
+$BR
+\{ $actual_population->buttons() \}
+
+$PAR
+c) What is the variable of interest?
+$BR
+\{ $variable_of_interest->buttons() \}
+
+END_TEXT
+Context()->normalStrings;
+
+#ANSWERS
+ANS( $ideal_population->cmp() );
+ANS( $actual_population->cmp() );
+ANS( $variable_of_interest->cmp() );
+
+BEGIN_SOLUTION
+
+a) The population that the executive wants to study is definitely all the
+regular Canadian MSNBC news programming viewers.  
+
+$PAR b) In practice though, there has to be a concrete definition of
+what a "regular" viewer is, and that was done as part of the survey by
+leaving out viewers who didn't watch at least once a week.  Also,
+because the list of phone numbers only covers Bell satellite viewers,
+that really defines the actual population we can infer about.
+
+$PAR c) The variable about each individual that is of concern is their
+age.  All the other information is used to identify the population, or
+more specifically whether an individual is inside or outside the
+population of interest.
+
+END_SOLUTION
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

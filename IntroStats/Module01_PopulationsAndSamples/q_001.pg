@@ -54,7 +54,7 @@ maxLabelSize => 80);
 
 Context()->texStrings;
 BEGIN_TEXT 
-$BITALIC Source: McGrave$EITALIC
+$BITALIC Source: McGrave and Sincich$EITALIC
 $PAR
 
 According to $BITALIC USA Today $EITALIC (Dec 30, 1999), the average

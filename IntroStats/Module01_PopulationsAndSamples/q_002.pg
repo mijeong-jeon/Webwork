@@ -65,7 +65,7 @@ maxLabelSize => 80);
 
 Context()->texStrings;
 BEGIN_TEXT 
-$BITALIC Source: McGrave$EITALIC
+$BITALIC Source: McGrave and Sincich$EITALIC
 $PAR
 
 "Cola Wars" is the popular term for the intense competition between Coca-Cola and Pepsi.  Their campaigns have featured movei and television stars, rock videos, athletic endorsements, and claims of consumer preference based on taste tests.  

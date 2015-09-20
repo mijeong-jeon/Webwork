@@ -47,7 +47,7 @@ $percent_left = 100*exp(-$k*$t);
 $how_long = $first_time*(log($reduced/100)/log((100-$percent)/100));
 
 $popupWhy = PopUp([("When highly polluted air is filtered, there is more pollutant per liter of air to remove", 
-"As the air gets cleaner and cleaner, the filter will collect pollutant at a slower rate", "All of the above", "None of the above")], "All of the above");
+"As the air gets cleaner and cleaner, the filter will collect pollutant at a slower rate", "Both reasons apply.", "Neither reason applies.")], "All of the above");
 
 BEGIN_TEXT
 

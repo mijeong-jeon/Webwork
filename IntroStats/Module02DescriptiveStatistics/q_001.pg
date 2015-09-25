@@ -22,8 +22,8 @@ Context()->flags->set(
   tolType => "absolute",
 );
 
-#$dataset_choice = random(1, 5);
-$dataset_choice = 2;
+#$dataset_choice = random(1, 8);
+$dataset_choice = 5;
 if ($dataset_choice == 1) {
   $excel_filename = "Module02/USArrestRates.xlsx";
   $variable = "Murder"; 
@@ -63,6 +63,16 @@ elsif ($dataset_choice == 4) {
   $median = Formula("66.00");
   $quart1 = Formula("54.50");
   $quart3 = Formula("77.75");
+}
+elsif ($dataset_choice == 5) {
+  $excel_filename = "Module02/DepartmentAttitudeSurvey.xlsx";
+  $variable = "OverallRating"; 
+  $variable_descr = "the percentage of favourable responses from each department about the overall job situation.";
+  $min = Formula("40");
+  $quart1 = Formula("58.75");
+  $median = Formula("65.50");
+  $quart3 = Formula("64.63");
+  $max = Formula("85.00");
 }
 
 

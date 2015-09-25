@@ -27,71 +27,57 @@ if ($dataset_choice == 1) {
   $excel_filename = "Module02/USArrestRates.xlsx";
   $variable = "Murder"; 
   $variable_descr = "the number of murder arrests per 100,000 population in each US state.";
-  $min = Formula("0.8");
-  $max = Formula("17.4");
   $median = Formula("7.250");
-  $quart1 = Formula("4.075");
-  $quart3 = Formula("11.25");
+  $mean = Formula("7.788");
+  $sd = Formula("4.355");
 }
 elsif ($dataset_choice == 2) {
   $excel_filename = "Module02/USArrestRates.xlsx";
   $variable = "Assault"; 
   $variable_descr = "the number of assault arrests per 100,000 population in each US state.";
-  $min = Formula("45.0");
-  $max = Formula("337.0");
-  $median = Formula("159");
-  $quart1 = Formula("109");
-  $quart3 = Formula("249.0");
+  $median = Formula("159.0");
+  $mean = Formula("170.8");
+  $sd = Formula("83.338");
 }
 elsif ($dataset_choice == 3) {
   $excel_filename = "Module02/USArrestRates.xlsx";
   $variable = "Rape"; 
   $variable_descr = "the number of assault arrests per 100,000 population in each US state.";
-  $min = Formula("7.30");
-  $max = Formula("46.0");
   $median = Formula("20.10");
-  $quart1 = Formula("15.08");
-  $quart3 = Formula("26.17");
+  $mean = Formula("21.23");
+  $sd = Formula("9.366");
 }
 elsif ($dataset_choice == 4) {
   $excel_filename = "Module02/USArrestRates.xlsx";
   $variable = "UrbanPop"; 
   $variable_descr = "the percentage of residents of the state that live in an urban area.";
-  $min = Formula("32");
-  $max = Formula("91");
   $median = Formula("66.00");
-  $quart1 = Formula("54.50");
-  $quart3 = Formula("77.75");
+  $mean = Formula("65.54");
+  $sd = Formula("14.475");
 }
 elsif ($dataset_choice == 5) {
   $excel_filename = "Module02/DepartmentAttitudeSurvey.xlsx";
   $variable = "OverallRating"; 
   $variable_descr = "the percentage of favourable responses from each department about the overall job situation.";
-  $min = Formula("40");
-  $quart1 = Formula("58.75");
   $median = Formula("65.50");
-  $quart3 = Formula("71.75");
-  $max = Formula("85.00");
+  $mean = Formula("64.63");
+  $sd = Formula("12.173");
 }
 elsif ($dataset_choice == 6) {
   $excel_filename = "Module02/DepartmentAttitudeSurvey.xlsx";
   $variable = "Complaints"; 
   $variable_descr = "the percentage of favourable responses from each department about how the company handled complaints.";
-  $min = Formula("37.0");
-  $quart1 = Formula("58.5");
   $median = Formula("65.0");
-  $quart3 = Formula("77.0");
-  $max = Formula("90.0");
+  $mean = Formula("66.6");
+  $sd = Formula("13.315");
 }
 elsif ($dataset_choice == 7) {
   $excel_filename = "Module02/DepartmentAttitudeSurvey.xlsx";
   $variable = "Raises"; 
   $variable_descr = "the percentage of favourable responses from each department about how the company handled raises.";
-  $min = Formula("43.0");
-  $quart1 = Formula("58.25");
   $median = Formula("63.50");
-  $quart3 = Formula("71.0");
-  $max = Formula("88.0");
+  $mean = Formula("64.63");
+  $sd = Formula("10.397");
 }
 
 
@@ -106,38 +92,29 @@ $BR
 \{ans_rule(10)\} is the median value.
 
 $PAR
-b) What is the lowest value of the variable labelled $variable? 
+b) What is the mean (average) value of the variable labelled $variable? 
 $BR
-\{ans_rule(10)\} is the minimum value.
+\{ans_rule(10)\} is the mean value.
 
 $PAR
-d) What is the highest value of the variable labelled $variable? 
+c) What is the standard deviation of the variable labelled $variable?
 $BR
-\{ans_rule(10)\} is the maximum value.
+\{ans_rule(10)\} is the standard deviation.
 
-$PAR
-d) Give the range in which the middle 50% of the measured values will lie:
-$BR
-50% of the data lies between \{ans_rule(10)\}  and \{ans_rule(10)\}.
-$PAR
-Tips: 
-$BR If using Excel for this, use the QUARTILE.INC function, rather than .EXC.
-$BR R will likely be faster for computing all of these values. 
 EOT
 
 #ANSWERS
 ANS($median->cmp() );
-ANS($min->cmp() );
-ANS($max->cmp() );
-ANS($quart1->cmp() );
-ANS($quart3->cmp() );
+ANS($mean->cmp() );
+ANS($sd->cmp() );
 
 BEGIN_SOLUTION
 $PAR 
 All of this information can be seen using the "summary" command in R. E.g.
 summary(MyData${DOLLAR}$variable)
-$PAR
-The range covering the middle 50% of the measured values is between the 1st quartile and the last quartile. 
+$BR
+or the "sd" command, e.g. 
+sd(MyData${DOLLAR}$variable)
 
 
 END_SOLUTION

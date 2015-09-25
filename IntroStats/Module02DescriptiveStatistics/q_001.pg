@@ -1,0 +1,116 @@
+#DESCRIPTION
+# Number of variables/sample size
+#ENDDESCRIPTION
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"PGauxiliaryFunctions.pl",
+"PGgraphmacros.pl",
+"extraAnswerEvaluators.pl"
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+Context("Numeric");
+Context()->flags->set(
+  tolerance => 0.1,
+  tolType => "absolute",
+);
+
+#$dataset_choice = random(1, 5);
+$dataset_choice = 2;
+if ($dataset_choice == 1) {
+  $excel_filename = "Module02/USArrestRates.xlsx";
+  $variable = "Murder"; 
+  $variable_descr = "the number of murder arrests per 100,000 population in each US state.";
+  $min = Formula("0.8");
+  $max = Formula("17.4");
+  $median = Formula("7.250");
+  $quart1 = Formula("4.075");
+  $quart3 = Formula("11.25");
+}
+elsif ($dataset_choice == 2) {
+  $excel_filename = "Module02/USArrestRates.xlsx";
+  $variable = "Assault"; 
+  $variable_descr = "the number of assault arrests per 100,000 population in each US state.";
+  $min = Formula("45.0");
+  $max = Formula("337.0");
+  $median = Formula("159");
+  $quart1 = Formula("109");
+  $quart3 = Formula("249.0");
+}
+elsif ($dataset_choice == 3) {
+  $excel_filename = "Module02/USArrestRates.xlsx";
+  $variable = "Rape"; 
+  $variable_descr = "the number of assault arrests per 100,000 population in each US state.";
+  $min = Formula("7.30");
+  $max = Formula("46.0");
+  $median = Formula("20.10");
+  $quart1 = Formula("15.08");
+  $quart3 = Formula("26.17");
+}
+elsif ($dataset_choice == 4) {
+  $excel_filename = "Module02/USArrestRates.xlsx";
+  $variable = "UrbanPop"; 
+  $variable_descr = "the percentage of residents of the state that live in an urban area.";
+  $min = Formula("32");
+  $max = Formula("91");
+  $median = Formula("66.00");
+  $quart1 = Formula("54.50");
+  $quart3 = Formula("77.75");
+}
+
+
+TEXT(EV2(<<EOT));
+$BR
+Find the following properties of this \{ htmlLink("${htmlURL}$excel_filename", "Excel dataset (.xlsx)")\}.
+
+$PAR
+a) What is the median of the variable labelled $BBOLD$variable$EBOLD? 
+$BR(This variable represents $variable_descr)
+$BR
+\{ans_rule(10)\} is the median value.
+
+$PAR
+b) What is the lowest value of the variable labelled $variable? 
+$BR
+\{ans_rule(10)\} is the minimum value.
+
+$PAR
+d) What is the highest value of the variable labelled $variable? 
+$BR
+\{ans_rule(10)\} is the maximum value.
+
+$PAR
+d) Give the range in which the middle 50% of the measured values will lie:
+$BR
+50% of the data lies between \{ans_rule(10)\}  and \{ans_rule(10)\}.
+$PAR
+Tips: 
+$BR If using Excel for this, use the QUARTILE.INC function, rather than .EXC.
+$BR R will likely be faster for computing all of these values. 
+EOT
+
+#ANSWERS
+ANS($median->cmp() );
+ANS($min->cmp() );
+ANS($max->cmp() );
+ANS($quart1->cmp() );
+ANS($quart3->cmp() );
+
+BEGIN_SOLUTION
+$PAR 
+All of this information can be seen using the "summary" command in R. E.g.
+summary(MyData${DOLLAR}$variable)
+$PAR
+The range covering the middle 50% of the measured values is between the 1st quartile and the last quartile. 
+
+
+END_SOLUTION
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

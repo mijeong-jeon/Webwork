@@ -11,6 +11,7 @@ ssh $SERVER 'chmod -R a+rX' $TARGET_DIR
 # The data also has to be uploaded
 rsync -arv --perms --include "*.csv" --include "*.xlsx" -e ssh IntroStats/Module01_Datasets/* InWebwork4:/opt/webwork/courses/IntroStats/html/Module01
 rsync -arv --perms --include "*.csv" --include "*.xlsx" -e ssh IntroStats/Module02_Datasets/* InWebwork4:/opt/webwork/courses/IntroStats/html/Module02
+rsync -arv --perms --include "*.csv" --include "*.xlsx" -e ssh IntroStats/Module03_Datasets/* InWebwork4:/opt/webwork/courses/IntroStats/html/Module03
 
 
 

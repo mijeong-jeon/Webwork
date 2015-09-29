@@ -1,0 +1,102 @@
+#DESCRIPTION
+# Number of variables/sample size
+#ENDDESCRIPTION
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"PGauxiliaryFunctions.pl",
+"PGgraphmacros.pl",
+"extraAnswerEvaluators.pl"
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 0;
+install_problem_grader(~~&std_problem_grader);
+
+Context("Numeric");
+Context()->flags->set(
+  tolerance => 0.1,
+  tolType => "absolute",
+);
+
+$q1 = new_select_list();
+$q1->rf_print_q(~~&pop_up_list_print_q);
+$q1->ra_pop_up_list( [ No_answer => "  ?", A=>"A", B=>"B", C=>"C", D=>"D", E=>"E", F=>"F"] );
+$q1->qa ( # each entry has to end with a comma
+   "Department with the fewest number of successful applicants",
+    "F",
+   "Department with the largest number of successful applicants",
+    "A",
+   "Department with the fewest number of refused applicants",
+    "B",
+   "Department with the largest number of refused applicants",
+    "F",
+   "Department with the most total applicants.",
+   "A",
+   "Department with the fewest total applicants.",
+   "E",
+);
+# Only choose some of the problems to show.
+$q1 ->choose(2);
+
+$q2 = new_select_list();
+$q2->rf_print_q(~~&pop_up_list_print_q);
+$q2->ra_pop_up_list( [ No_answer => "  ?", A=>"A", B=>"B", C=>"C", D=>"D", E=>"E", F=>"F"] );
+$q2->qa ( # each entry has to end with a comma
+   "Department with the lowest ratio of successful to unsuccesful applicants.",
+    "F",
+   "Department with the highest ratio of successful to unsuccesful applicants.",
+    "A",
+   "Department with the ratio of successful to unsuccessful closest to 50:50.",
+    "B",
+   "Department with the largest imbalance in the success/unsuccessful applicant ratio, in either direction.", 
+    "F",
+);
+
+# Choose four of the question and answer pairs at random.
+$q2 ->choose(1);
+
+BEGIN_TEXT
+$BR
+Find the following properties of this \{ htmlLink("${htmlURL}$excel_filename", "Excel dataset (.xlsx)")\}.
+This dataset contains information on the admissions success of several thousand students who applied to different departments (labelled "A" through "F") at the University of Calfornia at Berkeley. 
+$PAR
+Use the $BBOLD table $EBOLD command in R to create a raw count contingency table showing 
+$BR
+- a two-way table between $BBOLD Accepted$EBOLD against $BBOLD Department$EBOLD, and 
+$BR
+- a one-way table with just $BBOLD Department $EBOLD.
+$BR 
+Adding the related command $BBOLD prop.table $EBOLD outside of that,   e.g.
+$BR
+ $BBOLD prop.table(  table( [data columns] ), 1) $EBOLD
+$BR or 
+ $BR
+$BBOLD prop.table(  table( [data columns] ), 2) $EBOLD
+$BR 
+will show the conditional table in proportions, one with 100% for each row, and the other for 100% for each column.  
+$PAR 
+Both versions of the table command will help you answer the following questions.
+
+$BR
+\{ $q1-> print_q \}
+$BR
+\{ $q2-> print_q \}
+
+END_TEXT
+
+#ANSWERS
+ANS(str_cmp( $q1->ra_correct_ans )   ) ;
+ANS(str_cmp( $q2->ra_correct_ans )   ) ;
+
+BEGIN_SOLUTION
+
+
+END_SOLUTION
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

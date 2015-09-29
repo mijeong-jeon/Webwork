@@ -1,4 +1,6 @@
 # ********************
+library(xlsx)
+
 data(occupationalStatus)
 N = sum(sum(occupationalStatus))
 v = data.frame(N, 2)
@@ -16,6 +18,7 @@ for (r in 1:8) {
 v2 = v[sample(nrow(v)),]
 names(v2) = c("FatherStatus", "SonStatus")
 write.csv(v2, file="OccupationalStatus.csv", row.names = F);
+write.xlsx(v2, file="OccupationalStatus.xlsx", row.names = F);
 
 
 # *******************************
@@ -42,4 +45,9 @@ for (admit in 1:2) {
       
     }
   }
+ 
 }
+v2 = v[sample(nrow(v)),]
+
+
+write.xlsx(v2, "BerkeleyAdmissions.xlsx", row.names = F)

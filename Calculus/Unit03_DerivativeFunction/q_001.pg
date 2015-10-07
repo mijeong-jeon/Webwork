@@ -42,8 +42,8 @@ $bk="black";
 # define function and domain
 $p1_x = random(-3, -1, 1);
 $p1_y = random(-2, 4, 1);
-$p2_x = $p1_x + 4 + random(0, 1);
-$p2_y = 2 - $p1_y + random(-2, 2);
+$p2_x = $p1_x + 4 + random(1, 2);
+$p2_y = $p1_y + list_random(-2, -1, 1, 2);
 $slope = ($p2_y - $p1_y)/($p2_x - $p1_x);
 $w = $p2_x - $p1_x;
 

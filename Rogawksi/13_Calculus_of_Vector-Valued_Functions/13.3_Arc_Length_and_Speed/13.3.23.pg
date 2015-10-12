@@ -24,11 +24,12 @@ $r=random(1,5,1);
 $speed=$r*$phi;
 
 $context = Context();
-$context->variables->add(s=>'Real');
+$context->variables->add(t=>'Real');
+$context->variables->remove("x");
 
-$ansx=Formula("$x0+$r*cos($phi*s)")->reduce();
+$ansx=Formula("$x0+$r*cos($phi*t)")->reduce();
 $ansy=Formula("$y0")->reduce();
-$ansz=Formula("$z0+$r*sin($phi*s)")->reduce();
+$ansz=Formula("$z0+$r*sin($phi*t)")->reduce();
 
 
 Context()->texStrings;
@@ -42,7 +43,7 @@ $BR
 If you have a choice, use the cosine function in the first variable.
 
 $PAR
-\(\bf r\it_1(s)=\left< \right.\) \{ans_rule()\},\{ans_rule()\},\{ans_rule()\} \(\left. \right>\) 
+\(\bf r\it_1(t)=\left< \right.\) \{ans_rule()\},\{ans_rule()\},\{ans_rule()\} \(\left. \right>\) 
 $BR
 END_TEXT
 

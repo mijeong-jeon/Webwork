@@ -29,7 +29,7 @@ BEGIN_TEXT
 $PAR
 Let \[ P=$f \].
 Calculate \( \frac{dP}{dr} \),
-assuming that \( r \) is variable and \( R \) is constant.
+assuming that \( r \) is variable and both \(V \) and \( R \) are constant.
 $PAR
 \( \frac{dP}{dr} = \) \{ans_rule()\}
 END_TEXT

@@ -1,0 +1,150 @@
+#DESCRIPTION
+# Number of variables/sample size
+#ENDDESCRIPTION
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"MathObjects.pl",
+"PGauxiliaryFunctions.pl",
+"extraAnswerEvaluators.pl",
+"parserRadioButtons.pl",
+"parserMultiAnswer.pl",
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 0;  # all multiple choice; don't allow that much guessing
+
+$excel_filename = "Module06/DepartmentAttitudeSurvey.xlsx";
+
+Context("Numeric");
+Context()->flags->set(
+  tolerance => 0.02,
+  tolType => "absolute",
+);
+
+# Common numeric values
+$t_critical = Compute("-1.699");
+
+# Differing numeric values 
+$ver = random(1, 12);
+if ($ver == 1) {
+   $variable = "OverallRating"; 
+   $cutoff = "65";
+   $hyp_tag = 1;  # 0=reject Ho,  1=not reject Ho
+   $test_statistic = Compute("-0.165");
+}
+elsif ($ver == 2) {
+   $variable = "OverallRating"; 
+   $cutoff = "70";
+   $hyp_tag = 0;  # 0=reject Ho,  1=not reject Ho
+   $test_statistic = Compute("-2.415");
+}
+elsif ($ver == 3) {
+   $variable = "Complaints"; 
+   $cutoff = "65";
+   $hyp_tag = 1;  # 0=reject Ho,  1=not reject Ho
+   $test_statistic = Compute("0.658");
+}
+elsif ($ver == 4) {
+   $variable = "Complaints"; 
+   $cutoff = "70";
+   $hyp_tag = 1;  # 0=reject Ho,  1=not reject Ho
+   $test_statistic = Compute("-1.399");
+}
+elsif ($ver == 5) {
+   $variable = "Complaints"; 
+   $cutoff = "75";
+   $hyp_tag = 0;  # 0=reject Ho,  1=not reject Ho
+   $test_statistic = Compute("-3.455");
+}
+elsif ($ver == 6) {
+   $variable = "Privileges"; 
+   $cutoff = "50";
+   $hyp_tag = 1;  # 0=reject Ho,  1=not reject Ho
+   $test_statistic = Compute("1.403");
+}
+elsif ($ver == 7) {
+   $variable = "Privileges"; 
+   $cutoff = "60";
+   $hyp_tag = 0;  # 0=reject Ho,  1=not reject Ho
+   $test_statistic = Compute("-3.074");
+}
+elsif ($ver == 8) {
+   $variable = "Raises"; 
+   $cutoff = "70";
+   $hyp_tag = 0;  # 0=reject Ho,  1=not reject Ho
+   $test_statistic = Compute("-2.827");
+}
+elsif ($ver == 9) {
+   $variable = "Raises"; 
+   $cutoff = "75";
+   $hyp_tag = 0;  # 0=reject Ho,  1=not reject Ho
+   $test_statistic = Compute("-5.461");
+}
+elsif ($ver == 10) {
+   $variable = "Advancement"; 
+   $cutoff = "40";
+   $hyp_tag = 1;  # 0=reject Ho,  1=not reject Ho
+   $test_statistic = Compute("1.562");
+}
+elsif ($ver == 11) {
+   $variable = "Advancement"; 
+   $cutoff = "50";
+   $hyp_tag = 1;  # 0=reject Ho,  1=not reject Ho
+   $test_statistic = Compute("-1.100");
+}
+elsif ($ver == 12) {
+   $variable = "Advancement"; 
+   $cutoff = "60";
+   $hyp_tag = 0;  # 0=reject Ho,  1=not reject Ho
+   $test_statistic = Compute("-3.762");
+}
+
+
+$mc = new_multiple_choice();
+@ans = ("Reject \(H_0\).", "Do Not Reject \(H_0\).",
+        "Reject \(H_1\).", "Do Not Reject \(H_1\).");
+$mc -> qa('Your decision for the hypothesis test, at the \(\alpha = 0.05\) level:', $ans[$hyp_tag]);
+$mc -> extra($ans[1-$hyp_tag],$ans[2],$ans[3]);
+
+Context()->texStrings;
+BEGIN_TEXT 
+
+Download and review the content of this \{ htmlLink("${htmlURL}$excel_filename", "Excel dataset (.xlsx)")\}.
+
+$PAR
+This data describes the responses to a survey of departments in a company about how the employess feel about aspects of the company's management.
+$PAR
+Senior managers claim that their target for the mean score on the variable $BBOLD$variable$EBOLD is $cutoff or above.  
+Using an appropriate test in R, evaluate whether this claim is supported by the data or not.  
+$BR 
+Be careful about whether you should be using a one-tailed or a two-tailed test.
+
+$PAR 
+(a) Test statistic for the sample data:  \{ans_rule(20) \}
+$PAR
+(b) Critical test statistic with \(\alpha = 0.05\):\{ans_rule(20) \}
+$PAR 
+(c) 
+\{ $mc ->print_q() \} $BR
+\{ $mc ->print_a() \}
+
+
+END_TEXT
+Context()->normalStrings;
+
+#ANSWERS
+ANS($test_statistic->cmp());
+ANS($t_critical->cmp());
+ANS(radio_cmp($mc->correct_ans));
+
+BEGIN_SOLUTION
+
+END_SOLUTION
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

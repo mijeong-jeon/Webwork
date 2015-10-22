@@ -1,0 +1,70 @@
+## DESCRIPTION
+##  Statistics 
+## ENDDESCRIPTION
+
+## Tagged by dgt5v
+
+## DBsubject(Statistics)
+## DBchapter(Hypothesis tests)
+## DBsection(Type I/type II errors and power)
+## Institution(ASU)
+## Level(2)
+## KEYWORDS('Statistics','Hypothesis Testing')
+
+DOCUMENT();
+
+loadMacros(
+"PG.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"PGauxiliaryFunctions.pl",
+"PGasu.pl"
+);
+
+$a='"';
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+
+$mc[0] = new_multiple_choice();
+$mc[0] -> qa("The mean annual consumption of beer in Ottawa is actually _not less_ than the national mean. $BR If the result of measuring a sample _does not_ lead to the conclusion that the mean annual consumption of beer in Ottawa is below the national mean, this is a:", "Correct decision");
+$mc[0] -> extra("Type II error", "Type I error");
+
+$mc[1] = new_multiple_choice();
+$mc[1] -> qa("The mean annual consumption of beer in Ottawa is actually _not less_ than the national mean. $BR
+If the result of measuring a sample _does lead_ to the conclusion that the mean annual consumption of beer in Ottawa is below the national mean, this is a:", "Type I error");
+$mc[1] -> extra("Type II error", "Correct decision");
+
+$mc[2] = new_multiple_choice();
+$mc[2] -> qa("The mean annual consumption of beer in Ottawa is actually _less_ than the national mean. 
+$BR If the result of measuring a sample _does not_ lead to the conclusion that the mean annual consumption of beer in Ottawa is below the national mean, this is a:", "Type II error");
+$mc[2] -> extra("Type I error", "Correct decision");
+
+$mc[3] = new_multiple_choice();
+$mc[3] -> qa("The mean annual consumption of beer in Ottawa is actually _less_ than the national mean. 
+$BR If the result of measuring a sample _does_ lead to the conclusion that the mean annual consumption of beer in Ottawa is below the national mean, this is a", "Correct decision");
+$mc[3] -> extra("Type II error", "Type I error");
+
+@slice = NchooseK(4,2);
+#@slice = qw(0 1);
+@smc = @mc[@slice];
+
+BEGIN_TEXT
+Consider a hypothesis test to decide whether the mean annual consumption of beer in Ottawa is less than the national mean. Answer the following questions.
+$PAR
+a.
+\{ $smc[0]-> print_q() \} $BR
+\{ $smc[0]-> print_a() \} 
+$PAR
+b.
+\{ $smc[1]-> print_q() \} $BR
+\{ $smc[1]-> print_a() \} 
+$PAR
+END_TEXT
+
+ANS(radio_cmp($smc[0]->correct_ans));
+ANS(radio_cmp($smc[1]->correct_ans));
+
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.
+

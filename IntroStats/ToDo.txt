@@ -2,4 +2,5 @@
 Module 6 - add more T Test and Chi Sq datasets
 Add paired t test to the T test bank.
 
+Mod 6 - get the MASS dataset biopsy for independent sample t-tests 
 

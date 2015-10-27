@@ -28,7 +28,7 @@ $c=random(1,10,1)*random(-1,1,2);
 $ans = FormulaUpToConstant("$a*t*tan(t)-$a*ln(abs(sec(t)))");
 BEGIN_TEXT
 
-Evaluate the integral \( \displaystyle \int {$a t \sec^2(t)}\, dt;\quad u=$a t,\quad dv= \sec^2(t)\, dt\)
+Evaluate the integral \( \displaystyle \int {$a t \sec^2(t)}\, dt\)
 $PAR
 \{ans_rule(45)\}
 

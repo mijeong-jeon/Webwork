@@ -1,0 +1,63 @@
+#DESCRIPTION
+# Number of variables/sample size
+#ENDDESCRIPTION
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"MathObjects.pl",
+"PGauxiliaryFunctions.pl",
+"extraAnswerEvaluators.pl",
+"parserRadioButtons.pl",
+"parserMultiAnswer.pl",
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 0;  # all multiple choice; don't allow that much guessing
+
+Context("Numeric");
+
+$correct_type = "case-control survey";
+@opts = (
+"cohort survey",
+"simple random survey",
+"cluster survey",
+"stratified survey",
+"case-control survey",
+);
+$survey_design = RadioButtons([$opts[0], $opts[1], $opts[2], $opts[3], $opts[4]], 
+$correct_type,
+maxLabelSize => 80);
+
+Context()->texStrings;
+BEGIN_TEXT 
+$BITALIC Source: George Washington University $EITALIC
+$PAR
+
+     A study gathered a pool of patients with non-Hodgkin lymphoma (NHL) and a second pool
+of control subjects, and compared their history of autoimmune and chronic
+inflammatory disorders, markers of severity, and treatment. It found
+that the risk of NHL was increased in association with rheumatoid
+arthritis, primary Sjogren syndrome, systemic lupus erythematosus, and
+celiac disease. 
+
+$PAR
+a) What kind of study design is this?
+$BR
+\{ $survey_design->buttons() \}
+
+END_TEXT
+Context()->normalStrings;
+
+#ANSWERS
+ANS( $survey_design->cmp() );
+
+BEGIN_SOLUTION
+
+END_SOLUTION
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

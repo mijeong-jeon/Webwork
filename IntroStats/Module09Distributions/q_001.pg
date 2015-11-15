@@ -1,0 +1,99 @@
+## DESCRIPTION
+##  Statistics: Descriptive statistics
+## ENDDESCRIPTION
+
+## naw tagged this problem.
+
+## DBsubject(Statistics)
+## DBchapter(Simple linear regression)
+## DBsection(Correlation)
+## Date(06/01/2005)
+## Institution(UVA)
+## Author(Nolan A. Wages)
+## Level(3)
+## TitleText1('Statistics for Management and Economics')
+## AuthorText1('Keller, Warrack')
+## EditionText1('6')
+## Section1('.')
+## Problem1('')
+## KEYWORDS('statistics', 'descriptive statistics')
+
+DOCUMENT();
+loadMacros("PGbasicmacros.pl",
+           "PGchoicemacros.pl",
+           "PGanswermacros.pl"
+);
+
+$showPartialCorrectAnswers = 0;
+install_problem_grader(~~&std_problem_grader);
+
+# True false questions are a special case of a "select list"
+# Make a new select list
+
+$tf = new_select_list();
+
+# $tf now "contains" the select list object.
+# Insert some  questions and whether or not they are true.
+
+$tf->rf_print_q(~~&pop_up_list_print_q);
+
+$tf -> ra_pop_up_list( [ No_answer => "  ?", T => "True", F => "False"] );
+
+
+$tf -> qa ( # each entry has to end with a comma
+"The mean of any F distribution is 1.",
+"T",
+"The mean of any chi-squared distribution is 1.",
+"F",
+"The mean of any F distribution is equal to the number of degrees of freedom for the distribution.",
+"F",
+"The mean of any chi-squared distribution is equal to the number of degrees of freedom for the distribution.",
+"T",
+"In any normal distribution, roughly 95% of the probability distribution lies within \(\pm 2\) standard deviations of the mean." ,
+"T",
+"In any F distribution, roughly 95% of the probability distribution lies within \(\pm 2\) standard deviations of the mean." ,
+"F",
+"Normal distributions only have positive probability density when the \(x\) value (horizontal axis value) is positive.",
+"F",
+"F distributions only have positive probability density when the \(x\) value (horizontal axis value) is positive.",
+"T",
+"Chi-squared distributions only have positive probability density when the F value is positive.",
+"T",
+"Chi-squared distributions are used to test whether the counts in a contingency table are independent.", 
+"T",
+"F distributions are used to test whether the counts in a contingency table are independent.", 
+"F",
+"t distributions are used to test whether the counts in a contingency table are independent.", 
+"F",
+"Chi-squared distributions are used to test whether the slope in a regression is different from zero.",
+"F",
+"F distributions are used to test whether the slope in a regression is different from zero.",
+"T",
+"t distributions are used to test whether the slope in a regression is different from zero.",
+"T",
+);
+
+# Choose four of the question and answer pairs at random.
+$tf ->choose(3);
+
+# Now print the text using $ml->print_q for the questions
+# and $ml->print_a to print the answers.
+
+BEGIN_TEXT
+$PAR
+
+Select True or False from each pull-down menu, depending on whether 
+the corresponding statement is true or false.
+$BR
+
+\{ $tf-> print_q \}
+
+$PAR
+
+END_TEXT
+
+# Enter the correct answers to be checked against the answers to the students.
+
+ANS(str_cmp( $tf->ra_correct_ans )   ) ;
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

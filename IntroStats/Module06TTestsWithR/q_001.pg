@@ -96,13 +96,13 @@ elsif ($ver == 11) {
    $variable = "Advancement"; 
    $cutoff = "50";
    $hyp_tag = 1;  # 0=reject Ho,  1=not reject Ho
-   $test_statistic = Compute("-1.100");
+   $test_statistic = Compute("-3.762");
 }
 elsif ($ver == 12) {
    $variable = "Advancement"; 
    $cutoff = "60";
    $hyp_tag = 0;  # 0=reject Ho,  1=not reject Ho
-   $test_statistic = Compute("-3.762");
+   $test_statistic = Compute("-9.085");
 }
 
 

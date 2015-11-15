@@ -32,11 +32,10 @@ print(summary(mf1))
 mf2 = lm(Raises-75~1, data = MyData)
 print(summary(mf2))
 
-# Advancement with 65, 70, 75
+# Advancement with 40, 50, 60
 print("*** Advancement ***")
 mf1 = lm(Advancement-40~1, data = MyData)
 print(summary(mf1))
-
 mf3 = lm(Advancement-50~1, data = MyData)
 print(summary(mf3))
 mf3 = lm(Advancement-60~1, data = MyData)

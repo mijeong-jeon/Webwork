@@ -25,37 +25,117 @@ loadMacros(
 "PGgraphmacros.pl",
 "PGnumericalmacros.pl",
 "PGstatisticsmacros.pl",
+"parserPopUp.pl",
 "MathObjects.pl",
 );
 
 
 TEXT(beginproblem());
 $showPartialCorrectAnswers = 1;
-
-$excel_filename = "Module10/GrowthHormones.xlsx";
-
 Context("Numeric");
 Context()->flags->set(
   tolerance => 0.01,
   tolType => "relative",
 );
 
-$ANOVA_F = Compute("13.81");
-$ANOVA_p = Compute("0.0003379");
-$mc = new_checkbox_multiple_choice();
-$mc -> qa (
-"",
-# Correct - p < 0.05
-"Treatment A vs C$BR",
-"Treatment B vs D$BR",
-"Treatment C vs D$BR",
-);
-$mc -> extra(
-"Treatment A vs B$BR",
-"Treatment A vs D$BR",
-"Treatment B vs C$BR",
-);
-$mc -> makeLast("No groups differ in their means.");
+
+@graph_filenames = (
+"GrowthHormonesA.png",
+"GrowthHormonesB.png",
+"GrowthHormonesC.png",
+"GrowthHormonesD.png");
+
+@graph_perm = shuffle(4);
+@inv_graph_perm  = invert(@graph_perm);
+
+@shuffled_graph_filenames = @graph_filenames[@graph_perm];
+@shuffled_graph_labels = @graph_labels[@graph_perm];
+@graph_number = ("1", "2", "3", "4");
+
+$ver = random(1, 4);
+if ($ver  == 1)  {
+  $excel_filename = "Module10/GrowthHormonesA.xlsx";
+  $correct_graph_number = $graph_number[$inv_graph_perm[0]];# A is correct graph
+  $ANOVA_F = Compute("13.81");
+  $ANOVA_p = Compute("0.0003379");
+  $mc = new_checkbox_multiple_choice();
+  $mc -> qa (
+  "",
+  # Correct - p < 0.05
+  "Treatment A vs C$BR",
+  "Treatment B vs D$BR",
+  "Treatment C vs D$BR",
+  );
+  $mc -> extra(  # incorrect
+  "Treatment A vs B$BR",
+  "Treatment A vs D$BR",
+  "Treatment B vs C$BR",
+  );
+  $mc -> makeLast("No groups differ in their means.");
+}
+elsif ($ver  == 2)  {
+  $excel_filename = "Module10/GrowthHormonesB.xlsx";
+  $correct_graph_number = $graph_number[$inv_graph_perm[1]];# B is correct graph
+  $ANOVA_F = Compute("13.81");
+  $ANOVA_p = Compute("0.0003379");
+  $mc = new_checkbox_multiple_choice();
+  $mc -> qa (
+  "",
+  # Correct - p < 0.05
+  "Treatment A vs C$BR",
+  "Treatment A vs D$BR",
+  "Treatment B vs D$BR",
+  );
+  $mc -> extra(  # incorrect
+  "Treatment A vs B$BR",
+  "Treatment B vs C$BR",
+  "Treatment C vs D$BR",
+  );
+  $mc -> makeLast("No groups differ in their means.");
+}
+elsif ($ver  == 3)  {
+  $excel_filename = "Module10/GrowthHormonesC.xlsx";
+  $correct_graph_number = $graph_number[$inv_graph_perm[2]];# C is correct graph
+  $ANOVA_F = Compute("6.13");
+  $ANOVA_p = Compute("0.009035");
+  $mc = new_checkbox_multiple_choice();
+  $mc -> qa (
+  "",
+  # Correct - p < 0.05
+  "Treatment A vs C$BR",
+  );
+  $mc -> extra(  # incorrect
+  "Treatment A vs D$BR",
+  "Treatment B vs D$BR",
+  "Treatment A vs B$BR",
+  "Treatment B vs C$BR",
+  "Treatment C vs D$BR",
+  );
+  $mc -> makeLast("No groups differ in their means.");
+}
+
+elsif ($ver  == 4)  {
+  $excel_filename = "Module10/GrowthHormonesD.xlsx";
+  $correct_graph_number = $graph_number[$inv_graph_perm[3]];# C is correct graph
+  $ANOVA_F = Compute("8.109");
+  $ANOVA_p = Compute("0.003224");
+  $mc = new_checkbox_multiple_choice();
+  $mc -> qa (
+  "",
+  # Correct - p < 0.05
+  "Treatment A vs C$BR",
+  "Treatment B vs C$BR",
+  );
+  $mc -> extra(  # incorrect
+  "Treatment A vs D$BR",
+  "Treatment B vs D$BR",
+  "Treatment A vs B$BR",
+  "Treatment C vs D$BR",
+  );
+  $mc -> makeLast("No groups differ in their means.");
+}
+
+$popup = PopUp(["?","1","2","3","4"], $correct_graph_number);  
 	
 BEGIN_TEXT
 An experiment is conducted to determine whether there is a difference among the mean increases in
@@ -64,22 +144,33 @@ material consists of 16 cuttings of a shrub with four cuttings each randomly ass
 to each of the four different strains.  The increases in weight for each cutting 
 are included in the Excel dataset.
 $PAR
-\{ image( "GrowthHormonesA.png" ) \}
+$BR 
 $PAR
 Download and review the content of this \{ htmlLink("${htmlURL}$excel_filename", "Excel dataset (.xlsx)")\}.
 $BR
 Assume that this data satisfies the criteria for an ANOVA F-test.
 
 $PAR
+(a) Which graph shows the dataset you downloaded?   Click on any graph for an enlarged view.
+$BR 
+1. \{ image( "$shuffled_graph_filenames[0]" ) \}
+2. \{ image( "$shuffled_graph_filenames[1]" ) \}
+$BR
+3. \{ image( "$shuffled_graph_filenames[2]" ) \}
+4. \{ image( "$shuffled_graph_filenames[3]" ) \}
+$BR
+Graph: \{ $popup->menu() \}
+$PAR
 Compute the following, including at least 3 non-zero digits in your answer: $BR
-(a) F observed for the ANOVA: \{ans_rule(20)\} $BR
-(b) p value for the ANOVA \{ans_rule(20)\} $BR
-(c) Which of treatment pairs (if any) differ by a significant amount at \(\alpha = 0.05\), based on the Tukey HSD test? 
+(b) F observed for the ANOVA: \{ans_rule(20)\} $BR
+(c) p value for the ANOVA \{ans_rule(20)\} $BR
+(d) Which of treatment pairs (if any) differ by a significant amount at \(\alpha = 0.05\), based on the Tukey HSD test? 
 $BR
 \{ $mc -> print_a() \}
 END_TEXT
 
 install_problem_grader(~~&std_problem_grader);
+ANS($popup->cmp());
 ANS($ANOVA_F->cmp());
 ANS($ANOVA_p->cmp());
 ANS( checkbox_cmp( $mc->correct_ans() ) );

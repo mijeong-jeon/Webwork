@@ -13,6 +13,7 @@ rsync -arv --perms --include "*.csv" --include "*.xlsx" -e ssh IntroStats/Module
 rsync -arv --perms --include "*.csv" --include "*.xlsx" -e ssh IntroStats/Module02_Datasets/* InWebwork4:/opt/webwork/courses/IntroStats/html/Module02
 rsync -arv --perms --include "*.csv" --include "*.xlsx" -e ssh IntroStats/Module03_Datasets/* InWebwork4:/opt/webwork/courses/IntroStats/html/Module03
 rsync -arv --perms --include "*.csv" --include "*.xlsx" -e ssh IntroStats/Module06_Datasets/* InWebwork4:/opt/webwork/courses/IntroStats/html/Module06
+rsync -arv --perms --include "*.csv" --include "*.xlsx" -e ssh IntroStats/Module10_Datasets/* InWebwork4:/opt/webwork/courses/IntroStats/html/Module10
 
 
 

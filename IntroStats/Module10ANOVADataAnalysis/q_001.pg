@@ -1,0 +1,87 @@
+
+## DESCRIPTION
+##  Statistics 
+## ENDDESCRIPTION
+
+## Tagged by dgt5v
+
+## DBsubject(Statistics)
+## DBchapter(Hypothesis tests)
+## DBsection(One-way ANOVA)
+## Institution(ASU)
+## MLT(FromData)
+## MLTleader(1)
+## Level(3)
+## KEYWORDS('Statistics','Hypothesis Testing','ANOVA', 'Analysis', 'Variance', 'F-test', 'analysis of variance', 'ANOVA')
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGbasicmacros.pl",
+"PGcourse.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"PGgraphmacros.pl",
+"PGnumericalmacros.pl",
+"PGstatisticsmacros.pl",
+"MathObjects.pl",
+);
+
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+
+$excel_filename = "Module10/GrowthHormones.xlsx";
+
+Context("Numeric");
+Context()->flags->set(
+  tolerance => 0.01,
+  tolType => "relative",
+);
+
+$ANOVA_F = Compute("13.81");
+$ANOVA_p = Compute("0.0003379");
+$mc = new_checkbox_multiple_choice();
+$mc -> qa (
+"",
+# Correct - p < 0.05
+"Treatment A vs C$BR",
+"Treatment B vs D$BR",
+"Treatment C vs D$BR",
+);
+$mc -> extra(
+"Treatment A vs B$BR",
+"Treatment A vs D$BR",
+"Treatment B vs C$BR",
+);
+$mc -> makeLast("No groups differ in their means.");
+	
+BEGIN_TEXT
+An experiment is conducted to determine whether there is a difference among the mean increases in
+growth produced by four growth hormone treatments (A, B, C, and D) for plants.  The experimental
+material consists of 16 cuttings of a shrub with four cuttings each randomly assigned
+to each of the four different strains.  The increases in weight for each cutting 
+are included in the Excel dataset.
+$PAR
+\{ image( "GrowthHormonesA.png" ) \}
+$PAR
+Download and review the content of this \{ htmlLink("${htmlURL}$excel_filename", "Excel dataset (.xlsx)")\}.
+$BR
+Assume that this data satisfies the criteria for an ANOVA F-test.
+
+$PAR
+Compute the following, including at least 3 non-zero digits in your answer: $BR
+(a) F observed for the ANOVA: \{ans_rule(20)\} $BR
+(b) p value for the ANOVA \{ans_rule(20)\} $BR
+(c) Which of treatment pairs (if any) differ by a significant amount at \(\alpha = 0.05\), based on the Tukey HSD test? 
+$BR
+\{ $mc -> print_a() \}
+END_TEXT
+
+install_problem_grader(~~&std_problem_grader);
+ANS($ANOVA_F->cmp());
+ANS($ANOVA_p->cmp());
+ANS( checkbox_cmp( $mc->correct_ans() ) );
+
+ENDDOCUMENT();       # This should be the last executable line in the problem.

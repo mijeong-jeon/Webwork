@@ -1,0 +1,128 @@
+
+## DESCRIPTION
+##  Statistics 
+## ENDDESCRIPTION
+
+## Tagged by dgt5v
+
+## DBsubject(Statistics)
+## DBchapter(Hypothesis tests)
+## DBsection(One-way ANOVA)
+## Institution(ASU)
+## MLT(FromData)
+## MLTleader(1)
+## Level(3)
+## KEYWORDS('Statistics','Hypothesis Testing','ANOVA', 'Analysis', 'Variance', 'F-test', 'analysis of variance', 'ANOVA')
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGbasicmacros.pl",
+"PGcourse.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"PGgraphmacros.pl",
+"PGnumericalmacros.pl",
+"PGstatisticsmacros.pl",
+"parserPopUp.pl",
+"MathObjects.pl",    
+"PGML.pl",
+);
+
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+Context("Numeric");
+Context()->flags->set(
+  tolerance => 0.01,
+  tolType => "relative",
+);
+
+
+@boxplot_filenames = (
+"StressReliefA.png",
+"StressReliefB.png",
+"StressReliefC.png",
+"StressReliefD.png");
+@boxplot_perm = shuffle(4);
+@inv_boxplot_perm  = invert(@boxplot_perm);
+@shuffled_boxplot_filenames = @boxplot_filenames[@boxplot_perm];
+@shuffled_boxplot_labels = @boxplot_labels[@boxplot_perm];
+@boxplot_number = ("1", "2", "3", "4");
+
+@interaction_filenames = (
+"StressReliefA_InteractionPlot.png",
+"StressReliefB_InteractionPlot.png",
+"StressReliefC_InteractionPlot.png",
+"StressReliefD_InteractionPlot.png");
+@interaction_perm = shuffle(4);
+@inv_interaction_perm  = invert(@interaction_perm);
+@shuffled_interaction_filenames = @interaction_filenames[@interaction_perm];
+@shuffled_interaction_labels = @interaction_labels[@interaction_perm];
+@interaction_number = ("1", "2", "3", "4");
+
+$ver = random(1, 4);
+$ver = 1;
+if ($ver  == 1)  {
+  $excel_filename = "Module11/StressReliefA.xlsx";
+  $correct_boxplot_number = $boxplot_number[$inv_boxplot_perm[0]];# A is correct boxplot
+  $correct_interaction_number = $interaction_number[$inv_boxplot_perm[0]];# A is correct interaction
+  $ANOVA_F = Compute("13.81");
+  $ANOVA_p = Compute("0.0003379");
+  $mc = new_checkbox_multiple_choice();
+  $mc -> qa (
+  "",
+  # Correct - p < 0.05
+  "Treatment A vs C$BR",
+  "Treatment B vs D$BR",
+  "Treatment C vs D$BR",
+  );
+  $mc -> extra(  # incorrect
+  "Treatment A vs B$BR",
+  "Treatment A vs D$BR",
+  "Treatment B vs C$BR",
+  );
+  $mc -> makeLast("No groups differ in their means.");
+}
+
+$boxplot_popup = PopUp(["?","1","2","3","4"], $correct_boxplot_number);  
+$interaction_popup = PopUp(["?","1","2","3","4"], $correct_interaction_number);  
+	
+BEGIN_PGML
+_Source: R Tutorial Series_
+
+A study is conducted with 60 participants who are divided into:
+
+* three stress reduction treatment groups (mental, physical, and medical) and 
+* two gender groups (male and female). 
+
+For each participant, their level of stress reduction after the treatment is computed based on a survey, with the final scale of 1 (least effect) to 50 (most stress reduction).
+
+Download and review the content of this [@ htmlLink("${htmlURL}$excel_filename", "Excel dataset (.xlsx)") @]*.
+
+
+Assume that this data satisfies the criteria for an ANOVA F-test.
+
+(a) Which boxplot shows the dataset you downloaded?   Click on any graph for an enlarged view.
+
+1. [@ image( "$shuffled_boxplot_filenames[0]", width,300, height,200 ) @]* 2. [@ image( "$shuffled_boxplot_filenames[1]", width,300, height,200 ) @]*
+
+3. [@ image( "$shuffled_boxplot_filenames[2]", width,300, height,200 ) @]* 4. [@ image( "$shuffled_boxplot_filenames[3]", width,300, height,200 ) @]*
+
+Graph: [@ $boxplot_popup->menu() @]*
+
+(b) Which interaction graph shows the dataset you downloaded?   Click on any graph for an enlarged view.
+
+1. [@ image( "$shuffled_interaction_filenames[0]", width,300, height,200 ) @]* 2. [@ image( "$shuffled_interaction_filenames[1]", width,300, height,200 ) @]*
+
+3. [@ image( "$shuffled_interaction_filenames[2]", width,300, height,200 ) @]* 4. [@ image( "$shuffled_interaction_filenames[3]", width,300, height,200 ) @]*
+
+Graph: [@ $interaction_popup->menu() @]*
+END_PGML
+
+#install_problem_grader(~~&std_problem_grader);
+ANS($boxplot_popup->cmp());
+ANS($interaction_popup->cmp());
+
+ENDDOCUMENT();       # This should be the last executable line in the problem.

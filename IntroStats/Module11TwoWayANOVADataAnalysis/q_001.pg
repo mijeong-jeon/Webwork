@@ -26,6 +26,7 @@ loadMacros(
 "PGnumericalmacros.pl",
 "PGstatisticsmacros.pl",
 "parserPopUp.pl",
+"parserRadioButtons.pl",
 "MathObjects.pl",    
 "PGML.pl",
 );
@@ -62,32 +63,58 @@ Context()->flags->set(
 @shuffled_interaction_labels = @interaction_labels[@interaction_perm];
 @interaction_number = ("1", "2", "3", "4");
 
+
+
 $ver = random(1, 4);
-$ver = 1;
 if ($ver  == 1)  {
   $excel_filename = "Module11/StressReliefA.xlsx";
   $correct_boxplot_number = $boxplot_number[$inv_boxplot_perm[0]];# A is correct boxplot
-  $correct_interaction_number = $interaction_number[$inv_boxplot_perm[0]];# A is correct interaction
-  $ANOVA_F = Compute("13.81");
-  $ANOVA_p = Compute("0.0003379");
-  $mc = new_checkbox_multiple_choice();
-  $mc -> qa (
-  "",
-  # Correct - p < 0.05
-  "Treatment A vs C$BR",
-  "Treatment B vs D$BR",
-  "Treatment C vs D$BR",
-  );
-  $mc -> extra(  # incorrect
-  "Treatment A vs B$BR",
-  "Treatment A vs D$BR",
-  "Treatment B vs C$BR",
-  );
-  $mc -> makeLast("No groups differ in their means.");
+  $correct_interaction_number = $interaction_number[$inv_interaction_perm[0]];# A is correct interaction
+  $ANOVA_F = Compute("12.24");
+  $ANOVA_p = Compute("5.984*10^(-8)");
+  $radio_interaction_correct = "Yes";
+  $radio_main_effect_correct = "No main effects can be confirmed because the interaction term was significant.";
+}
+elsif ($ver  == 2)  {
+  $excel_filename = "Module11/StressReliefB.xlsx";
+  $correct_boxplot_number = $boxplot_number[$inv_boxplot_perm[1]];# B is correct boxplot
+  $correct_interaction_number = $interaction_number[$inv_interaction_perm[1]];# B is correct interaction
+  $ANOVA_F = Compute("11.96");
+  $ANOVA_p = Compute("8.182*10^(-8)");
+  $radio_interaction_correct = "No";
+  $radio_main_effect_correct = "Both the Gender and a Treatment main effects are significant.";
+}
+elsif ($ver  == 3)  {
+  $excel_filename = "Module11/StressReliefC.xlsx";
+  $correct_boxplot_number = $boxplot_number[$inv_boxplot_perm[2]];# C is correct boxplot
+  $correct_interaction_number = $interaction_number[$inv_interaction_perm[2]];# C is correct interaction
+  $ANOVA_F = Compute("03.48");
+  $ANOVA_p = Compute("0.008464");
+  $radio_interaction_correct = "No";
+  $radio_main_effect_correct = "Only the Treatment main effect is significant.";
+}
+elsif ($ver  == 4)  {
+  $excel_filename = "Module11/StressReliefD.xlsx";
+  $correct_boxplot_number = $boxplot_number[$inv_boxplot_perm[3]];# D is correct boxplot
+  $correct_interaction_number = $interaction_number[$inv_interaction_perm[3]];# D is correct interaction
+  $ANOVA_F = Compute("0.7383");
+  $ANOVA_p = Compute("0.5981");
+  $radio_interaction_correct = "No";
+  $radio_main_effect_correct = "No main effects are significant.";
 }
 
 $boxplot_popup = PopUp(["?","1","2","3","4"], $correct_boxplot_number);  
 $interaction_popup = PopUp(["?","1","2","3","4"], $correct_interaction_number);  
+$radio_interaction = RadioButtons(["Yes", "No"], $radio_interaction_correct);
+
+$radio_main_effect = RadioButtons( 
+["Only the Gender main effect is significant.",
+"Only the Treatment main effect is significant.",
+"Both the Gender and a Treatment main effects are significant.",
+"No main effects are significant.",
+"No main effects can be confirmed because the interaction term was significant."],
+$radio_main_effect_correct,
+last => ["No main effects can be confirmed because the interaction term was significant."],);
 	
 BEGIN_PGML
 _Source: R Tutorial Series_
@@ -100,7 +127,6 @@ A study is conducted with 60 participants who are divided into:
 For each participant, their level of stress reduction after the treatment is computed based on a survey, with the final scale of 1 (least effect) to 50 (most stress reduction).
 
 Download and review the content of this [@ htmlLink("${htmlURL}$excel_filename", "Excel dataset (.xlsx)") @]*.
-
 
 Assume that this data satisfies the criteria for an ANOVA F-test.
 
@@ -119,10 +145,31 @@ Graph: [@ $boxplot_popup->menu() @]*
 3. [@ image( "$shuffled_interaction_filenames[2]", width,300, height,200 ) @]* 4. [@ image( "$shuffled_interaction_filenames[3]", width,300, height,200 ) @]*
 
 Graph: [@ $interaction_popup->menu() @]*
+
+Compute the following, including at least 3 non-zero digits in your answer: 
+
+(c) F observed for the two-way ANOVA: [_____]{width=>20}
+
+(d) p value for the two-way ANOVA [_____]{width=>20}  Express scientific notation like [` 3.254 \times 10^{-4}`] with text like "3.254 * 10^(-4)"
+
+(e) From the ANOVA, is there evidence of interaction between Gender and Treatment at the [` \alpha=0.05 `] level?
+
+[@ $radio_interaction -> buttons() @]*
+ 
+(f) Given your answer to (e), and the aov output in R, can you say whether any of the main effects are significant at [` \alpha = 0.05`]? 
+
+[@ $radio_main_effect -> buttons() @]*
+
+
+
 END_PGML
 
 #install_problem_grader(~~&std_problem_grader);
 ANS($boxplot_popup->cmp());
 ANS($interaction_popup->cmp());
+ANS($ANOVA_F->cmp());
+ANS($ANOVA_p->cmp());
+ANS( $radio_interaction->cmp() );
+ANS( $radio_main_effect->cmp() );
 
 ENDDOCUMENT();       # This should be the last executable line in the problem.

@@ -1,0 +1,89 @@
+TODO:
+
+To Write - Mod 4 normal probabilities that are only based on 
+Mod 5 - t tests - modify the q_001.pg so that it gives the t score, like on an exam. 
+
+------------
+FIRST HALF
+Module 1 populations - All Q's
+LibraryQueens/IntroStats/Module01_PopulationsAndSamples/q_001.pg
+LibraryQueens/IntroStats/Module01_PopulationsAndSamples/q_002.pg
+
+From Mod 2 Sampling error: 
+Library/UVA-Stat/setStat212-Homework03/stat212-HW03-01.pg
+From Mod 2 Study Designs
+Library/CollegeOfIdaho/setStatistics_Ch08Sampling/08Stats_08_Sampling.pg
+Library/CollegeOfIdaho/setStatistics_Ch08Sampling/08Stats_05_Sampling.pg
+Library/ASU-topics/setStat/gust9.pg
+
+---
+
+Boxplot interpretation - from Module3
+Library/NAU/setStatistics/boxplot_problem.pg
+Library/CollegeOfIdaho/setStatistics_Ch02DescribingData/02Stats_07_DescrData/02Stats_07_DescrData.pg
+
+---
+
+
+Probability - Module 4
+Binomial
+Library/NAU/setProbability/binoprob3.pg
+Library/NAU/setProbability/binoprob1.pg
+Library/ASU-topics/setStat/kolossa4.pg
+
+Normal probability
+Library/ASU-topics/setStat/gust34.pg
+
+
+Std error of the mean. Module05 
+LibraryQueens/IntroStats/Module05StandardErrorOfMean/q_002.pg
+LibraryQueens/IntroStats/Module05StandardErrorOfMean/q_003.pg
+LibraryQueens/IntroStats/Module05StandardErrorOfMean/q_004.pg
+and some theory
+Library/ASU-topics/setStat/di4.pg
+Library/ASU-topics/setStat/kolossa9.pg
+LibraryQueens/IntroStats/Module05SamplingDistributionConcepts/q_001.pg
+Library/ASU-topics/setStat/di3.pg
+
+
+---------------------------
+
+SECOND HALF
+
+Mod 6 Error Type I and II 
+Library/UVA-Stat/setStat212-Homework09/stat212-HW09-03.pg
+LibraryQueens/IntroStats/Module06Type1And2Error/q_002.pg
+
+Mod 6 t test concepts 
+Library/UVA-Stat/setStat212-Homework11/stat212-HW11-06.pg
+
+Module07Correlation and Regression concepts
+LibraryQueens/IntroStats/Module07Correlation/q_003.pg
+LibraryQueens/IntroStats/Module07Correlation/q_002.pg
+LibraryQueens/IntroStats/Module07Correlation/q_001.pg
+Library/CollegeOfIdaho/setStatistics_Ch04ScatterplotsAndCorrelation/04Stats_01_ScatterCorrelation.pg
+Library/ASU-topics/setStat/lines2.pg
+Library/CollegeOfIdaho/setStatistics_Ch05Regression/05Stats_01_Regression.pg
+
+
+Module 08 classifying studies, and some which ask the appropriate test to use.
+LibraryQueens/IntroStats/Module08ClassifyingStudies/q_001.pg
+LibraryQueens/IntroStats/Module08ClassifyingStudies/q_002.pg
+LibraryQueens/IntroStats/Module08ClassifyingStudies/q_003.pg
+LibraryQueens/IntroStats/Module08ClassifyingStudies/q_004.pg
+LibraryQueens/IntroStats/Module08ClassifyingStudies/q_005.pg
+LibraryQueens/IntroStats/Module08StatisticalTests/q_001.pg
+LibraryQueens/IntroStats/Module08StatisticalTests/q_002.pg
+
+Module 9 Distributions
+LibraryQueens/IntroStats/Module09Distributions/q_001.pg
+
+Module 10 - ANOVA concepts
+LibraryQueens/IntroStats/Module10ANOVAConcepts/q_001.pg
+LibraryQueens/IntroStats/Module10ANOVAConcepts/q_002.pg
+LibraryQueens/IntroStats/Module10ANOVAConcepts/q_003.pg
+
+
+
+
+Interaction plot

@@ -1,0 +1,107 @@
+#DESCRIPTION
+# Number of variables/sample size
+#ENDDESCRIPTION
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"MathObjects.pl",
+"PGauxiliaryFunctions.pl",
+"extraAnswerEvaluators.pl",
+"parserRadioButtons.pl",
+"parserMultiAnswer.pl",
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 0;  # all multiple choice; don't allow that much guessing
+
+$excel_filename = "Module01/LoblollyPines.xlsx";
+
+Context("Numeric");
+@opts = (
+"colClasses=c('factor', 'numeric', 'numeric'))",
+"colClasses=c('numeric', 'numeric', 'numeric'))",
+"colClasses=c('factor', 'factor', 'factor'))",
+"colClasses=c('numeric', 'factor', 'factor'))",
+);
+  $radio = RadioButtons([$opts[0], $opts[1], $opts[2], $opts[3]], 
+$opts[0],
+maxLabelSize => 80);
+
+
+@opts2 = (
+"All the seed sources lead to comparable ranges of tree height.",
+"Seed source A leads to a definitively higher range of tree heights.",
+"Seed source D leads to a definitively higher range of tree heights.",
+"Seed source E leads to a definitively lower range of tree heights.",
+);
+  $radio2 = RadioButtons([$opts2[0], $opts2[1], $opts2[2], $opts2[3]], 
+$opts2[0], # correct answer
+maxLabelSize => 80);
+
+Context()->texStrings;
+BEGIN_TEXT 
+
+Download the following \{ htmlLink("${htmlURL}$excel_filename", "Excel dataset (.xlsx)")\}, then:
+$BR
+- Open it in Excel,  and
+$BR
+- Save it as a .csv file.
+
+$PAR
+a) Which of the following R commands would correctly load the data into R, based on the type of data in each column?
+$PAR 
+MyData = read.csv(file.choose(), ...
+$BR
+\{ $radio->buttons() \}
+
+$PAR
+b) Assuming you called your data "MyData" as above, generate a $BBOLD boxplot $EBOLD using the commands:
+$PAR
+x = MyData\{${DOLLAR}\}SeedSource
+$BR
+y = MyData\{${DOLLAR}\}TreeHeight
+$BR
+boxplot(y~x, xlab = "Seed Source", ylab="Tree Height")
+
+$PAR
+Which of the following best describes the relationship between these variables in the sample?
+$BR
+\{ $radio2->buttons() \}
+
+
+END_TEXT
+Context()->normalStrings;
+
+#ANSWERS
+ANS( $radio->cmp() );
+ANS( $radio2->cmp() );
+
+BEGIN_SOLUTION
+
+a) The first few rows of the data look like:
+$PAR
+SeedSource	TreeHeight	TreeAge
+$BR
+A	4.51	3
+$BR
+A	10.89	5
+$BR
+A	28.72	10
+
+$PAR
+This indicates that the first column is categorical (non-numeric or 'factor') values, while the last two are numeric.
+
+$PAR 
+The graph shows boxes which are all overlapping in terms of their tree height values.
+$BR
+While we haven't learned yet how to numerically compare this kind of data, no single box is either all-the-way above or below the boxes for the other seed sources.
+
+
+END_SOLUTION
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

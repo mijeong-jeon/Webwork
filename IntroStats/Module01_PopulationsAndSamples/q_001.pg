@@ -24,16 +24,6 @@ $excel_filename = "Module01/CarbonDioxideGrassUptake.xlsx";
 Context("Numeric");
 
 @opts = (
-"Regular Canadian viewers of MSNBC news programming.",
-"All at-least-weekly Canadian viewers of MSNBC news programming.",
-"All at-least-weekly Canadian viewers of MSNBC news programming who watch using Bell satellite.",
-"Regular Canadian viewers of MSNBC news programming who watch using Bell satellite.",
-);
-$ideal_population = RadioButtons([$opts[0], $opts[1], $opts[2], $opts[3]], 
-$opts[0],
-maxLabelSize => 80);
-
-@opts = (
 "All at-least-weekly Canadian viewers of MSNBC news programming who watch using Bell satellite.",
 "Regular Canadian viewers of MSNBC news programming.",
 "All at-least-weekly Canadian viewers of MSNBC news programming.",
@@ -72,17 +62,12 @@ programming at least once a week is left out of the survey; in the end
 part of the survey.
 
 $PAR
-a) What is the target population of interest?
-$BR
-\{ $ideal_population->buttons() \}
-
-$PAR
-b) What is the actual population for this study?
+(a) What is the statistical population for this study?
 $BR
 \{ $actual_population->buttons() \}
 
 $PAR
-c) What is the variable of interest?
+(b) What is the variable of interest?
 $BR
 \{ $variable_of_interest->buttons() \}
 
@@ -90,26 +75,8 @@ END_TEXT
 Context()->normalStrings;
 
 #ANSWERS
-ANS( $ideal_population->cmp() );
 ANS( $actual_population->cmp() );
 ANS( $variable_of_interest->cmp() );
 
-BEGIN_SOLUTION
-
-a) The population that the executive wants to study is definitely all the
-regular Canadian MSNBC news programming viewers.  
-
-$PAR b) In practice though, there has to be a concrete definition of
-what a "regular" viewer is, and that was done as part of the survey by
-leaving out viewers who didn't watch at least once a week.  Also,
-because the list of phone numbers only covers Bell satellite viewers,
-that really defines the actual population we can infer about.
-
-$PAR c) The variable about each individual that is of concern is their
-age.  All the other information is used to identify the population, or
-more specifically whether an individual is inside or outside the
-population of interest.
-
-END_SOLUTION
 
 ENDDOCUMENT();        # This should be the last executable line in the problem.

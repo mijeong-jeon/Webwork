@@ -4,7 +4,7 @@ export COLL="IntroStats"
 
 export SRC_DIR=$COLL
 export TARGET_DIR="/home/wwadmin/LibraryQueens/$COLL"
-export SERVER="InWebwork4"
+export SERVER="InWebwork6"
 rsync -arv --perms --exclude "*~" -e ssh $SRC_DIR/ $SERVER:$TARGET_DIR/
 
 

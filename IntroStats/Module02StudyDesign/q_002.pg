@@ -1,0 +1,54 @@
+#DESCRIPTION
+# Number of variables/sample size
+#ENDDESCRIPTION
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"MathObjects.pl",
+"PGauxiliaryFunctions.pl",
+"extraAnswerEvaluators.pl",
+"parserRadioButtons.pl",
+"parserMultiAnswer.pl",
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 0;  # all multiple choice; don't allow that much guessing
+
+$excel_filename = "Module01/CarbonDioxideGrassUptake.xlsx";
+
+Context("Numeric");
+
+@opts = (
+"Cohort study",
+"Stratified survey",
+"Case-control study",
+"Cluster survey",
+"Simple random survey",
+);
+$course_options = RadioButtons([$opts[0], $opts[1], $opts[2], $opts[3]], 
+$opts[1],
+maxLabelSize => 80);
+
+Context()->texStrings;
+BEGIN_TEXT 
+
+$PAR
+You are interested in the relationship between education and income, but recognizing that there are regional differences in this relationship.  
+$BR You randomly identify 1,000 people in each province, and have them complete a survey about their current income, and their educational background. 
+$BR 
+What kind of study design is this?
+$BR
+\{ $course_options->buttons() \}
+
+END_TEXT
+Context()->normalStrings;
+
+#ANSWERS
+ANS( $course_options->cmp() );
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

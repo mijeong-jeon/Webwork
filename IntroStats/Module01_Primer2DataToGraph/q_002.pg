@@ -54,7 +54,7 @@ $BR
 - Save it as a .csv file.
 
 $PAR
-a) Which of the following R commands would correctly load the data into R, based on the type of data in each column?
+a) Which of the following R commands would correctly load the data into R, based on the type of data in each column?  (Car speed is reported in km/h, and stopping distance is in meters.)
 $PAR 
 MyData = read.csv(file.choose(), ...
 $BR
@@ -63,9 +63,9 @@ $BR
 $PAR
 b) Assuming you called your data "MyData" as above, generate a scatter plot using the commands:
 $PAR
-x = MyData\{${DOLLAR}\}CO2Concentration
+x = MyData\{${DOLLAR}\}CarSpeed
 $BR
-y = MyData\{${DOLLAR}\}CO2Uptake
+y = MyData\{${DOLLAR}\}StoppingDistance
 $BR
 plot(x, y, xlab = "Car Speed", ylab="Stopping Distance")
 

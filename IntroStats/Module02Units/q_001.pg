@@ -1,0 +1,56 @@
+#DESCRIPTION
+# Number of variables/sample size
+#ENDDESCRIPTION
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"MathObjects.pl",
+"PGauxiliaryFunctions.pl",
+"extraAnswerEvaluators.pl",
+"parserRadioButtons.pl",
+"parserMultiAnswer.pl",
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 0;  # all multiple choice; don't allow that much guessing
+
+$excel_filename = "Module01/CarbonDioxideGrassUptake.xlsx";
+
+Context("Numeric");
+
+@opts = (
+"Sampling unit",
+"Observational unit",
+"Both sampling and observational unit",
+"Measurement unit",
+);
+$option1 = RadioButtons([$opts[0], $opts[1], $opts[2], $opts[3]], 
+$opts[0],
+maxLabelSize => 80);
+
+$option2 = RadioButtons([$opts[0], $opts[1], $opts[2], $opts[3]], 
+$opts[1],
+maxLabelSize => 80);
+
+Context()->texStrings;
+BEGIN_TEXT 
+A school superintendent is evaluating school cleanliness in preparation for a review of costodial staff assignments and budget.   She selects 7 random schools, and then emails a survey about school cleanliness to 50 students in each school.
+$PAR
+(a) What term best describes each $BBOLD schools$EBOLD in this study design?
+\{ $option1->buttons() \}
+$PAR
+(b) What term best describes each $BBOLDstudent$EBOLD in this study design?
+\{ $option2->buttons() \}
+END_TEXT
+Context()->normalStrings;
+
+#ANSWERS
+ANS( $option1->cmp() );
+ANS( $option2->cmp() );
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

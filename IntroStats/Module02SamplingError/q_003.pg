@@ -39,8 +39,9 @@ BEGIN_TEXT
 $PAR
 A psychology professor recruits 50 randomly selected Queen's undergraduates, and ask them to recommend friends who would also be willing to participate in an introvert/extrovert personality study; overall, 93 students complete the study. 
 $BR The results are 73% of the students are extroverts, 17% are introverts, and 10% are a mix.
-$BR
+$PAR
 What would the biggest concern or risk be about this sampling strategy?
+$BR
 \{ $course_options->buttons() \}
 
 END_TEXT

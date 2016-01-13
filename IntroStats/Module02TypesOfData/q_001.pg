@@ -40,7 +40,7 @@ $tf->rf_print_q(~~&pop_up_list_print_q);
 $tf -> ra_pop_up_list( [ No_answer => "  ?", ContinuousNumerical => "Continuous numerical", Categorical => "Categorical", DiscreteNumerical => "Discrete numerical"] );
 
 $tf -> qa ( # each entry has to end with a comma
-"What is the approximate distance of the restaurant from your home?",
+"What is the approximate distance of the restaurant from your home, in km?",
 "ContinuousNumerical",
 "Have you eaten at this restaurant previously?",
 "Categorical",

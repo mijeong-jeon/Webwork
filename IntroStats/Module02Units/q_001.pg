@@ -42,9 +42,11 @@ BEGIN_TEXT
 A school superintendent is evaluating school cleanliness in preparation for a review of costodial staff assignments and budget.   She selects 7 random schools, and then emails a survey about school cleanliness to 50 students in each school.
 $PAR
 (a) What term best describes each $BBOLD schools$EBOLD in this study design?
+$BR 
 \{ $option1->buttons() \}
 $PAR
-(b) What term best describes each $BBOLDstudent$EBOLD in this study design?
+(b) What term best describes each $BBOLD student$EBOLD in this study design?
+$BR 
 \{ $option2->buttons() \}
 END_TEXT
 Context()->normalStrings;

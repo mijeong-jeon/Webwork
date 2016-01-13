@@ -44,20 +44,17 @@ $ma -> ra_pop_up_list( [ No_answer => "  ?", Categorical => "Categorical", Discr
 $ma -> qa ( # each entry has to end with a comma
 "How many escorted vacations have your taken prior to this one?",
 "DiscreteNumerical",
-"Do you feel that the stay in Paris was sufficiently long?",
+"Which of the following features of the hotel in Paris did you find most attractive: location, facilities, room size, or price?",
 "Categorical",
-"Which of the following features of the hotel in Paris did you find most 
-attractive: location, facilities, room size, or price?",
-"Categorical",
-"What is the maximum number of hours per day that you would like to spend travelling?",
+"What is the maximum number of hours that you would like to spend on a tour?",
 "ContinuousNumerical",
 "Would your overall rating of this tour be excellent, good, fair, or poor?",
 "Categorical",
-"What is your political party affiliation?",
-"Categorical",
-"What grade did you receive in Statistics last semester; A, B, C, D, or F?",
-"Categorical",
-"What is the current temperature outside?",
+"How many days was your stay in Paris?",
+"DiscreteNumerical",
+"How much did you expect to spend during your stay (all hotels and meals included)?  Estimate in euros.",
+"ContinuousNumerical",
+"How much did you actually spend during your stay (all hotels and meals included)?  Estimate in euros.",
 "ContinuousNumerical",
 );
 
@@ -69,9 +66,9 @@ $ma ->choose(4);
 
 BEGIN_TEXT
 $PAR
-
-Determine whether the following possible responses should be classified as categorical, 
-continuous numerical or discrete numerical.
+Consider a survey being designed for customers of a tour company in Paris.
+$BR
+Determine whether the following possible responses on their survey should be classified as categorical, continuous numerical or discrete numerical.
 $BR
 
 \{ $ma-> print_q \}

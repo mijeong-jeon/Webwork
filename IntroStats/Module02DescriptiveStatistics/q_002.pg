@@ -24,6 +24,7 @@ Context()->flags->set(
 
 $dataset_choice = random(1, 7);
 if ($dataset_choice == 1) {
+  $description = "arrests in the US";
   $excel_filename = "Module02/USArrestRates.xlsx";
   $variable = "Murder"; 
   $variable_descr = "the number of murder arrests per 100,000 population in each US state.";
@@ -32,6 +33,7 @@ if ($dataset_choice == 1) {
   $sd = Formula("4.355");
 }
 elsif ($dataset_choice == 2) {
+  $description = "arrests in the US";
   $excel_filename = "Module02/USArrestRates.xlsx";
   $variable = "Assault"; 
   $variable_descr = "the number of assault arrests per 100,000 population in each US state.";
@@ -40,6 +42,7 @@ elsif ($dataset_choice == 2) {
   $sd = Formula("83.338");
 }
 elsif ($dataset_choice == 3) {
+  $description = "arrests in the US";
   $excel_filename = "Module02/USArrestRates.xlsx";
   $variable = "Rape"; 
   $variable_descr = "the number of assault arrests per 100,000 population in each US state.";
@@ -48,6 +51,7 @@ elsif ($dataset_choice == 3) {
   $sd = Formula("9.366");
 }
 elsif ($dataset_choice == 4) {
+  $description = "arrests in the US";
   $excel_filename = "Module02/USArrestRates.xlsx";
   $variable = "UrbanPop"; 
   $variable_descr = "the percentage of residents of the state that live in an urban area.";
@@ -56,6 +60,7 @@ elsif ($dataset_choice == 4) {
   $sd = Formula("14.475");
 }
 elsif ($dataset_choice == 5) {
+  $description = "employee feelings about a company and its management";
   $excel_filename = "Module02/DepartmentAttitudeSurvey.xlsx";
   $variable = "OverallRating"; 
   $variable_descr = "the percentage of favourable responses from each department about the overall job situation.";
@@ -64,6 +69,7 @@ elsif ($dataset_choice == 5) {
   $sd = Formula("12.173");
 }
 elsif ($dataset_choice == 6) {
+  $description = "employee feelings about a company and its management";
   $excel_filename = "Module02/DepartmentAttitudeSurvey.xlsx";
   $variable = "Complaints"; 
   $variable_descr = "the percentage of favourable responses from each department about how the company handled complaints.";
@@ -72,6 +78,7 @@ elsif ($dataset_choice == 6) {
   $sd = Formula("13.315");
 }
 elsif ($dataset_choice == 7) {
+  $description = "employee feelings about a company and its management";
   $excel_filename = "Module02/DepartmentAttitudeSurvey.xlsx";
   $variable = "Raises"; 
   $variable_descr = "the percentage of favourable responses from each department about how the company handled raises.";
@@ -82,7 +89,9 @@ elsif ($dataset_choice == 7) {
 
 
 TEXT(EV2(<<EOT));
-$BR
+$BR 
+The dataset below contains information about $description.
+$PAR
 Find the following properties of this \{ htmlLink("${htmlURL}$excel_filename", "Excel dataset (.xlsx)")\}.
 
 $PAR

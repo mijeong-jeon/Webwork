@@ -41,8 +41,9 @@ A psychology professor recruits 76 randomly selected Queen's undergraduates to c
 73% of the students are extroverts, 17% are introverts, and 10% are a mix.
 $BR The next year, the professor re-runs the study, recruiting 56 students, this time from the PSYC 100 student pool.    The results for this sample are 
 79% of the students are extroverts, 10% are introverts, and 11% are a mix.
-$BR
+$PAR
 What statistical effect is most likely responsible for the difference between the two results?
+$BR
 \{ $course_options->buttons() \}
 
 END_TEXT

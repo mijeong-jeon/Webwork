@@ -68,7 +68,7 @@ elsif ($dataset_choice == 4) {
   $quart3 = Formula("77.75");
 }
 elsif ($dataset_choice == 5) {
-  $description = "employee feelings about the company and management";
+  $description = "employee feelings about a company and its management";
   $excel_filename = "Module02/DepartmentAttitudeSurvey.xlsx";
   $variable = "OverallRating"; 
   $variable_descr = "the percentage of favourable responses from each department about the overall job situation.";
@@ -79,7 +79,7 @@ elsif ($dataset_choice == 5) {
   $max = Formula("85.00");
 }
 elsif ($dataset_choice == 6) {
-  $description = "employee feelings about the company and management";
+  $description = "employee feelings about a company and its management";
   $excel_filename = "Module02/DepartmentAttitudeSurvey.xlsx";
   $variable = "Complaints"; 
   $variable_descr = "the percentage of favourable responses from each department about how the company handled complaints.";
@@ -90,7 +90,7 @@ elsif ($dataset_choice == 6) {
   $max = Formula("90.0");
 }
 elsif ($dataset_choice == 7) {
-  $description = "employee feelings about the company and management";
+  $description = "employee feelings about a company and its management";
   $excel_filename = "Module02/DepartmentAttitudeSurvey.xlsx";
   $variable = "Raises"; 
   $variable_descr = "the percentage of favourable responses from each department about how the company handled raises.";
@@ -104,8 +104,8 @@ elsif ($dataset_choice == 7) {
 
 TEXT(EV2(<<EOT));
 $BR 
-The dataset below contains information about \{ $description \}.
-$BR
+The dataset below contains information about $description.
+$PAR
 Find the following properties of this \{ htmlLink("${htmlURL}$excel_filename", "Excel dataset (.xlsx)")\}.
 
 $PAR

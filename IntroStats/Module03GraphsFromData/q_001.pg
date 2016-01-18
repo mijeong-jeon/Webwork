@@ -53,7 +53,7 @@ maxLabelSize => 100);
 
 BEGIN_TEXT
 $BR
-Find the following properties of this \{ htmlLink("${htmlURL}$excel_filename", "Excel dataset (.xlsx)")\}.
+Find the following properties of this \{ htmlLink("${htmlURL}$excel_filename", "Excel dataset (.xlsx)")\}.  It contains information about the height of various newly planted trees over time.
 
 $PAR
 Generate a scatter plot based on this data, with 

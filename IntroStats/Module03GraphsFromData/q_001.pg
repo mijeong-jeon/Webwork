@@ -33,7 +33,7 @@ loadMacros(
 
 
 TEXT(beginproblem());
-$showPartialCorrectAnswers = 1;
+$showPartialCorrectAnswers = 0;
 Context("Numeric");
 Context()->flags->set(
   tolerance => 0.01,

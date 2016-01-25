@@ -19,8 +19,6 @@ loadMacros(
 TEXT(beginproblem());
 $showPartialCorrectAnswers = 0;  # all multiple choice; don't allow that much guessing
 
-$excel_filename = "Module01/CarbonDioxideGrassUptake.xlsx";
-
 Context("Numeric");
 
 @opts = (

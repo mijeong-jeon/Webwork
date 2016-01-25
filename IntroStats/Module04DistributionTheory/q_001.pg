@@ -1,0 +1,63 @@
+
+##DESCRIPTION
+##   Statistics: Normal Distribution
+##ENDDESCRIPTION
+
+## DBsubject(Probability)
+## DBchapter(Continuous distributions)
+## DBsection(Gaussian normal)
+## Institution(ASU)
+## Level(1)
+## KEYWORDS('Statistics')
+
+
+DOCUMENT();
+
+loadMacros(
+"PG.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"PGauxiliaryFunctions.pl",
+"PGasu.pl",
+"parserPopUp.pl",
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 0;
+
+$m0 = random(1,15,1) ;
+do  {$m1 = random(1,16,1)}    until    ($m1 != $m0) ;
+
+
+$s1 = random(4, 9, 1);
+$case = random(1, 2);
+if ($case == 1) {
+   $s2 = $s1;
+   $shape_answer = "True";
+} else {
+   $s2 = 2*$s1;
+   $shape_answer = "False";
+}
+
+$popup_shape = PopUp(["?", "True", "False"], $shape_answer);
+$popup_center = PopUp(["?", "True", "False"], "False");
+
+
+BEGIN_TEXT
+Consider two normal distributions, one with mean \( $m0 \) and standard deviation \( $s1 \),
+the other with mean \( $m1 \) and standard deviation \( $s2 \).    $SPACE
+
+$PAR
+a)  The two distributions have the same shape/spread.  \{ $popup_shape->menu() \}
+
+$PAR
+b)  The two distributions are centered at the same place. \{ $popup_center->menu() \}
+
+END_TEXT
+
+ANS($popup_shape->cmp() );
+ANS($popup_center->cmp() );
+
+
+ENDDOCUMENT();

@@ -1,0 +1,58 @@
+
+##DESCRIPTION
+##   Statistics: Normal Distribution
+##ENDDESCRIPTION
+
+## DBsubject(Probability)
+## DBchapter(Continuous distributions)
+## DBsection(Gaussian normal)
+## Institution(ASU)
+## Level(1)
+## KEYWORDS('Statistics')
+
+
+DOCUMENT();
+
+loadMacros(
+"PG.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"MathObjects.pl",
+"PGauxiliaryFunctions.pl",
+"extraAnswerEvaluators.pl",
+"parserRadioButtons.pl",
+"parserMultiAnswer.pl",
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 0;
+
+$m0 = random(3,7,1) ;
+do  {$m0 = random(3, 7,1)}    until    ($m0 != 5) ;
+
+@opts = (
+"The number of flips is even, not odd.",
+"The probabilities are only exact in the long run, not in small samples.",
+"Not all coins are fair, and so don't flip heads with exactly 0.5 probability.",
+);
+$radio_options = RadioButtons([$opts[0], $opts[1], $opts[2]],
+$opts[1],
+maxLabelSize => 80);
+
+BEGIN_TEXT
+
+You flip a coin 10 times, and it comes up heads \( $m0 \) times out of
+the 10.  The probability of a coin coming up heads is 0.5 on each
+attempt, so why isn't the number of heads = 5 exactly?
+
+$BR
+\{ $radio_options->buttons() \}
+
+
+END_TEXT
+
+ANS( $radio_options->cmp() );
+
+
+ENDDOCUMENT();

@@ -1,0 +1,95 @@
+
+##DESCRIPTION
+##   Statistics: Normal Distribution
+##ENDDESCRIPTION
+
+## DBsubject(Probability)
+## DBchapter(Continuous distributions)
+## DBsection(Gaussian normal)
+## Institution(ASU)
+## Level(1)
+## KEYWORDS('Statistics')
+
+
+DOCUMENT();
+
+loadMacros(
+"PG.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"PGauxiliaryFunctions.pl",
+"PGasu.pl",
+"MathObjects.pl",
+"parserPopUp.pl",
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 0;
+Context("Numeric");
+Context()->flags->set(
+  tolerance => 0.002,
+  tolType => "absolute",
+);
+
+%left_prob = (
+-2.0 => 0.023,
+-1.5 => 0.067,
+-1.0 =>0.159,
+-0.5 => 0.309,
+0 =>  0.500, 
+0.5 =>0.691, 
+1.0 =>0.841, 
+1.5 =>0.933, 
+2.0 =>0.977,
+2.5 =>0.994,);
+%right_prob = (
+2.0 => 0.023,
+1.5 => 0.067,
+1.0 =>0.159,
+0.5 => 0.309,
+0 =>  0.500, 
+-0.5 =>0.691, 
+-1.0 =>0.841, 
+-1.5 =>0.933, 
+-2.0 =>0.977,
+-2.5 =>0.994,);
+
+$mu = random(70, 80);
+$sigma = random(5, 8);
+$sd_a = list_random(-1, -0.5, 0.5, 1, 1.5, 2, 2.5);
+$sd_b = list_random(-2.5, -2, -1.5, -1, -0.5, 0.5);
+$sd_c = list_random(-5, -4.5, -4, -3.5, -3);
+$a = $mu + $sd_a * $sigma;
+$b = $mu + $sd_b * $sigma;
+$c = $mu + $sd_c * $sigma; 
+$ans_a = Compute($right_prob{$sd_a});
+$ans_b = Compute($left_prob{$sd_b});
+$popup_is_athlete = PopUp(["?", "Yes", "No"], "No");
+
+BEGIN_TEXT
+
+The physical fitness of an athlete is often measured by how much
+oxygen the athlete takes in (which is recorded in milliliters per
+kilogram, ml/kg).  The mean maximum oxygen uptake for elite athletes
+has been found to be \($mu\) with a standard deviation of \($sigma\).
+Assume that the distribution is approximately normal. 
+$BR 
+You may use the standard normal curve to answer these questions: 
+$BR
+\{ image( "M04_standard_normal_curve.png", width,300, height,200 )\} (click to open in a new window) 
+$PAR
+(a) \( \) What is the probability that an elite athlete has a maximum oxygen uptake of at least \($a\) ml/kg?  $BR(Enter each probability as a number between 0 and 1, not as a percentage)
+$PAR
+answer: \{ans_rule(10)\} $PAR
+(b) \( \) What is the probability that an elite athlete has a maximum oxygen uptake of \($b\) ml/kg or lower? $PAR
+answer: \{ans_rule(10)\} $PAR
+(c) \( \) Consider someone with a maximum oxygen uptake of \($c\) ml/kg.  Is it likely that this person is an elite athlete? \{ $popup_is_athlete->menu() \}
+
+END_TEXT
+ANS($ans_a->cmp());
+ANS($ans_b->cmp());
+ANS($popup_is_athlete->cmp() );
+
+
+ENDDOCUMENT();

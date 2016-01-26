@@ -1,0 +1,27 @@
+\documentclass{standalone}
+\usepackage{pstricks,auto-pst-pdf}
+\usepackage{pst-all}
+\usepackage{pst-func}
+\begin{document}
+\begin{pspicture}[showgrid=false](-5,-1)(5,5)
+  \psset{yunit=6cm,xunit=1.5cm}
+  \psaxes[linecolor=black,labels=none,yAxis=false]{->}(0,0)(-3,0)(3,1.25)
+  \psGauss[sigma=1.0]{-3}{3}
+
+  % Filled region
+   \pscustom[linestyle=none,fillcolor=red,fillstyle=solid]{%
+     \psline(-3,0)(2.0,0)
+     \psGauss[sigma=1.0]{2.0}{-3}
+   }
+%  \rput(-2.5,0.20){$P(X<6.9)$}
+   % Put the horizontal scale on
+  \multido{\i=-3+1,\n=111+3}{7}{%
+    \psline[linewidth=0.5\pslinewidth](\i,-0.01)(\i,0.01)
+    \rput(\i,-0.05){\n}
+  }
+
+ \pcline[linecolor=red,linestyle=dashed](2.0,-0.1)(2.0,0.5)
+% \aput*{:U}{6.9 hr}  
+\rput(0,-0.15){Subcomponent length (cm)}
+\end{pspicture}
+\end{document}

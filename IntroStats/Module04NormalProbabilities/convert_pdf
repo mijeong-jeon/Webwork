@@ -1,0 +1,9 @@
+convert -density 200 -trim OxygenA.pdf OxygenA.png
+convert -density 200 -trim OxygenB.pdf OxygenB.png
+convert -density 200 -trim OxygenC.pdf OxygenC.png
+convert -density 200 -trim OxygenD.pdf OxygenD.png
+
+convert -density 200 -trim MachineA.pdf MachineA.png
+convert -density 200 -trim MachineB.pdf MachineB.png
+convert -density 200 -trim MachineC.pdf MachineC.png
+convert -density 200 -trim MachineD.pdf MachineD.png

@@ -21,13 +21,26 @@ DOCUMENT();        # This should be the first executable line in the problem.
 loadMacros(
   "PGstandard.pl",
   "answerHints.pl",
-  "MathObjects.pl"
+  "MathObjects.pl",
+  "PGanswermacros.pl",
+  "PGchoicemacros.pl",
+  "parserRadioButtons.pl",
+  "PGML.pl",
   );
 
 TEXT(beginproblem());
+$radio_conclusion_options = ("Reject the Null Hypotheis",
+"Fail to Reject the Null Hypothesis", 
+"Accept the Null Hypothesis");
 
 
-BEGIN_TEXT
+$radio_conclusion_correct = $radio_conclusion_options[1]; # FAIL TO REJECT
+$radio_conclusion = RadioButtons(["Reject the Null Hypotheis",
+"Fail to Reject the Null Hypothesis", 
+"Accept the Null Hypothesis"], 
+"Fail to Reject the Null Hypothesis");
+
+BEGIN_PGML
 
  During an angiogram, heart
     problems can be examined via a small tube (a catheter) threaded
@@ -38,39 +51,40 @@ BEGIN_TEXT
     control personnel make several measurements to test the diameter
     of the actual catheters being produced.
 
-$BR
 (a) What would the null and alternative hypotheses of the quality control team be?
-$BR
-(a) If the 40 catheter samples measured on one day had a mean
+
+(b) If the 40 catheter samples measured on one day had a mean
   diameter of 1.97 mm and a standard deviation of 0.15 mm, find the
-  normalized \(t\) score for this observed mean.  (This is what was
-  called \(t_{\mbox{obs}}\) in the videos.)
-$BR
-(b) Draw $\tobs$ on the plot of the null $t$-distribution below, and
+  normalized [`t`] score for this observed mean.  (This is what was
+  called [`t_{\mbox{obs}}`] in the videos.)
+
+(c) Draw \(\t_{obs}\) on the plot of the null \(t\)-distribution below, and
   shade in the appropropriate region that represents the probability
   of a value as large or more extreme that \(t_{\mbox{obs}}\), in either direction.
   (I.e. don't forget the other tail.) \\
 
-$BR
 (c) You now find that the critical \(t\)
   score for this sample, representing the threshold beyond which there
   is total of 5% probability across both the tails, would be \(t_{crit} \) =  
   \(t_{0.05 (2), df}\) = 2.02.  Add this value to your \(t\) distribution plot.
-$BR
+ 
 (d) Find the 95\% confidence interval for the mean catheter diameter.
-$BR
+ 
 (e) What conclusion would the quality control team arrive at on this
   day? 
 
+[@ $radio_conclusion -> buttons() @]*
 
 
-END_TEXT
+
+END_PGML
 
 ######################################
 #  Answers
 
 $showPartialCorrectAnswers = 1;
 
+ANS( $radio_conclusion->cmp() );
 
 ENDDOCUMENT();        # This should be the last executable line in the problem.
 

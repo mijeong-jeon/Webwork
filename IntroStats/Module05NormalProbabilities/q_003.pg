@@ -70,8 +70,6 @@ $ans_b = Compute($left_prob{$sd_b});
 $ans_interval = Compute(100* ($left_prob{$sd_interval_b} - $left_prob{$sd_interval_a}) );
 
 BEGIN_TEXT
-Case: $case
-$PAR
  As reported in "Runner's World" magazine, the times of the finishers in the New York City 10 km run are normally distributed with a mean of 61 minutes and a standard deviation of 9 minutes. Let x denote finishing time for the finishers.
 
 Assume that the distribution is approximately normal. 

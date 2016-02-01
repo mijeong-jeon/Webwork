@@ -39,10 +39,10 @@ $s = $a+$b;
 
 $m = new_multiple_choice();
 
-$m ->qa("What effect does the sample size have on the standard error (std. dev. of sample means)?",
-"The standard error gets smaller as the sample size grows.");
-$m -> extra("The standard error gets larger as the sample size grows.",
-"The sample size has no effect on the standard error.");
+$m ->qa("Explain why increasing the sample size tends to result in a smaller sampling error when a sample mean is used to estimate a population mean.",
+"The larger the sample size, the more closely the possible values of \(\bar{x}\) cluster around the mean of \(\bar{x}\)");
+$m -> extra("If the sample size is larger, the possible values of \(\bar{x}\) are farther from the mean of \(\bar{x}\)",
+"The above statement is incorrect, the sample size has no effect on the sampling error.");
 
 BEGIN_TEXT
 \{ $m->print_q \}

@@ -1,0 +1,4 @@
+convert -density 200 epilepsy1.pdf epilepsy1.png
+convert -density 200 epilepsy2.pdf epilepsy2.png
+convert -density 200 epilepsy3.pdf epilepsy3.png
+convert -density 200 epilepsy4.pdf epilepsy4.png

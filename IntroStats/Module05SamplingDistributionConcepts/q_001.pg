@@ -39,7 +39,7 @@ $s = $a+$b;
 
 $m = new_multiple_choice();
 
-$m ->qa("What effect does the sample size have on the standard error (std. dev. of sample means)?",
+$m ->qa("Assuming samples have roughly constand standard deviations, what effect does the sample size have on the standard error (std. dev. of sample means)?",
 "The standard error gets smaller as the sample size grows.");
 $m -> extra("The standard error gets larger as the sample size grows.",
 "The sample size has no effect on the standard error.");

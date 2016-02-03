@@ -43,40 +43,49 @@ Context("Numeric");
 @shuffled_graph_labels = @graph_labels[@graph_perm];
 @graph_number = ("1", "2", "3", "4");
 
-$radio_null_options = ["The children's mean IQ is 100.", 
-"The children's mean IQ is different from 100."];
+$radio_null_options = ["The golf ball will travel 350 yards.",
+"The golf ball will travel a distance different from 350 yards."]; 
 $null_correct = ${$radio_null_options}[0];
 
 $radio_conclusion_options = ["Reject the Null Hypothesis.",
 "Fail to Reject the Null Hypothesis.", 
 "Accept the Null Hypothesis."];
 
-$radio_colloquial_options = ["The epilepsy medication has an effect on children's IQ.",
-"The data does not provide evidence that the epilepsy medication has an effect on children's IQ.",
-"The epilepsy medication has no effect on children's IQ."];
+$radio_colloquial_options = ["Golf balls from this brand do not travel the 350 yard target distance.",
+"The data does not provide evidence that this brand's golf clubs produce a distance other than 350 yards.",
+"The brand's golf balls travel on average 350 yards."];
 
-$case = random(1, 2);
+$case = list_random(1, 2, 3);
 if ($case == 1) {
-  $drug = "iPad";
-  $sample_mean = ;
-  $sample_sd = 9.05;
-  $expected_mean = 10.0;
+  $brand = "Titleist";
+  $sample_mean = 372;
+  $sample_sd = 15.8;
+  $expected_mean = 350;
   $conclusion_correct = ${$radio_conclusion_options}[0];  # REJECT
   $colloquial_correct = ${$radio_colloquial_options}[0];  # HAS an effect
-  $correct_graph_number = $graph_number[$inv_graph_perm[2]];# significant, t < 0 
+  $correct_graph_number = $graph_number[$inv_graph_perm[0]];# significant, t > 0 
 } elsif ($case == 2) {
-  $drug = "iPhone";
-  $sample_mean = 98.0;
-  $sample_sd = 6.03;
-  $conclusion_correct = ${$radio_conclusion_options}[1];  # Fail to REJECT
-  $colloquial_correct = ${$radio_colloquial_options}[1];  # No effect
-  $correct_graph_number = $graph_number[$inv_graph_perm[3]];# not significant, t < 0 
+  $brand = "Pinnacle";
+  $sample_mean = 374;
+  $sample_sd = 73.1;
+  $expected_mean = 350;
+  $conclusion_correct = ${$radio_conclusion_options}[1];  # Not REJECT
+  $colloquial_correct = ${$radio_colloquial_options}[1];  # Has an no effect
+  $correct_graph_number = $graph_number[$inv_graph_perm[1]];# not significant, t > 0 
+} else {
+  $brand = "Dunlop";
+  $sample_mean = 369;
+  $sample_sd = 8.4;
+  $expected_mean = 350;
+  $conclusion_correct = ${$radio_conclusion_options}[0];  # REJECT
+  $colloquial_correct = ${$radio_colloquial_options}[0];  # HAS an effect
+  $correct_graph_number = $graph_number[$inv_graph_perm[0]];# significant, t > 0 
 }
 
 $n = 30;
 $se = $sample_sd / sqrt($n);
 $tcrit = 2.11;
-$tobs = Formula("($sample_mean - 100)/$se");
+$tobs = Formula("($sample_mean - $expected_mean)/$se");
 $ci_1 = Formula("$sample_mean - $tcrit * $se");
 $ci_2 = Formula("$sample_mean + $tcrit * $se");
 
@@ -87,21 +96,21 @@ $radio_colloquial = RadioButtons($radio_colloquial_options, $colloquial_correct)
 
 BEGIN_PGML
 
-Several drugs can be used to treat epilepsy, including one called
-[$drug].  In the 2000's, a concern was raised by studies indicating
-that in pregnant epilepsy patients, [$drug] might be causing
-cognitive impairment in their children.
+A mechanical engineering lab was hired to test the distance travelled
+by a new design of [$brand] brand golf balls, when struck by a
+standardized mechanically-driven club.  Over several months of
+production, 30 randomly selected golf balls were tested.  The mean
+distance travelled by the balls in the sample was [$sample_mean]
+yards, and the standard deviation was [$sample_sd] yards.  Studies of
+pro golfers and their results have shown that balls that reach 350
+yards in this test (not more, not less) are correlated with the best
+performance during matches.
 
-A study of [$n] children from women who had taken [$drug] during
-pregnancy was conducted, with each child taking a (age-appropriate) IQ
-test.  The mean child IQ was [$sample_mean], and the standard deviation was
-[$sample_sd].  The expected mean for IQ tests is 100.
-
-(a) What would the researcher's null hypothesis be?
+(a) What would the lab's null hypothesis be?
 
 [@ $radio_null -> buttons() @]*
 
-(b) Find the normalized [`t_{obs}`] score for the observed mean IQ for the children exposed to [$drug].   Report 2 digits after the decimal.
+(b) Find the normalized [`t_{obs}`] score for the observed mean distance travelled by [$brand] golf balls.   Report 2 digits after the decimal.
 
 [`t_{obs}`] = [___________]
 
@@ -109,7 +118,7 @@ test.  The mean child IQ was [$sample_mean], and the standard deviation was
   of a value as large or more extreme that [`t_{\mbox{obs}}`], in either direction.
   (I.e. don't forget the other tail.) 
 
- You next find that for this sample, [`t_{crit} `] = [`t_{0.05 (2), df}`] = 2.11.  Add this value to your [`t`] distribution plot.
+ You next find that for this sample, [`t_{crit} `] = [`t_{0.05 (2), df}`] = 2.05.  Add this value to your [`t`] distribution plot.
 
 Which of the following graphs _most resembles_ your sketch?  (Click to open a graph in a new window.)
 
@@ -119,7 +128,7 @@ Which of the following graphs _most resembles_ your sketch?  (Click to open a gr
 
 Graph: [@ $popup->menu() @]* 
  
-(d) Find the 95\% confidence interval for the mean IQ for the population of children exposed to [$drug].  Report 1 digit after the decimal for each value. 
+(d) Find the 95\% confidence interval for the mean distance travelled by [$brand] golf balls when hit by the mechanical golf club.  Report 1 digit after the decimal for each value. 
 
 95% confidence interval: \[ [___________], [____________] \]
  
@@ -132,7 +141,7 @@ Graph: [@ $popup->menu() @]*
 [@ $radio_colloquial -> buttons() @]*
 
 
-Source: Gould and Ryan
+Source: Bock et. al.
 
 END_PGML
 
@@ -151,27 +160,3 @@ ANS( $radio_conclusion->cmp() );
 ANS( $radio_colloquial->cmp() );
 
 ENDDOCUMENT();        # This should be the last executable line in the problem.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -1,0 +1,38 @@
+# Analysis of the epilepsy data
+# Source: page 412 of Gould & Ryan
+
+# Maple Leaf
+n = 30
+tcrit = abs(qt(0.025, n-1))
+xbar = 372;
+sd = 15.8;
+se = sd/sqrt(n);
+
+
+tobs = (xbar - 100)/se
+ci1 = xbar - tcrit * se
+ci2 = xbar + tcrit * se
+
+# Oscar Meyer
+n = 30
+tcrit = abs(qt(0.025, n-1))
+xbar = 374;
+sd = 73.1
+se = sd/sqrt(n);
+
+
+tobs = (xbar - 100)/se
+ci1 = xbar - tcrit * se
+ci2 = xbar + tcrit * se
+
+# Nathan's
+n = 30
+tcrit = abs(qt(0.025, n-1))
+xbar = 374;
+sd = 73.1
+se = sd/sqrt(n);
+
+
+tobs = (xbar - 100)/se
+ci1 = xbar - tcrit * se
+ci2 = xbar + tcrit * se

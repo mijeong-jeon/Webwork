@@ -1,4 +1,4 @@
-# Analysis of the epilepsy data
+# Analysis of the Golf ball Data (was originally Hot Dogs, but that would be 1-tailed)
 # Source: page 412 of Gould & Ryan
 
 # Maple Leaf
@@ -28,8 +28,8 @@ ci2 = xbar + tcrit * se
 # Nathan's
 n = 30
 tcrit = abs(qt(0.025, n-1))
-xbar = 374;
-sd = 73.1
+xbar = 369;
+sd = 8.4;
 se = sd/sqrt(n);
 
 

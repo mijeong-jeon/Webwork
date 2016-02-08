@@ -84,7 +84,7 @@ if ($case == 1) {
 
 $n = 30;
 $se = $sample_sd / sqrt($n);
-$tcrit = 2.11;
+$tcrit = 2.05;
 $tobs = Formula("($sample_mean - $expected_mean)/$se");
 $ci_1 = Formula("$sample_mean - $tcrit * $se");
 $ci_2 = Formula("$sample_mean + $tcrit * $se");

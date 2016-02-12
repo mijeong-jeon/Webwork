@@ -17,7 +17,7 @@ loadMacros(
 );
 
 TEXT(beginproblem());
-$showPartialCorrectAnswers = 1;  # all multiple choice; don't allow that much guessing
+$showPartialCorrectAnswers = 1;  
 
 $excel_filename = "Module06/MinnesotaHighSchool.xlsx";
 
@@ -87,6 +87,14 @@ $mc = new_multiple_choice();
 $mc -> qa('Your decision for the hypothesis test, at the \(\alpha = 0.05\) level:', $ans[$hyp_tag]);
 $mc -> extra($ans[1-$hyp_tag],$ans[2],$ans[3]);
 
+$mc_scientific_conclusion = new_multiple_choice();
+@ans = (
+"$variable1 and $variable2 are not independent of each other.",
+"$variable1 and $variable2 are independent of each other.",
+);
+$mc_scientific_conclusion -> qa('Select the appropriate scientific conclusion: ', $ans[$hyp_tag]);
+$mc_scientific_conclusion -> extra($ans[1-$hyp_tag]);
+
 Context()->texStrings;
 BEGIN_TEXT 
 
@@ -117,17 +125,21 @@ $PAR
 (b) How many degrees of freedom would a chi-squared test on this table have? \{ans_rule(10)\}
 $BR 
 (c) What would the null hypothesis for the relation between $variable1 and $variable2 be?
-$BR
+$PAR
 \{ $mc_hyp ->print_q() \} 
 \{ $mc_hyp ->print_a() \}
 $BR 
 (d) Test statistic for the sample data:   \{ans_rule(20)\}
-$BR
+$PAR
 (e) Critical test statistic with \(\alpha = 0.05\): \{ ans_rule(20) \}
-$BR 
+$PAR 
 (f) 
-\{ $mc ->print_q() \} $BR
+\{ $mc ->print_q() \} 
 \{ $mc ->print_a() \}
+$PAR 
+(g) 
+\{ $mc_scientific_conclusion ->print_q() \} 
+\{ $mc_scientific_conclusion ->print_a() \}
 
 
 END_TEXT
@@ -140,6 +152,7 @@ ANS(radio_cmp($mc_hyp->correct_ans));
 ANS($test_statistic->cmp());
 ANS($t_critical->cmp());
 ANS(radio_cmp($mc->correct_ans));
+ANS(radio_cmp($mc_scientific_conclusion->correct_ans));
 
 BEGIN_SOLUTION
 

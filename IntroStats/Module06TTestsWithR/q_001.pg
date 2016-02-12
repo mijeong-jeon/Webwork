@@ -17,7 +17,7 @@ loadMacros(
 );
 
 TEXT(beginproblem());
-$showPartialCorrectAnswers = 0;  # all multiple choice; don't allow that much guessing
+$showPartialCorrectAnswers = 1;  
 
 $excel_filename = "Module06/DepartmentAttitudeSurvey.xlsx";
 
@@ -149,13 +149,15 @@ you will evaluate whether this claim is supported by the data or not.
 
 $PAR 
 (a) 
-\{ $mc_H0 ->print_q() \} $BR
+\{ $mc_H0 ->print_q() \} 
 \{ $mc_H0 ->print_a() \}
 
-(b)
-\{ $mc_H0 ->print_q() \} $BR
-\{ $mc_H0 ->print_a() \}
+$PAR
+(b) 
+\{ $mc_ttest_type ->print_q() \} 
+\{ $mc_ttest_type ->print_a() \}
 
+$PAR
 (c) From R, find the test statistic for the sample data:  \{ans_rule(20) \}
 
 $PAR
@@ -176,9 +178,11 @@ Context()->normalStrings;
 
 #ANSWERS
 ANS(radio_cmp($mc_H0->correct_ans));
+ANS(radio_cmp($mc_ttest_type->correct_ans));
 ANS($test_statistic->cmp());
 ANS($t_critical->cmp());
 ANS(radio_cmp($mc->correct_ans));
+ANS(radio_cmp($mc_scientific_conclusion->correct_ans));
 
 BEGIN_SOLUTION
 

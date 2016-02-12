@@ -34,12 +34,12 @@ $mc[0] -> extra("Type II error", "Type I error");
 
 $mc[1] = new_multiple_choice();
 $mc[1] -> qa("The mean cost to community hospitals per patient per day in Ontario actually _does not_ exceed the national mean.$BR If the result of measuring a sample leads to the conclusion that the mean cost to community hospitals per patient per day in Ontario exceeds the national mean, this is a", "Type I error");
-$mc[1] -> extra("Type I error", "correct decision");
+$mc[1] -> extra("Type II error", "correct decision");
 
 $mc[2] = new_multiple_choice();
 $mc[2] -> qa("The mean cost to community hospitals per patient per day in Ontario actually exceeds the national mean.
 $BR If the result of measuring a sample does not lead to the conclusion that the mean cost to community hospitals per patient per day in Ontario exceeds the national mean, this is a", "Type II error");
-$mc[2] -> extra("Type II error", "correct decision");
+$mc[2] -> extra("Type I error", "correct decision");
 
 $mc[3] = new_multiple_choice();
 $mc[3] -> qa("The mean cost to community hospitals per patient per day in Ontario actually exceeds the national mean and the result of measuring a sample leads to the conclusion that the mean cost to community hospitals per patient per day in Ontario exceeds the national mean, this is a", "correct decision");
@@ -49,7 +49,7 @@ $mc[3] -> extra("Type II error", "Type I error");
 @smc = @mc[@slice];
 
 BEGIN_TEXT
-Consider a hypothesis test to decide whether the mean cost to community hospitals per patient per day in Ontario exceed the national mean. Answer the following questions.
+Consider a hypothesis test to decide whether the mean cost to community hospitals per patient per day in Ontario exceeds the national mean. Answer the following questions.
 $PAR
 a.
 \{ $smc[0]-> print_q() \} $BR

@@ -1,0 +1,4 @@
+convert -density 200 department_attitude1.pdf department_attitude1.png
+convert -density 200 department_attitude2.pdf department_attitude2.png
+convert -density 200 department_attitude3.pdf department_attitude3.png
+convert -density 200 department_attitude4.pdf department_attitude4.png

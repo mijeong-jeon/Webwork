@@ -14,6 +14,7 @@ loadMacros(
 "extraAnswerEvaluators.pl",
 "parserRadioButtons.pl",
 "parserMultiAnswer.pl",
+"parserPopUp.pl",
 );
 
 TEXT(beginproblem());
@@ -30,6 +31,17 @@ Context()->flags->set(
 # Common numeric values
 $t_critical = Compute("-1.699");
 
+@graph_filenames = (
+"department_attitude1.png",  # significant, t < 0
+"department_attitude2.png",  # not significant, t < 0
+"department_attitude3.png",  # significant, t > 0
+"department_attitude4.png");  # not significant, t > 0
+@graph_perm = shuffle(4);
+@inv_graph_perm  = invert(@graph_perm);
+@shuffled_graph_filenames = @graph_filenames[@graph_perm];
+@shuffled_graph_labels = @graph_labels[@graph_perm];
+@graph_number = ("1", "2", "3", "4");
+
 # Differing numeric values 
 $ver = random(1, 12);
 if ($ver == 1) {
@@ -37,73 +49,87 @@ if ($ver == 1) {
    $cutoff = "65";
    $hyp_tag = 1;  # 0=reject Ho,  1=not reject Ho
    $test_statistic = Compute("-0.165");
+    $correct_graph_number = $graph_number[$inv_graph_perm[1]];# not significant, t < 0 
 }
 elsif ($ver == 2) {
    $variable = "OverallRating"; 
    $cutoff = "70";
    $hyp_tag = 0;  # 0=reject Ho,  1=not reject Ho
    $test_statistic = Compute("-2.415");
+   $correct_graph_number = $graph_number[$inv_graph_perm[0]];# significant, t < 0 
 }
 elsif ($ver == 3) {
    $variable = "Complaints"; 
    $cutoff = "65";
    $hyp_tag = 1;  # 0=reject Ho,  1=not reject Ho
    $test_statistic = Compute("0.658");
+    $correct_graph_number = $graph_number[$inv_graph_perm[1]];# not significant, t < 0 
 }
 elsif ($ver == 4) {
    $variable = "Complaints"; 
    $cutoff = "70";
    $hyp_tag = 1;  # 0=reject Ho,  1=not reject Ho
    $test_statistic = Compute("-1.399");
+    $correct_graph_number = $graph_number[$inv_graph_perm[1]];# not significant, t < 0 
 }
 elsif ($ver == 5) {
    $variable = "Complaints"; 
    $cutoff = "75";
    $hyp_tag = 0;  # 0=reject Ho,  1=not reject Ho
    $test_statistic = Compute("-3.455");
+   $correct_graph_number = $graph_number[$inv_graph_perm[0]];# significant, t < 0 
 }
 elsif ($ver == 6) {
    $variable = "Privileges"; 
    $cutoff = "50";
    $hyp_tag = 1;  # 0=reject Ho,  1=not reject Ho
    $test_statistic = Compute("1.403");
+    $correct_graph_number = $graph_number[$inv_graph_perm[1]];# not significant, t < 0 
 }
 elsif ($ver == 7) {
    $variable = "Privileges"; 
    $cutoff = "60";
    $hyp_tag = 0;  # 0=reject Ho,  1=not reject Ho
    $test_statistic = Compute("-3.074");
+   $correct_graph_number = $graph_number[$inv_graph_perm[0]];# significant, t < 0 
 }
 elsif ($ver == 8) {
    $variable = "Raises"; 
    $cutoff = "70";
    $hyp_tag = 0;  # 0=reject Ho,  1=not reject Ho
    $test_statistic = Compute("-2.827");
+   $correct_graph_number = $graph_number[$inv_graph_perm[0]];# significant, t < 0 
 }
 elsif ($ver == 9) {
    $variable = "Raises"; 
    $cutoff = "75";
    $hyp_tag = 0;  # 0=reject Ho,  1=not reject Ho
    $test_statistic = Compute("-5.461");
+   $correct_graph_number = $graph_number[$inv_graph_perm[0]];# significant, t < 0 
 }
 elsif ($ver == 10) {
    $variable = "Advancement"; 
    $cutoff = "40";
    $hyp_tag = 1;  # 0=reject Ho,  1=not reject Ho
    $test_statistic = Compute("1.562");
+    $correct_graph_number = $graph_number[$inv_graph_perm[1]];# not significant, t < 0 
 }
 elsif ($ver == 11) {
    $variable = "Advancement"; 
    $cutoff = "50";
    $hyp_tag = 1;  # 0=reject Ho,  1=not reject Ho
    $test_statistic = Compute("-3.762");
+    $correct_graph_number = $graph_number[$inv_graph_perm[1]];# not significant, t < 0 
 }
 elsif ($ver == 12) {
    $variable = "Advancement"; 
    $cutoff = "60";
    $hyp_tag = 0;  # 0=reject Ho,  1=not reject Ho
    $test_statistic = Compute("-9.085");
+   $correct_graph_number = $graph_number[$inv_graph_perm[0]];# significant, t < 0 
 }
+
+$popup = PopUp(["?","1","2","3","4"], $correct_graph_number);  
 
 $mc_H0 = new_multiple_choice();
 @ans = ("The mean value of $variable is $cutoff",
@@ -162,6 +188,19 @@ $PAR
 
 $PAR
 (d) Critical test statistic with \(\alpha = 0.05\):\{ans_rule(20) \}  (Be careful about whether you have a one-tailed or two-tailed test!)
+$PAR
+(e) Sketch a normalized t distribution, and  add \(t_{obs}\) on the plot of the null \(t\) distribution. Shade in the appropropriate region that represents the probability
+  of a value as large or more extreme that \(t_{\mbox{obs}}\). 
+$BR
+Add the critical test statistic, \(t_{0.05, df}\) to your sketch as well.
+$PAR
+Which of the following graphs most resembles your sketch?  (Click to open a graph in a new window.)
+$BR
+ 1. \{ image( "$shuffled_graph_filenames[0]", width,350 )  \} 2. \{ image( "$shuffled_graph_filenames[1]", width,350 ) \} 
+$BR
+ 3. \{ image( "$shuffled_graph_filenames[2]", width,350 ) \} 4. \{ image( "$shuffled_graph_filenames[3]", width,350 ) \} 
+$BR
+Graph: \{ $popup->menu() \} 
 
 $PAR 
 (e) 
@@ -181,6 +220,7 @@ ANS(radio_cmp($mc_H0->correct_ans));
 ANS(radio_cmp($mc_ttest_type->correct_ans));
 ANS($test_statistic->cmp());
 ANS($t_critical->cmp());
+ANS( $popup->cmp() );
 ANS(radio_cmp($mc->correct_ans));
 ANS(radio_cmp($mc_scientific_conclusion->correct_ans));
 

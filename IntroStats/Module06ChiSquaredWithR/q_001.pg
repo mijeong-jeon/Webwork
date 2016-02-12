@@ -14,6 +14,7 @@ loadMacros(
 "extraAnswerEvaluators.pl",
 "parserRadioButtons.pl",
 "parserMultiAnswer.pl",
+"parserPopUp.pl",
 );
 
 TEXT(beginproblem());
@@ -27,8 +28,16 @@ Context()->flags->set(
   tolType => "absolute",
 );
 
-# Common numeric values
-$t_critical = Compute("-1.699");
+@graph_filenames = (
+"high_school_1.png",  # significant, chi sq
+"high_school_2.png",  # not significant, chi sq
+"high_school_3.png",  # significant, t test 
+"high_school_4.png");  # not significant,  t test
+@graph_perm = shuffle(4);
+@inv_graph_perm  = invert(@graph_perm);
+@shuffled_graph_filenames = @graph_filenames[@graph_perm];
+@shuffled_graph_labels = @graph_labels[@graph_perm];
+@graph_number = ("1", "2", "3", "4");
 
 # Differing numeric values 
 $ver = random(1, 4);
@@ -40,8 +49,9 @@ if ($ver == 1) {
    $value_count = Compute("64");
    $df = Compute("6");
    $test_statistic = Compute("16.33");
-   $t_critical = Compute("12.59159");
+   $chi_critical = Compute("12.59159");
    $hyp_tag = 0;  # 0=reject Ho,  1=not reject Ho
+   $correct_graph_number = $graph_number[$inv_graph_perm[0]];# significant, chi sq 
 }
 if ($ver == 2) {
    $variable1 = "HighSchoolRank"; 
@@ -51,8 +61,9 @@ if ($ver == 2) {
    $value_count = Compute("23");
    $df = Compute("12");
    $test_statistic = Compute("22.696");
-   $t_critical = Compute("21.02607");
+   $chi_critical = Compute("21.02607");
    $hyp_tag = 0;  # 0=reject Ho,  1=not reject Ho
+   $correct_graph_number = $graph_number[$inv_graph_perm[0]];# significant, chi sq 
 }
 if ($ver == 3) {
    $variable1 = "HighSchoolRank"; 
@@ -62,8 +73,9 @@ if ($ver == 3) {
    $value_count = Compute("74");
    $df = Compute("2");
    $test_statistic = Compute("10.818");
-   $t_critical = Compute("5.991465");
+   $chi_critical = Compute("5.991465");
    $hyp_tag = 0;  # 0=reject Ho,  1=not reject Ho
+   $correct_graph_number = $graph_number[$inv_graph_perm[0]];# significant, chi sq 
 }
 if ($ver == 4) {
    $variable1 = "PostGrad"; 
@@ -73,9 +85,12 @@ if ($ver == 4) {
    $value_count = Compute("14");
    $df = Compute("3");
    $test_statistic = Compute("9.5861");
-   $t_critical = Compute("7.814728");
+   $chi_critical = Compute("7.814728");
    $hyp_tag = 0;  # 0=reject Ho,  1=not reject Ho
+   $correct_graph_number = $graph_number[$inv_graph_perm[0]];# significant, chi sq 
 }
+
+$popup = PopUp(["?","1","2","3","4"], $correct_graph_number);  
 
 $mc_hyp = new_multiple_choice();
 $mc_hyp -> qa('Ho: $variable1 and $variable2 are:', "independent of each other.");
@@ -133,11 +148,24 @@ $BR
 $PAR
 (e) Critical test statistic with \(\alpha = 0.05\): \{ ans_rule(20) \}
 $PAR 
-(f) 
+(f) Sketch the null chi-squared distribution, and  add \(\chi_{obs}\). Shade in the appropropriate region that represents the probability of interest in a chi-squared test.
+$BR
+Add the critical test statistic, \(\chi^2_{0.05, df}\) to your sketch as well.
+$PAR
+Which of the following graphs most resembles your sketch?  (Click to open a graph in a new window.)
+$BR
+ 1. \{ image( "$shuffled_graph_filenames[0]", width,350 )  \} 2. \{ image( "$shuffled_graph_filenames[1]", width,350 ) \} 
+$BR
+ 3. \{ image( "$shuffled_graph_filenames[2]", width,350 ) \} 4. \{ image( "$shuffled_graph_filenames[3]", width,350 ) \} 
+$BR
+Graph: \{ $popup->menu() \} 
+
+$PAR
+(g) 
 \{ $mc ->print_q() \} 
 \{ $mc ->print_a() \}
 $PAR 
-(g) 
+(h) 
 \{ $mc_scientific_conclusion ->print_q() \} 
 \{ $mc_scientific_conclusion ->print_a() \}
 
@@ -150,7 +178,8 @@ ANS($value_count->cmp());
 ANS($df->cmp());
 ANS(radio_cmp($mc_hyp->correct_ans));
 ANS($test_statistic->cmp());
-ANS($t_critical->cmp());
+ANS($chi_critical->cmp());
+ANS($popup->cmp() );
 ANS(radio_cmp($mc->correct_ans));
 ANS(radio_cmp($mc_scientific_conclusion->correct_ans));
 

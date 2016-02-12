@@ -49,7 +49,7 @@ if ($ver == 1) {
    $cutoff = "65";
    $hyp_tag = 1;  # 0=reject Ho,  1=not reject Ho
    $test_statistic = Compute("-0.165");
-    $correct_graph_number = $graph_number[$inv_graph_perm[1]];# not significant, t < 0 
+   $correct_graph_number = $graph_number[$inv_graph_perm[1]];# not significant, t < 0 
 }
 elsif ($ver == 2) {
    $variable = "OverallRating"; 

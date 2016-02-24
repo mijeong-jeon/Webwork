@@ -116,7 +116,7 @@ Find the equations of the two planes that just touch the sphere and
 which are parallel to the \($plane_txt\)-plane.  
 
 $BR
-Equations of Planes:  \{ans_rule(20)\} (Separate your planes with a commas.)
+Equations of Planes:  \{ans_rule(20)\} (Separate your planes with commas.)
 
 $PAR 
 

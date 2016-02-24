@@ -1,5 +1,4 @@
 
-
 ## DESCRIPTION
 ## Calculus: Functions and models
 ## ENDDESCRIPTION
@@ -24,7 +23,7 @@ DOCUMENT();        # This should be the first executable line in the problem.
 loadMacros("PG.pl",
            "PGbasicmacros.pl",
            "PGanswermacros.pl",
-	   "parserImplicitPlane.pl",
+	   "parserImplicitEquation.pl",
 	   "unorderedAnswer.pl",
 "MathObjects.pl",
 "PGauxiliaryFunctions.pl");
@@ -34,7 +33,7 @@ $showPartialCorrectAnswers = 1;
 
 # Formulas for spheres
 
-Context("ImplicitPlane");
+Context("ImplicitEquation");
 
 $a = random(-3, 3);
 $b = random(-3, 3);
@@ -49,9 +48,8 @@ if ($i == 0) { # x = .. plane
    Context()->variables->set( x=>{limits=>[-10,10]} );
    $low = -$a - $R;
    $high = -$a + $R;
-   $plane1 = ImplicitPlane("x = $low");
+   $plane1 = ImplicitEquation("x = $low");
    $plane2 = ImplicitEquation("x = $high");
-   $plane_list = List($plane1, $plane2);
 
 }
 elsif ($i == 1) { # y = .. plane
@@ -62,9 +60,8 @@ elsif ($i == 1) { # y = .. plane
 
    $low = -$b - $R;
    $high = -$b + $R;
-   $plane1 = ImplicitPlane("y = $low");
-   $plane2 = ImplicitPlane("y = $high");
-   $plane_list = List($plane1, $plane2);
+   $plane1 = ImplicitEquation("y = $low");
+   $plane2 = ImplicitEquation("y = $high");
 }
 else { # z = ... plane
    $plane_txt = "xy";
@@ -74,9 +71,8 @@ else { # z = ... plane
 
    $low = -$c - $R;
    $high = -$c + $R;
-   $plane1 = ImplicitPlane("z = $low");
-   $plane2 = ImplicitPlane("z = $high");
-   $plane_list = List($plane1, $plane2);
+   $plane1 = ImplicitEquation("z = $low");
+   $plane2 = ImplicitEquation("z = $high");
 }
 
 # Cube definition
@@ -116,7 +112,9 @@ Find the equations of the two planes that just touch the sphere and
 which are parallel to the \($plane_txt\)-plane.  
 
 $BR
-Equations of Planes:  \{ans_rule(20)\} (Separate your planes with a commas.)
+Plane 1:  \{ans_rule(20)\}
+$BR
+Plane 2:  \{ans_rule(20)\}
 
 $PAR 
 
@@ -134,9 +132,8 @@ $BR (Enter the point as "(x, y, z)", with the parentheses and commas.)
 
 END_TEXT
 
-Context("ImplicitPlane");
-ANS($plane_list->cmp());
-Context("Point");
+ANS($plane1->cmp());
+ANS($plane2->cmp());
 ANS($center->cmp);
 
 ENDDOCUMENT();        # This should be the last executable line in the problem.

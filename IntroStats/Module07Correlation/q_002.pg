@@ -50,7 +50,7 @@ $mc[1]->extra(
 
 $mc[2] = new_multiple_choice();
 $mc[2]->qa('Correlation analysis is used to determine:',
-    'the strength of the relationship between x and y'
+    'the strength of the linear relationship between x and y'
 );
 $mc[2]->extra(
     'the least squares estimates of the regression parameters',

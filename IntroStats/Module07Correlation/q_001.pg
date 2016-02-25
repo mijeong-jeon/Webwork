@@ -53,15 +53,12 @@ relationship between the dependent variable y and the independent variable x.",
 "Since the sample is always smaller than the population, the sample mean is always 
 smaller than the population mean.",
 "F",
-"Expressed in percentiles, the interquartile range is the difference between 
-the 25th and the 75th percentiles.",
-"T",
 "A straight line that slopes upward and exactly fits all data points would produce a correlation coefficient value of one.",
 "T",
 );
 
 # Choose four of the question and answer pairs at random.
-$tf ->choose(4);
+$tf ->choose(3);
 
 # Now print the text using $ml->print_q for the questions
 # and $ml->print_a to print the answers.

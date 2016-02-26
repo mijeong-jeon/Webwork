@@ -18,21 +18,21 @@
   
   
   % Division line
-  \psline[linecolor=brightpink](-2.60,-0.1)(-2.60,0.2)
-  \rput[tc,linecolor=brightpink](-2.60,-0.15){$t_{\mbox{obs}}$}
+  \psline[linecolor=brightpink]( 1.51,-0.1)( 1.51,0.2)
+  \rput[tc,linecolor=brightpink]( 1.51,-0.15){$t_{\mbox{obs}}$}
   % Filled region
   \pscustom[linestyle=none,fillcolor=brightpink,fillstyle=solid]{%
-    \psline(-3.5,0)(-2.60,0)
-    \psTDist[sigma=1.0,nue=17]{-2.60}{-3.5}
+    \psline(-3.5,0)(-1.51,0)
+    \psTDist[sigma=1.0,nue=17]{-1.51}{-3.5}
   }
   \pscustom[linestyle=none,fillcolor=brightpink,fillstyle=solid]{%
-    \psline(3.5,0)(2.60,0)
-    \psTDist[sigma=1.0,nue=17]{2.60}{3.5}
+    \psline(3.5,0)(1.51,0)
+    \psTDist[sigma=1.0,nue=17]{1.51}{3.5}
   }
   % t crit line
   \psline[linecolor=brightgreen](-2.11,-0.1)(-2.11,0.4)
-  \rput[tl](-2.11,0.30){$-t_{0.05 (2), df}$}
+  \rput[tr](-2.11,0.25){$-t_{0.05 (2), df}$}
   \psline[linecolor=brightgreen](2.11,-0.1)(2.11,0.4)
-  \rput[tr](2.11,0.30){$t_{0.05 (2), df}$}
+  \rput[tl](2.11,0.25){$t_{0.05 (2), df}$}
 \end{pspicture}
 \end{document}

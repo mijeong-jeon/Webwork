@@ -1,4 +1,3 @@
-
 #DESCRIPTION
 # Number of variables/sample size
 #ENDDESCRIPTION
@@ -16,12 +15,13 @@ loadMacros(
 "parserRadioButtons.pl",
 "parserMultiAnswer.pl",
 "parserPopUp.pl",
+"parserRadioButtons.pl",
 );
 
 TEXT(beginproblem());
 $showPartialCorrectAnswers = 1;  
 
-$excel_filename = "Module06/DepartmentAttitudeSurvey.xlsx";
+$excel_filename = "Module07/DepartmentAttitudeSurvey.xlsx";
 
 Context("Numeric");
 Context()->flags->set(
@@ -30,13 +30,13 @@ Context()->flags->set(
 );
 
 # Common numeric values
-$t_critical = Compute("-1.699");
+$t_critical = Compute("2.0484");
 
 @graph_filenames = (
-"department_attitude1.png",  # significant, t < 0
-"department_attitude2.png",  # not significant, t < 0
-"department_attitude3.png",  # significant, t > 0
-"department_attitude4.png");  # not significant, t > 0
+"attitude1.png",  # significant, t < 0
+"attitude2.png",  # not significant, t < 0
+"attitude3.png",  # significant, t > 0
+"attitude4.png");  # not significant, t > 0
 @graph_perm = shuffle(4);
 @inv_graph_perm  = invert(@graph_perm);
 @shuffled_graph_filenames = @graph_filenames[@graph_perm];
@@ -44,164 +44,87 @@ $t_critical = Compute("-1.699");
 @graph_number = ("1", "2", "3", "4");
 
 # Differing numeric values 
-$ver = random(1, 12);
+$ver = random(2, 2);
+$df = Compute("28");
 if ($ver == 1) {
-   $variable = "OverallRating"; 
-   $cutoff = "65";
-   $hyp_tag = 1;  # 0=reject Ho,  1=not reject Ho
-   $test_statistic = Compute("-0.165");
-   $correct_graph_number = $graph_number[$inv_graph_perm[1]];# not significant, t < 0 
+   $variable = "Complaints"; 
+   $hyp_tag = 1;  # 0=not reject Ho,  1=reject Ho
+   $test_statistic = Compute("7.737");
+   $r = Compute("0.8254176");
+   $correct_graph_number = $graph_number[$inv_graph_perm[0]]; # Graph 1
+   $corr_tag = 0;	 #high correlation
 }
 elsif ($ver == 2) {
-   $variable = "OverallRating"; 
-   $cutoff = "70";
-   $hyp_tag = 0;  # 0=reject Ho,  1=not reject Ho
-   $test_statistic = Compute("-2.415");
-   $correct_graph_number = $graph_number[$inv_graph_perm[0]];# significant, t < 0 
-}
-elsif ($ver == 3) {
-   $variable = "Complaints"; 
-   $cutoff = "65";
-   $hyp_tag = 1;  # 0=reject Ho,  1=not reject Ho
-   $test_statistic = Compute("0.658");
-    $correct_graph_number = $graph_number[$inv_graph_perm[1]];# not significant, t < 0 
-}
-elsif ($ver == 4) {
-   $variable = "Complaints"; 
-   $cutoff = "70";
-   $hyp_tag = 1;  # 0=reject Ho,  1=not reject Ho
-   $test_statistic = Compute("-1.399");
-    $correct_graph_number = $graph_number[$inv_graph_perm[1]];# not significant, t < 0 
-}
-elsif ($ver == 5) {
-   $variable = "Complaints"; 
-   $cutoff = "75";
-   $hyp_tag = 0;  # 0=reject Ho,  1=not reject Ho
-   $test_statistic = Compute("-3.455");
-   $correct_graph_number = $graph_number[$inv_graph_perm[0]];# significant, t < 0 
-}
-elsif ($ver == 6) {
    $variable = "Privileges"; 
-   $cutoff = "50";
-   $hyp_tag = 1;  # 0=reject Ho,  1=not reject Ho
-   $test_statistic = Compute("1.403");
-    $correct_graph_number = $graph_number[$inv_graph_perm[1]];# not significant, t < 0 
+   $hyp_tag = 1;  # 0=not reject Ho,  1=reject Ho
+   $test_statistic = Compute("2.4924");
+   $r = Compute("0.4261169");
+   $correct_graph_number = $graph_number[$inv_graph_perm[1]]; # Graph 2
+   $corr_tag = 1;	 # moderate correlation
 }
-elsif ($ver == 7) {
-   $variable = "Privileges"; 
-   $cutoff = "60";
-   $hyp_tag = 0;  # 0=reject Ho,  1=not reject Ho
-   $test_statistic = Compute("-3.074");
-   $correct_graph_number = $graph_number[$inv_graph_perm[0]];# significant, t < 0 
-}
-elsif ($ver == 8) {
-   $variable = "Raises"; 
-   $cutoff = "70";
-   $hyp_tag = 0;  # 0=reject Ho,  1=not reject Ho
-   $test_statistic = Compute("-2.827");
-   $correct_graph_number = $graph_number[$inv_graph_perm[0]];# significant, t < 0 
-}
-elsif ($ver == 9) {
-   $variable = "Raises"; 
-   $cutoff = "75";
-   $hyp_tag = 0;  # 0=reject Ho,  1=not reject Ho
-   $test_statistic = Compute("-5.461");
-   $correct_graph_number = $graph_number[$inv_graph_perm[0]];# significant, t < 0 
-}
-elsif ($ver == 10) {
-   $variable = "Advancement"; 
-   $cutoff = "40";
-   $hyp_tag = 1;  # 0=reject Ho,  1=not reject Ho
-   $test_statistic = Compute("1.562");
-    $correct_graph_number = $graph_number[$inv_graph_perm[1]];# not significant, t < 0 
-}
-elsif ($ver == 11) {
-   $variable = "Advancement"; 
-   $cutoff = "50";
-   $hyp_tag = 1;  # 0=reject Ho,  1=not reject Ho
-   $test_statistic = Compute("-3.762");
-    $correct_graph_number = $graph_number[$inv_graph_perm[1]];# not significant, t < 0 
-}
-elsif ($ver == 12) {
-   $variable = "Advancement"; 
-   $cutoff = "60";
-   $hyp_tag = 0;  # 0=reject Ho,  1=not reject Ho
-   $test_statistic = Compute("-9.085");
-   $correct_graph_number = $graph_number[$inv_graph_perm[0]];# significant, t < 0 
-}
-
 $popup = PopUp(["?","1","2","3","4"], $correct_graph_number);  
 
 $mc_H0 = new_multiple_choice();
-@ans = ("The mean value of $variable is $cutoff",
- "The mean value of $variable is $cutoff or above", 
- "The mean value of $variable is $cutoff or below",);
-$mc_H0 -> qa('The null hypothesis for the managers is: ', $ans[1]);
-$mc_H0 -> extra($ans[0],$ans[2]);
-
-$mc_ttest_type = new_multiple_choice();
-@ans = ("A single-sample t test",
- "A two-sample t test",
- "A paired-sample t test");
-$mc_ttest_type -> qa('The appropriate t test for this study is: ', $ans[0]);
-$mc_ttest_type -> extra($ans[1],$ans[2]);
+@ans = ("Ratings for $variable and OverallRating are independent of each other.",
+ "Ratings for $variable and OverallRating are correlated.",
+ "Ratings for $variable and OverallRating are strongly correlated.");
+$mc_H0 -> qa('The null hypothesis for the managers is: ', $ans[0]);
+$mc_H0 -> extra($ans[1],$ans[2]);
 
 $mc = new_multiple_choice();
-@ans = ("Reject \(H_0\).", "Do Not Reject \(H_0\).",
+@ans = ( "Do Not Reject \(H_0\).", "Reject \(H_0\).",
         "Reject \(H_1\).", "Do Not Reject \(H_1\).");
 $mc -> qa('Select the correct statistical conclusion, at the \(\alpha = 0.05\) level:', $ans[$hyp_tag]);
 $mc -> extra($ans[1-$hyp_tag],$ans[2],$ans[3]);
 
 $mc_scientific_conclusion = new_multiple_choice();
-@ans = ("The mean $variable is significantly below $cutoff",
-"There is no evidence that the mean $variable is not at $cutoff or above",
-"The mean $variable is significantly above $cutoff",
-"There is no evidence that the mean $variable is not at $cutoff or below");
+@ans = (
+"There is no evidence that the rating on $variable is correlated with OverallRating",
+"The rating on $variable is significantly correlated with OverallRating");
 $mc_scientific_conclusion -> qa('Select the appropriate scientific conclusion: ', $ans[$hyp_tag]);
-$mc_scientific_conclusion -> extra($ans[1-$hyp_tag],$ans[2],$ans[3]);
+$mc_scientific_conclusion -> extra($ans[1-$hyp_tag]);
 
+$ans = [
+"The correlation is high (above r = 0.7).",
+"The correlation is moderate (between r = 0.4 and r = 0.7).",
+"The correlation is weak (below r = 0.4).",
+"The correlation is not significant, so the correlation r should not be reported.",
+];
+$labels = ["Correlation high", "Correlation moderate", "Correlation weak", "Correlation not significant"];
+$mc_correlation_conclusion = RadioButtons($ans, $ans->[$corr_tag], labels => $labels);
 Context()->texStrings;
 BEGIN_TEXT 
 
 Download and review the content of this \{ htmlLink("${htmlURL}$excel_filename", "Excel dataset (.xlsx)")\}.
 
 $PAR
-This data describes the responses to a survey of departments in a company about how the employees feel about aspects of the company's management.
+This data describes the responses to a survey of departments in a company about how the employees feel about aspects of the company's management.  Managers want to investigate the relationship between $BBOLD $variable$EBOLD and the $BBOLD OverallRating $EBOLD.
 
 $PAR
-
-Senior managers claim that their target for the mean score on the
-variable $BBOLD$variable$EBOLD is $cutoff or above.  With help from R,
-you will evaluate whether this claim is supported by the data or not.
 
 $PAR 
-(a) 
-\{ $mc_H0 ->print_q() \} 
-\{ $mc_H0 ->print_a() \}
-
-$PAR
-(b) 
-\{ $mc_ttest_type ->print_q() \} 
-\{ $mc_ttest_type ->print_a() \}
-
-$PAR
-(c) From R, find the test statistic for the sample data:  \{ans_rule(20) \}
-
-$PAR
-(d) Critical test statistic with \(\alpha = 0.05\):\{ans_rule(20) \}  (Be careful about whether you have a one-tailed or two-tailed test!)
-$PAR
-(e) Sketch a normalized t distribution, and  add \(t_{obs}\) on the plot of the null \(t\) distribution. Shade in the appropropriate region that represents the probability
-  of a value as large or more extreme that \(t_{\mbox{obs}}\). 
-$BR
-Add the critical test statistic, \(t_{0.05, df}\) to your sketch as well.
-$PAR
-Which of the following graphs most resembles your sketch?  (Click to open a graph in a new window.)
+(a) Plot a scatterplot with $variable on the x axis, and OverallRating on the y axis. Which of the following graphs most resembles your plot?  (Click to open a graph in a new window.)
 $BR
  1. \{ image( "$shuffled_graph_filenames[0]", width,350 )  \} 2. \{ image( "$shuffled_graph_filenames[1]", width,350 ) \} 
 $BR
  3. \{ image( "$shuffled_graph_filenames[2]", width,350 ) \} 4. \{ image( "$shuffled_graph_filenames[3]", width,350 ) \} 
 $BR
-Graph: \{ $popup->menu() \} 
+Graph: \{ $popup->menu() \}
+
+$PAR
+(b) \{ $mc_H0 ->print_q() \} 
+\{ $mc_H0 ->print_a() \}
+
+$PAR
+(b) From R, find the value of the \(t_{obs}\) for a correlation test of the $variable with OverallRating:  \{ans_rule(20) \}
+
+$PAR
+(b) When comparing this \(t_{obs}\) to the null distribution, how many degrees of freedom
+are there in the null disribution?
+$BR degrees of freedom: \{ans_rule(20) \}
+
+$PAR
+(c) Critical \(t\) statistic with \(\alpha = 0.05\): \{ans_rule(20) \}  (Find this critical score for a 2-tailed test, and give the positive value.)
 
 $PAR 
 (e) 
@@ -213,17 +136,23 @@ $PAR
 \{ $mc_scientific_conclusion ->print_q() \} $BR
 \{ $mc_scientific_conclusion->print_a() \}
 
+$PAR 
+(g) What should you conclude about the strength of the correlation?
+$BR
+\{ $mc_correlation_conclusion ->buttons() \} 
+
 END_TEXT
 Context()->normalStrings;
 
 #ANSWERS
-ANS(radio_cmp($mc_H0->correct_ans));
-ANS(radio_cmp($mc_ttest_type->correct_ans));
-ANS($test_statistic->cmp());
-ANS($t_critical->cmp());
 ANS( $popup->cmp() );
+ANS(radio_cmp($mc_H0->correct_ans));
+ANS($test_statistic->cmp());
+ANS($df->cmp());
+ANS($t_critical->cmp());
 ANS(radio_cmp($mc->correct_ans));
 ANS(radio_cmp($mc_scientific_conclusion->correct_ans));
+ANS($mc_correlation_conclusion->cmp() );
 
 BEGIN_SOLUTION
 

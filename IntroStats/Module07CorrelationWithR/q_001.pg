@@ -44,7 +44,7 @@ $t_critical = Compute("2.0484");
 @graph_number = ("1", "2", "3", "4");
 
 # Differing numeric values 
-$ver = random(2, 2);
+$ver = random(4, 4);
 $df = Compute("28");
 if ($ver == 1) {
    $variable = "Complaints"; 
@@ -62,6 +62,24 @@ elsif ($ver == 2) {
    $correct_graph_number = $graph_number[$inv_graph_perm[1]]; # Graph 2
    $corr_tag = 1;	 # moderate correlation
 }
+elsif ($ver == 3) {
+   $variable = "Raises"; 
+   $hyp_tag = 1;  # 0=not reject Ho,  1=reject Ho
+   $test_statistic = Compute("3.8681");
+   $r = Compute("0.590139");
+   $correct_graph_number = $graph_number[$inv_graph_perm[2]]; # Graph 3
+   $corr_tag = 1;	 # moderate correlation
+}
+elsif ($ver == 4) {
+   $variable = "Advancement"; 
+   $hyp_tag = 0;  # 0=not reject Ho,  1=reject Ho
+   $test_statistic = Compute("0.8307");
+   $r = Compute("0.155086");
+   $correct_graph_number = $graph_number[$inv_graph_perm[3]]; # Graph 4
+   $corr_tag = 3;	 # no correlation significantly different from zero.
+}
+
+
 $popup = PopUp(["?","1","2","3","4"], $correct_graph_number);  
 
 $mc_H0 = new_multiple_choice();
@@ -116,28 +134,28 @@ $PAR
 \{ $mc_H0 ->print_a() \}
 
 $PAR
-(b) From R, find the value of the \(t_{obs}\) for a correlation test of the $variable with OverallRating:  \{ans_rule(20) \}
+(c) From R, find the value of the \(t_{obs}\) for a correlation test of the $variable with OverallRating:  \{ans_rule(20) \}
 
 $PAR
-(b) When comparing this \(t_{obs}\) to the null distribution, how many degrees of freedom
-are there in the null disribution?
+(d) When comparing this \(t_{obs}\) to the null distribution, how many degrees of freedom
+are there for the null hypothesis \(t\) disribution?
 $BR degrees of freedom: \{ans_rule(20) \}
 
 $PAR
-(c) Critical \(t\) statistic with \(\alpha = 0.05\): \{ans_rule(20) \}  (Find this critical score for a 2-tailed test, and give the positive value.)
+(e) Critical \(t\) statistic with \(\alpha = 0.05\): \{ans_rule(20) \}  (Find this critical score for a 2-tailed test, and give the positive value.)
 
 $PAR 
-(e) 
+(f) 
 \{ $mc ->print_q() \} $BR
 \{ $mc ->print_a() \}
 
 $PAR 
-(f) 
+(g) 
 \{ $mc_scientific_conclusion ->print_q() \} $BR
 \{ $mc_scientific_conclusion->print_a() \}
 
 $PAR 
-(g) What should you conclude about the strength of the correlation?
+(h) What should you conclude about the strength of the correlation?
 $BR
 \{ $mc_correlation_conclusion ->buttons() \} 
 

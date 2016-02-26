@@ -1,0 +1,6 @@
+convert -density 200 tdist_two_tailed1.pdf tdist_two_tailed1.png
+convert -density 200 tdist_two_tailed2.pdf tdist_two_tailed2.png
+convert -density 200 tdist_two_tailed3.pdf tdist_two_tailed3.png
+convert -density 200 tdist_two_tailed4.pdf tdist_two_tailed4.png
+
+rm *.log *.aux *-pics.pdf

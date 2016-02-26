@@ -31,8 +31,8 @@
   }
   % t crit line
   \psline[linecolor=brightgreen](-2.11,-0.1)(-2.11,0.4)
-  \rput[tl](-2.11,0.30){$-t_{0.05 (2), df}$}
+  \rput[tr](-2.11,0.25){$-t_{0.05 (2), df}$}
   \psline[linecolor=brightgreen](2.11,-0.1)(2.11,0.4)
-  \rput[tr](2.11,0.30){$t_{0.05 (2), df}$}
+  \rput[tl](2.11,0.25){$t_{0.05 (2), df}$}
 \end{pspicture}
 \end{document}

@@ -21,7 +21,7 @@ loadMacros(
 TEXT(beginproblem());
 $showPartialCorrectAnswers = 1;  
 
-$excel_filename = "Module07/DepartmentAttitudeSurvey.xlsx";
+$excel_filename = "Module07/USArrests.xlsx";
 
 Context("Numeric");
 Context()->flags->set(
@@ -30,18 +30,18 @@ Context()->flags->set(
 );
 
 # Common numeric values
-$t_critical = Compute("2.0484");
+$t_critical = Compute("2.010635");
+$df = Compute("48");
 
 @graph_filenames = (
-"attitude1.png",  # Complaints 
-"attitude2.png",  # Privileges 
-"attitude3.png",   # Raises
-"attitude4.png");  # Advancement 
-@graph_perm = shuffle(4);
+"arrests1.png",  # Murder 
+"arrests2.png",  # Assault 
+"arrests3.png");   # Rape
+@graph_perm = shuffle(3);
 @inv_graph_perm  = invert(@graph_perm);
 @shuffled_graph_filenames = @graph_filenames[@graph_perm];
 @shuffled_graph_labels = @graph_labels[@graph_perm];
-@graph_number = ("1", "2", "3", "4");
+@graph_number = ("1", "2", "3");
 
 @tdist_filenames = (
 "tdist_two_tailed1.png",  # significant, t > 0
@@ -55,54 +55,43 @@ $t_critical = Compute("2.0484");
 @tdist_number = ("1", "2", "3", "4");
 
 # Differing numeric values 
-$ver = random(1, 4);
-$df = Compute("28");
+$ver = random(3, 3);
 if ($ver == 1) {
-   $variable = "Complaints"; 
-   $hyp_tag = 1;  # 0=not reject Ho,  1=reject Ho
-   $test_statistic = Compute("7.737");
-   $r = Compute("0.8254176");
+   $variable = "Murder"; 
+   $hyp_tag = 0;  # 0=not reject Ho,  1=reject Ho
+   $test_statistic = Compute("0.483");
+   $intercept = Compute("6.41594");
+   $slope = Compute("0.02093");
    $correct_graph_number = $graph_number[$inv_graph_perm[0]]; # Graph 1
-   $correct_tdist_number = $tdist_number[$inv_tdist_perm[0]]; # significant, t > 0
-   $corr_tag = 0;	 #high correlation
+   $correct_tdist_number = $tdist_number[$inv_tdist_perm[1]]; # not significant, t > 0
 }
 elsif ($ver == 2) {
-   $variable = "Privileges"; 
-   $hyp_tag = 1;  # 0=not reject Ho,  1=reject Ho
-   $test_statistic = Compute("2.4924");
-   $r = Compute("0.4261169");
+   $variable = "Assault"; 
+   $hyp_tag = 0;  # 0=not reject Ho,  1=reject Ho
+   $test_statistic = Compute("1.857");
+   $intercept = Compute("73.0766");
+   $slope = Compute("1.4904");
    $correct_graph_number = $graph_number[$inv_graph_perm[1]]; # Graph 2
-   $correct_tdist_number = $tdist_number[$inv_tdist_perm[0]]; # significant, t > 0
-   $corr_tag = 1;	 # moderate correlation
+   $correct_tdist_number = $tdist_number[$inv_tdist_perm[1]]; # not significant, t > 0
 }
 elsif ($ver == 3) {
-   $variable = "Raises"; 
+   $variable = "Rape"; 
    $hyp_tag = 1;  # 0=not reject Ho,  1=reject Ho
-   $test_statistic = Compute("3.8681");
-   $r = Compute("0.590139");
+   $test_statistic = Compute("3.127");
+   $intercept = Compute("3.78707");
+   $slope = Compute("0.26617");
    $correct_graph_number = $graph_number[$inv_graph_perm[2]]; # Graph 3
    $correct_tdist_number = $tdist_number[$inv_tdist_perm[0]]; # significant, t > 0
-   $corr_tag = 1;	 # moderate correlation
-}
-elsif ($ver == 4) {
-   $variable = "Advancement"; 
-   $hyp_tag = 0;  # 0=not reject Ho,  1=reject Ho
-   $test_statistic = Compute("0.8307");
-   $r = Compute("0.155086");
-   $correct_graph_number = $graph_number[$inv_graph_perm[3]]; # Graph 4
-   $correct_tdist_number = $tdist_number[$inv_tdist_perm[1]]; # not significant, t > 0
-   $corr_tag = 3;	 # no correlation significantly different from zero.
 }
 
-
-$popup_graph = PopUp(["?","1","2","3","4"], $correct_graph_number);  
+$popup_graph = PopUp(["?","1","2","3"], $correct_graph_number);  
 $popup_tdist = PopUp(["?","1","2","3","4"], $correct_tdist_number);  
 
 $mc_H0 = new_multiple_choice();
-@ans = ("Ratings for $variable and OverallRating are independent of each other.",
- "Ratings for $variable and OverallRating are correlated.",
- "Ratings for $variable and OverallRating are strongly correlated.");
-$mc_H0 -> qa('The null hypothesis for the managers is: ', $ans[0]);
+@ans = ("The percentage UrbanPop and the $variable arrest rate are independent of each other.",
+ "The percentage UrbanPop and the $variable arrest rate are linearly related .",
+ "The percentage UrbanPop and the $variable arrest rate are strongly linearly related.");
+$mc_H0 -> qa('The null hypothesis for the researchers is: ', $ans[0]);
 $mc_H0 -> extra($ans[1],$ans[2]);
 
 $mc = new_multiple_choice();
@@ -113,35 +102,31 @@ $mc -> extra($ans[1-$hyp_tag],$ans[2],$ans[3]);
 
 $mc_scientific_conclusion = new_multiple_choice();
 @ans = (
-"There is no evidence that the rating on $variable is correlated with OverallRating",
-"The rating on $variable is significantly correlated with OverallRating");
+"There is no evidence that percent urban population in a state predicts the $variable arrest rate.",
+"The percent urban population in a state can be used to predict the $variable arrest rate.");
 $mc_scientific_conclusion -> qa('Select the appropriate scientific conclusion: ', $ans[$hyp_tag]);
 $mc_scientific_conclusion -> extra($ans[1-$hyp_tag]);
 
-$ans = [
-"The correlation is high (above r = 0.7).",
-"The correlation is moderate (between r = 0.4 and r = 0.7).",
-"The correlation is weak (below r = 0.4).",
-"The correlation is not significant, so the correlation r should not be reported.",
-];
-$labels = ["Correlation high", "Correlation moderate", "Correlation weak", "Correlation not significant"];
-$mc_correlation_conclusion = RadioButtons($ans, $ans->[$corr_tag], labels => $labels);
 Context()->texStrings;
 BEGIN_TEXT 
 
 Download and review the content of this \{ htmlLink("${htmlURL}$excel_filename", "Excel dataset (.xlsx)")\}.
 
 $PAR
-This data describes the responses to a survey of departments in a company about how the employees feel about aspects of the company's management.  Managers want to investigate the relationship between $BBOLD $variable$EBOLD and the $BBOLD OverallRating $EBOLD.
+This data describes the numer of arrests (per 100,000 population) for various crimes in states in the USA.
+Also included for each state is the variable UrbanPop, which is the percentage of the state population
+living in urban centers (in the range 0%-100%).
+
+$BR Researchers want to build a regression model from the percentage of urban population, $BBOLD UrbanPop$EBOLD, to the $BBOLD$variable$EBOLD arrest rate, and are specifically interested in whether the $BBOLD slope$EBOLD in the regression model differs significantly from 0 slope. 
 
 $PAR
-
-$PAR 
-(a) Plot a scatterplot with $variable on the x axis, and OverallRating on the y axis. Which of the following graphs most resembles your plot?  (Click to open a graph in a new window.)
+(a) Plot a scatterplot with UrbanPop on the \(x\) axis, and $variable
+on the \(y\) axis. Which of the following graphs most resembles your
+plot?  (Click to open a graph in a new window.)
 $BR
  1. \{ image( "$shuffled_graph_filenames[0]", width,350 )  \} 2. \{ image( "$shuffled_graph_filenames[1]", width,350 ) \} 
 $BR
- 3. \{ image( "$shuffled_graph_filenames[2]", width,350 ) \} 4. \{ image( "$shuffled_graph_filenames[3]", width,350 ) \} 
+ 3. \{ image( "$shuffled_graph_filenames[2]", width,350 ) \} 
 $BR
 Graph: \{ $popup_graph->menu() \}
 
@@ -150,16 +135,17 @@ $PAR
 \{ $mc_H0 ->print_a() \}
 
 $PAR
-(c) Using R, find the value of the \(t_{obs}\) for a correlation test of the $variable with OverallRating:  \{ans_rule(20) \}
+(c) Using R, find the value of the \(t_{obs}\) for a linear regression test of the $BBOLD slope$EBOLD relating UrbanPop and $variable :  \{ans_rule(20) \}
 
 $PAR
-(d) In the null hypothesis \(t\) distribution, what are the degrees of freedom are there?
+(d) When comparing this \(t_{obs}\) to the null distribution, how many degrees of freedom
+are there for the null hypothesis \(t\) disribution?
 $BR degrees of freedom: \{ans_rule(20) \}
 
 $PAR
 (e) Critical \(t\) statistic with \(\alpha = 0.05\), \(t_{crit}\): \{ans_rule(20) \}  (Find this critical score for a 2-tailed test, and give the positive value.)
 $PAR
-(f) Sketch a normalized t distribution (see the Practice Problems for examples), and add \(t_{obs}\) and \(t_{crit}\) on the plot of the null \(t\)-distribution. Shade in the appropropriate region that represents the probability
+(f) Sketch a normalized t distribution (see the Practice Problems for examples), and add, for the slope of the regression, \(t_{obs}\) and \(t_{crit}\) on the plot of the null \(t\)-distribution. Shade in the appropropriate region that represents the probability
   of a value as large or more extreme that \(t_{\mbox{obs}}\), in either direction.
 $BR
 Which of the following graphs most resembles your sketch?  (Click to open a graph in a new window.)
@@ -182,9 +168,12 @@ $PAR
 \{ $mc_scientific_conclusion->print_a() \}
 
 $PAR 
-(i) What should you conclude about the strength of the correlation?
+(i) Interpretation: Pretending for a moment that the slope result was significant (even if it wasn't),
+what is the formula for the regression line relating UrbanPop and the $variable arrest rate?
 $BR
-\{ $mc_correlation_conclusion ->buttons() \} 
+Murder Rate per 100,000 = \{ans_rule(10) \} + UrbanPop (%) \(\times\) \{ans_rule(10)\}
+$BR
+(Additionally, for practice, try using the "abline" command in R to add this regression line to your plot.)
 
 END_TEXT
 Context()->normalStrings;
@@ -198,7 +187,8 @@ ANS($t_critical->cmp());
 ANS( $popup_tdist->cmp() );
 ANS(radio_cmp($mc->correct_ans));
 ANS(radio_cmp($mc_scientific_conclusion->correct_ans));
-ANS($mc_correlation_conclusion->cmp() );
+ANS($intercept->cmp());
+ANS($slope->cmp());
 
 BEGIN_SOLUTION
 

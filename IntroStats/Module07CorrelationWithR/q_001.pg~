@@ -33,18 +33,29 @@ Context()->flags->set(
 $t_critical = Compute("2.0484");
 
 @graph_filenames = (
-"attitude1.png",  # significant, t < 0
-"attitude2.png",  # not significant, t < 0
-"attitude3.png",  # significant, t > 0
-"attitude4.png");  # not significant, t > 0
+"attitude1.png",  # Complaints 
+"attitude2.png",  # Privileges 
+"attitude3.png",   # Raises
+"attitude4.png");  # Advancement 
 @graph_perm = shuffle(4);
 @inv_graph_perm  = invert(@graph_perm);
 @shuffled_graph_filenames = @graph_filenames[@graph_perm];
 @shuffled_graph_labels = @graph_labels[@graph_perm];
 @graph_number = ("1", "2", "3", "4");
 
+@tdist_filenames = (
+"tdist_two_tailed1.png",  # significant, t > 0
+"tdist_two_tailed2.png",  # not significant, t > 0
+"tdist_two_tailed3.png",  # significant, t < 0
+"tdist_two_tailed4.png");  # not significant, t < 0
+@tdist_perm = shuffle(4);
+@inv_tdist_perm  = invert(@tdist_perm);
+@shuffled_tdist_filenames = @tdist_filenames[@tdist_perm];
+@shuffled_tdist_labels = @tdist_labels[@tdist_perm];
+@tdist_number = ("1", "2", "3", "4");
+
 # Differing numeric values 
-$ver = random(2, 2);
+$ver = random(1, 4);
 $df = Compute("28");
 if ($ver == 1) {
    $variable = "Complaints"; 
@@ -52,6 +63,7 @@ if ($ver == 1) {
    $test_statistic = Compute("7.737");
    $r = Compute("0.8254176");
    $correct_graph_number = $graph_number[$inv_graph_perm[0]]; # Graph 1
+   $correct_tdist_number = $tdist_number[$inv_tdist_perm[0]]; # significant, t > 0
    $corr_tag = 0;	 #high correlation
 }
 elsif ($ver == 2) {
@@ -60,9 +72,31 @@ elsif ($ver == 2) {
    $test_statistic = Compute("2.4924");
    $r = Compute("0.4261169");
    $correct_graph_number = $graph_number[$inv_graph_perm[1]]; # Graph 2
+   $correct_tdist_number = $tdist_number[$inv_tdist_perm[0]]; # significant, t > 0
    $corr_tag = 1;	 # moderate correlation
 }
-$popup = PopUp(["?","1","2","3","4"], $correct_graph_number);  
+elsif ($ver == 3) {
+   $variable = "Raises"; 
+   $hyp_tag = 1;  # 0=not reject Ho,  1=reject Ho
+   $test_statistic = Compute("3.8681");
+   $r = Compute("0.590139");
+   $correct_graph_number = $graph_number[$inv_graph_perm[2]]; # Graph 3
+   $correct_tdist_number = $tdist_number[$inv_tdist_perm[0]]; # significant, t > 0
+   $corr_tag = 1;	 # moderate correlation
+}
+elsif ($ver == 4) {
+   $variable = "Advancement"; 
+   $hyp_tag = 0;  # 0=not reject Ho,  1=reject Ho
+   $test_statistic = Compute("0.8307");
+   $r = Compute("0.155086");
+   $correct_graph_number = $graph_number[$inv_graph_perm[3]]; # Graph 4
+   $correct_tdist_number = $tdist_number[$inv_tdist_perm[1]]; # not significant, t > 0
+   $corr_tag = 3;	 # no correlation significantly different from zero.
+}
+
+
+$popup_graph = PopUp(["?","1","2","3","4"], $correct_graph_number);  
+$popup_tdist = PopUp(["?","1","2","3","4"], $correct_tdist_number);  
 
 $mc_H0 = new_multiple_choice();
 @ans = ("Ratings for $variable and OverallRating are independent of each other.",
@@ -109,35 +143,47 @@ $BR
 $BR
  3. \{ image( "$shuffled_graph_filenames[2]", width,350 ) \} 4. \{ image( "$shuffled_graph_filenames[3]", width,350 ) \} 
 $BR
-Graph: \{ $popup->menu() \}
+Graph: \{ $popup_graph->menu() \}
 
 $PAR
 (b) \{ $mc_H0 ->print_q() \} 
 \{ $mc_H0 ->print_a() \}
 
 $PAR
-(b) From R, find the value of the \(t_{obs}\) for a correlation test of the $variable with OverallRating:  \{ans_rule(20) \}
+(c) Using R, find the value of the \(t_{obs}\) for a correlation test of the $variable with OverallRating:  \{ans_rule(20) \}
 
 $PAR
-(b) When comparing this \(t_{obs}\) to the null distribution, how many degrees of freedom
-are there in the null disribution?
+(d) When comparing this \(t_{obs}\) to the null distribution, how many degrees of freedom
+are there for the null hypothesis \(t\) disribution?
 $BR degrees of freedom: \{ans_rule(20) \}
 
 $PAR
-(c) Critical \(t\) statistic with \(\alpha = 0.05\): \{ans_rule(20) \}  (Find this critical score for a 2-tailed test, and give the positive value.)
+(e) Critical \(t\) statistic with \(\alpha = 0.05\), \(t_{crit}\): \{ans_rule(20) \}  (Find this critical score for a 2-tailed test, and give the positive value.)
+$PAR
+(f) Sketch a normalized t distribution (see the Practice Problems for examples), and add \(t_{obs}\) and \(t_{crit}\) on the plot of the null \(t\)-distribution. Shade in the appropropriate region that represents the probability
+  of a value as large or more extreme that \(t_{\mbox{obs}}\), in either direction.
+$BR
+Which of the following graphs most resembles your sketch?  (Click to open a graph in a new window.)
+$BR
+ 1. \{ image( "$shuffled_tdist_filenames[0]", width,350 ) \} 2. \{ image( "$shuffled_tdist_filenames[1]", width,350 ) \}
+$BR
+ 3. \{ image( "$shuffled_tdist_filenames[2]", width,350 ) \} 4. \{ image( "$shuffled_tdist_filenames[3]", width,350 ) \} 
+$BR
+Graph: \{ $popup_tdist->menu() \} 
+ 
 
 $PAR 
-(e) 
+(g) 
 \{ $mc ->print_q() \} $BR
 \{ $mc ->print_a() \}
 
 $PAR 
-(f) 
+(h) 
 \{ $mc_scientific_conclusion ->print_q() \} $BR
 \{ $mc_scientific_conclusion->print_a() \}
 
 $PAR 
-(g) What should you conclude about the strength of the correlation?
+(i) What should you conclude about the strength of the correlation?
 $BR
 \{ $mc_correlation_conclusion ->buttons() \} 
 
@@ -145,11 +191,12 @@ END_TEXT
 Context()->normalStrings;
 
 #ANSWERS
-ANS( $popup->cmp() );
+ANS( $popup_graph->cmp() );
 ANS(radio_cmp($mc_H0->correct_ans));
 ANS($test_statistic->cmp());
 ANS($df->cmp());
 ANS($t_critical->cmp());
+ANS( $popup_tdist->cmp() );
 ANS(radio_cmp($mc->correct_ans));
 ANS(radio_cmp($mc_scientific_conclusion->correct_ans));
 ANS($mc_correlation_conclusion->cmp() );

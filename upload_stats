@@ -12,7 +12,8 @@ rsync -arv --perms --exclude "*~" -e ssh $SRC_DIR/ $SERVER:$TARGET_DIR/
 #rsync -arv --perms --include "*.csv" --include "*.xlsx" -e ssh IntroStats/Module01_Datasets/* $SERVER:/opt/webwork/courses/Intro_Stats/html/Module01
 #rsync -arv --perms --include "*.csv" --include "*.xlsx" -e ssh IntroStats/Module02_Datasets/* $SERVER:/opt/webwork/courses/Intro_Stats/html/Module02
 rsync -arv --perms --include "*.csv" --include "*.xlsx" -e ssh IntroStats/Module03_Datasets/* $SERVER:/opt/webwork/courses/Intro_Stats/html/Module03
-#rsync -arv --perms --include "*.csv" --include "*.xlsx" -e ssh IntroStats/Module06_Datasets/* $SERVER:/opt/webwork/courses/Intro_Stats/html/Module06
+rsync -arv --perms --include "*.csv" --include "*.xlsx" -e ssh IntroStats/Module06_Datasets/* $SERVER:/opt/webwork/courses/Intro_Stats/html/Module06
+rsync -arv --perms --include "*.csv" --include "*.xlsx" -e ssh IntroStats/Module07_Datasets/* $SERVER:/opt/webwork/courses/Intro_Stats/html/Module07
 #rsync -arv --perms --include "*.csv" --include "*.xlsx" -e ssh IntroStats/Module10_Datasets/* $SERVER:/opt/webwork/courses/Intro_Stats/html/Module10
 #rsync -arv --perms --include "*.csv" --include "*.xlsx" -e ssh IntroStats/Module11_Datasets/* $SERVER:/opt/webwork/courses/Intro_Stats/html/Module11
 

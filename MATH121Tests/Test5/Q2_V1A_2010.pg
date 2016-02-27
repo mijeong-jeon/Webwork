@@ -50,7 +50,7 @@ if ($i == 0) { # x = .. plane
    $low = -$a - $R;
    $high = -$a + $R;
    $plane1 = ImplicitPlane("x = $low");
-   $plane2 = ImplicitEquation("x = $high");
+   $plane2 = ImplicitPlane("x = $high");
    $plane_list = List($plane1, $plane2);
 
 }

@@ -153,8 +153,7 @@ $PAR
 (c) Using R, find the value of the \(t_{obs}\) for a correlation test of the $variable with OverallRating:  \{ans_rule(20) \}
 
 $PAR
-(d) When comparing this \(t_{obs}\) to the null distribution, how many degrees of freedom
-are there for the null hypothesis \(t\) disribution?
+(d) In the null hypothesis \(t\) distribution, what are the degrees of freedom are there?
 $BR degrees of freedom: \{ans_rule(20) \}
 
 $PAR

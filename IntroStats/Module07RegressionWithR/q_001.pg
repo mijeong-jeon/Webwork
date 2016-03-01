@@ -21,7 +21,7 @@ loadMacros(
 TEXT(beginproblem());
 $showPartialCorrectAnswers = 1;  
 
-$excel_filename = "Module07/USArrests.xlsx";
+$excel_filename = "Module07/USArrestRates.xlsx";
 
 Context("Numeric");
 Context()->flags->set(
@@ -55,7 +55,7 @@ $df = Compute("48");
 @tdist_number = ("1", "2", "3", "4");
 
 # Differing numeric values 
-$ver = random(3, 3);
+$ver = random(1, 3);
 if ($ver == 1) {
    $variable = "Murder"; 
    $hyp_tag = 0;  # 0=not reject Ho,  1=reject Ho

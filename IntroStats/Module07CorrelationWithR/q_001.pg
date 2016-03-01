@@ -150,7 +150,7 @@ $PAR
 \{ $mc_H0 ->print_a() \}
 
 $PAR
-(c) Using R, find the value of the \(t_{obs}\) for a correlation test of the $variable with OverallRating:  \{ans_rule(20) \}
+(c) Using R, find the value of the \(t_{obs}\) for a correlation test between $variable and OverallRating:  \{ans_rule(20) \}
 
 $PAR
 (d) In the null hypothesis \(t\) distribution, what are the degrees of freedom are there?

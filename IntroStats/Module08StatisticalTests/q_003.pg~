@@ -1,0 +1,112 @@
+#DESCRIPTION
+# Number of variables/sample size
+#ENDDESCRIPTION
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGML.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"MathObjects.pl",
+"PGauxiliaryFunctions.pl",
+"extraAnswerEvaluators.pl",
+"parserRadioButtons.pl",
+"parserMultiAnswer.pl",
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 0;  # all multiple choice; don't allow that much guessing
+
+Context("Numeric");
+
+$ver = random(1, 5);
+if ($ver == 1) {
+$description_text = "a difference in BMI (pre-pregnancy) between the two groups (comparison and diabetics)"; 
+$correct_statistical_test = "two sample t-test";
+}
+elsif ($ver == 2) {
+$description_text = "a difference in gestational age at birth between the two groups (comparison and diabetics)"; 
+$correct_statistical_test = "two sample t-test";
+}
+elsif ($ver == 3) {
+$description_text = "a difference in smoking behaviour between the two groups (comparison and diabetics)"; 
+$correct_statistical_test = "chi-squared test";
+}
+elsif ($ver == 4) {
+$description_text = "a relation between BMI pre-pregnancy and baby's birth weight, ignoring the group labels";
+$correct_statistical_test = "correlation (test for non-zero slope)";
+}
+elsif ($ver == 5) {
+$description_text = "an effect of smoking on gestational age at birth, ignoring the group labels";
+$correct_statistical_test = "two sample t-test";
+}
+
+
+# All the variations have the same survey type
+$correct_survey = "cohort survey";
+# Set up the SURVEY DESIGN radio buttons
+@opts = (
+"cohort survey",
+"simple random survey",
+"cluster survey",
+"stratified survey",
+"case-control survey",
+);
+$survey_design = RadioButtons([$opts[0], $opts[1], $opts[2], $opts[3], $opts[4]], 
+$correct_survey,
+maxLabelSize => 80);
+
+# Set up the STATISTICAL TEST radio buttons
+@opts = (
+"single sample t-test",
+"paired sample t-test",
+"two sample t-test",
+"chi-squared test",
+"correlation (test for non-zero slope)",
+"regression (test for non-zero slope and intercept)",
+);
+$statistical_test = RadioButtons([$opts[0], $opts[1], $opts[2], $opts[3], $opts[4], $opts[5]], 
+$correct_statistical_test,
+maxLabelSize => 80);
+
+Context()->texStrings;
+BEGIN_PGML 
+_Source: Dr. B. Kisilevsky_
+
+Researchers assigned 
+During the study, the women were classified into two groups: a comparison group (healthy,
+uneventful pregnancy) and a group with gestational diabetes (women who
+developed diabetes during pregnancy).  All the women were between 25
+and 40 years old.
+
+Also measured for each woman was:
+- Body Mass Index (BMI) pre-pregnancy (continuous numerical)
+- Smoker (Yes/No: categorical)
+- Baby's gestational age at birth in weeks (continuous numerical)
+- Baby's birth weight in grams (continuous numerical)
+
+(a) What kind of study design is this?
+
+[@ $survey_design->buttons() @]*
+
+(b) If the researchers were trying to test for 
+[$description_text], 
+what statistical test would be appropriate?
+
+[@ $statistical_test->buttons() @]*
+
+END_PGML
+Context()->normalStrings;
+
+#ANSWERS
+ANS( $survey_design->cmp() );
+ANS( $statistical_test->cmp() );
+
+BEGIN_SOLUTION
+
+END_SOLUTION
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

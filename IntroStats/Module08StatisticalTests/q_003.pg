@@ -1,0 +1,107 @@
+#DESCRIPTION
+# Number of variables/sample size
+#ENDDESCRIPTION
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGML.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"MathObjects.pl",
+"PGauxiliaryFunctions.pl",
+"extraAnswerEvaluators.pl",
+"parserRadioButtons.pl",
+"parserMultiAnswer.pl",
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 0;  # all multiple choice; don't allow that much guessing
+
+Context("Numeric");
+
+$ver = random(1, 4);
+if ($ver == 1) {
+$description_text = "a difference in initial headache severity between the two groups",
+$correct_statistical_test = "chi-squared test";
+}
+elsif ($ver == 2) {
+$description_text = "a difference in the effectiveness of the headache relief between the two groups", 
+$correct_statistical_test = "chi-squared test";
+}
+elsif ($ver == 3) {
+$description_text = "a difference in the time to feel relief between the two groups", 
+$correct_statistical_test = "two sample t-test";
+}
+elsif ($ver == 4) {
+$description_text = "a difference in the level of stomach discomfort between the two groups",
+$correct_statistical_test = "two sample t-test";
+}
+
+
+# All the variations have the same survey type
+$correct_survey = "control/treatment";
+# Set up the SURVEY DESIGN radio buttons
+@opts = (
+"control/treatment",
+"blocking design",
+"multi-treatment",
+);
+$survey_design = RadioButtons([$opts[0], $opts[1], $opts[2]],
+$correct_survey,
+maxLabelSize => 80);
+
+# Set up the STATISTICAL TEST radio buttons
+@opts = (
+"single sample t-test",
+"paired sample t-test",
+"two sample t-test",
+"chi-squared test",
+"correlation (test for non-zero slope)",
+"regression (test for non-zero slope and intercept)",
+);
+$statistical_test = RadioButtons([$opts[0], $opts[1], $opts[2], $opts[3], $opts[4], $opts[5]], 
+$correct_statistical_test,
+maxLabelSize => 80);
+
+Context()->texStrings;
+BEGIN_PGML 
+_Source: C. Molson_
+
+Researchers studying how adults respond to the addition of additives
+to their pain medication design a study where volunteers take home
+either a bottle of standard aspirin, or a bottle of "buffered" aspirin
+(aspirin mixed with an antacid); the medicine type is randomly
+assigned, and the volunteers do not know which medication type they
+have.
+
+Every time they have a headache, the volunteers take one of their assigned pills, and record
+- the severity of the headache (low/medium/high: categorical)
+- the effectiveness of the pain relief (very/not very: categorical)
+- the time in minutes until they felt some level of relief (continuous numerical).
+- the level of stomach discomfort 10 minutes after taking the pill (rating 1-100: continuous numerical).
+
+(a) What kind of study design is this?
+
+[@ $survey_design->buttons() @]*
+
+(b) If the researchers were trying to test for 
+[$description_text], 
+what statistical test would be appropriate?
+
+[@ $statistical_test->buttons() @]*
+
+END_PGML
+Context()->normalStrings;
+
+#ANSWERS
+ANS( $survey_design->cmp() );
+ANS( $statistical_test->cmp() );
+
+BEGIN_SOLUTION
+
+END_SOLUTION
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

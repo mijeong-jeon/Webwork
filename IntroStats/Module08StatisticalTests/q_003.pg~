@@ -22,40 +22,34 @@ $showPartialCorrectAnswers = 0;  # all multiple choice; don't allow that much gu
 
 Context("Numeric");
 
-$ver = random(1, 5);
+$ver = random(1, 4);
 if ($ver == 1) {
-$description_text = "a difference in BMI (pre-pregnancy) between the two groups (comparison and diabetics)"; 
-$correct_statistical_test = "two sample t-test";
-}
-elsif ($ver == 2) {
-$description_text = "a difference in gestational age at birth between the two groups (comparison and diabetics)"; 
-$correct_statistical_test = "two sample t-test";
-}
-elsif ($ver == 3) {
-$description_text = "a difference in smoking behaviour between the two groups (comparison and diabetics)"; 
+$description_text = "a difference in initial headache severity between the two groups",
 $correct_statistical_test = "chi-squared test";
 }
-elsif ($ver == 4) {
-$description_text = "a relation between BMI pre-pregnancy and baby's birth weight, ignoring the group labels";
-$correct_statistical_test = "correlation (test for non-zero slope)";
+elsif ($ver == 2) {
+$description_text = "a difference in the effectiveness of the headache relief between the two groups", 
+$correct_statistical_test = "chi-squared test";
 }
-elsif ($ver == 5) {
-$description_text = "an effect of smoking on gestational age at birth, ignoring the group labels";
+elsif ($ver == 3) {
+$description_text = "a difference in the time to feel relief between the two groups", 
+$correct_statistical_test = "two sample t-test";
+}
+elsif ($ver == 4) {
+$description_text = "a difference in the level of stomach discomfort between the two groups",
 $correct_statistical_test = "two sample t-test";
 }
 
 
 # All the variations have the same survey type
-$correct_survey = "cohort survey";
+$correct_survey = "control/treatment";
 # Set up the SURVEY DESIGN radio buttons
 @opts = (
-"cohort survey",
-"simple random survey",
-"cluster survey",
-"stratified survey",
-"case-control survey",
+"control/treatment",
+"blocking design",
+"multi-treatment",
 );
-$survey_design = RadioButtons([$opts[0], $opts[1], $opts[2], $opts[3], $opts[4]], 
+$survey_design = RadioButtons([$opts[0], $opts[1], $opts[2]],
 $correct_survey,
 maxLabelSize => 80);
 
@@ -74,19 +68,20 @@ maxLabelSize => 80);
 
 Context()->texStrings;
 BEGIN_PGML 
-_Source: Dr. B. Kisilevsky_
+_Source: C. Molson_
 
-Researchers assigned 
-During the study, the women were classified into two groups: a comparison group (healthy,
-uneventful pregnancy) and a group with gestational diabetes (women who
-developed diabetes during pregnancy).  All the women were between 25
-and 40 years old.
+Researchers studying how adults respond to the addition of additives
+to their pain medication design a study where volunteers take home
+either a bottle of standard aspirin, or a bottle of "buffered" aspirin
+(aspirin mixed with an antacid); the medicine type is randomly
+assigned, and the volunteers do not know which medication type they
+have.
 
-Also measured for each woman was:
-- Body Mass Index (BMI) pre-pregnancy (continuous numerical)
-- Smoker (Yes/No: categorical)
-- Baby's gestational age at birth in weeks (continuous numerical)
-- Baby's birth weight in grams (continuous numerical)
+Every time they have a headache, the volunteers take one of their assigned pills, and record
+- the severity of the headache (low/medium/high: categorical)
+- the effectiveness of the pain relief (very/not very: categorical)
+- the time in minutes until they felt some level of relief (continuous numerical).
+- the level of stomach discomfort 10 minutes after taking the pill (rating 1-100: continuous numerical).
 
 (a) What kind of study design is this?
 

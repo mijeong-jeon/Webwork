@@ -59,7 +59,7 @@ $tf -> qa ( # each entry has to end with a comma
 "T",
 "Chi-squared distributions only have positive probability density when the \(x\) value is positive.",
 "T",
-"Chi-squared distributions can be used to test whether the counts in a contingency table are independent.", 
+"Chi-squared distributions are used to test whether the counts in a contingency table are independent.", 
 "T",
 "F distributions can be used to test whether the counts in a contingency table are independent.", 
 "F",
@@ -71,14 +71,10 @@ $tf -> qa ( # each entry has to end with a comma
 "T",
 "t distributions can be used to test whether the slope in a regression is different from zero.",
 "T",
-"F distributions can be used to test whether the difference between two sample means is different from zero.",
-"F",
-"t distributions can be used to test whether the difference between two sample means is different from zero.",
-"T",
 );
 
 # Choose four of the question and answer pairs at random.
-$tf ->choose(5);
+$tf ->choose(3);
 
 # Now print the text using $ml->print_q for the questions
 # and $ml->print_a to print the answers.

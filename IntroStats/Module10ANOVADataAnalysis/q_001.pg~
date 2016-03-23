@@ -25,7 +25,6 @@ loadMacros(
 "PGgraphmacros.pl",
 "PGnumericalmacros.pl",
 "PGstatisticsmacros.pl",
-"parserRadioButtons.pl",
 "parserPopUp.pl",
 "MathObjects.pl",
 );
@@ -137,25 +136,13 @@ elsif ($ver  == 4)  {
 }
 
 $popup = PopUp(["?","1","2","3","4"], $correct_graph_number);  
-$radio_rationale = RadioButtons(["There is only one variable involved.",
-"There are two variables, one numeric and one categorical (with 2 or more categories).", 
-"There are two variables, one numeric and one categorical (with 3 or more categories).", 
-"There are two variables, one numeric and one categorical (with 3 or fewer categories)."],
-"There are two variables, one numeric and one categorical (with 3 or more categories).");
 	
-$radio_null_hypothesis = RadioButtons(["There is no relationship between Treatment A and the resulting average weight gain.",
-"There is no difference in average weight gain between the treatments.",
-"The average weight gain for all treatments is zero."],
-"There is no difference in average weight gain between the treatments.");
 BEGIN_TEXT
-
-An experiment is conducted to determine whether there is a difference
-among the mean increases in growth produced by four growth hormone
-treatments (A, B, C, and D) for plants.  The experimental material
-consists of 16 cuttings of a shrub with four cuttings each randomly
-assigned to each of the four different strains.  The increases in
-weight for each cutting are included in the Excel dataset.
-
+An experiment is conducted to determine whether there is a difference among the mean increases in
+growth produced by four growth hormone treatments (A, B, C, and D) for plants.  The experimental
+material consists of 16 cuttings of a shrub with four cuttings each randomly assigned
+to each of the four different strains.  The increases in weight for each cutting 
+are included in the Excel dataset.
 $PAR
 $BR 
 $PAR
@@ -173,30 +160,17 @@ $BR
 4. \{ image( "$shuffled_graph_filenames[3]" ) \}
 $BR
 Graph: \{ $popup->menu() \}
-
-$PAR
-(b) Why is a one-way ANOVA an appropriate analysis tool for this dataset?
-$BR
-\{ $radio_rationale->buttons() \}
-$PAR
-(c) What is the null hypothesis for the ANOVA statistical test?
-
-$BR
-\{ $radio_null_hypothesis->buttons() \}
-
 $PAR
 Compute the following, including at least 3 non-zero digits in your answer: $BR
-(d) F observed for the ANOVA: \{ans_rule(20)\} $BR
-(e) p value for the ANOVA \{ans_rule(20)\} $BR
-(f) Which of treatment pairs (if any) differ by a significant amount at \(\alpha = 0.05\), based on the Tukey HSD test? 
+(b) F observed for the ANOVA: \{ans_rule(20)\} $BR
+(c) p value for the ANOVA \{ans_rule(20)\} $BR
+(d) Which of treatment pairs (if any) differ by a significant amount at \(\alpha = 0.05\), based on the Tukey HSD test? 
 $BR
 \{ $mc -> print_a() \}
 END_TEXT
 
 install_problem_grader(~~&std_problem_grader);
 ANS($popup->cmp());
-ANS($radio_rationale->cmp() );
-ANS($radio_null_hypothesis->cmp() );
 ANS($ANOVA_F->cmp());
 ANS($ANOVA_p->cmp());
 ANS( checkbox_cmp( $mc->correct_ans() ) );

@@ -23,8 +23,8 @@ loadMacros(
 "PGstandard.pl",
 "MathObjects.pl",
 "PGchoicemacros.pl",
+"parserPopUp.pl",
 "parserNumberWithUnits.pl",
-"parserRadioButtons.pl",
 "hhAdditionalMacros.pl",
 "PG.pl",
 "PGbasicmacros.pl",,
@@ -46,8 +46,9 @@ $reduced = list_random(40, 50, 60, 70);
 $percent_left = 100*exp(-$k*$t);
 $how_long = $first_time*(log($reduced/100)/log((100-$percent)/100));
 
-$radioWhy = RadioButtons([("When highly polluted air is filtered, there is more pollutant per liter of air to remove.", 
-"As the air gets cleaner and cleaner, the filter will collect pollutant at a slower rate.", "Both reasons apply.", "Neither reason applies.")], "Both reasons apply.", last => ["Both reasons apply.", "Neither reason applies."]);
+$popupWhy = PopUp([("When highly polluted air is filtered, there is more pollutant per liter of air to remove", 
+"As the air gets cleaner and cleaner, the filter will collect pollutant at a slower rate", "Both reasons apply.", "Neither reason applies.")], "All of the above");
+
 BEGIN_TEXT
 
 The air in a factory is being filtered so that the quantity of a pollutant, \(P\) (in mg/liter), is decreasing according to the function \(P = P_0 e^{-kt}\), where \(t\) is time in hours. If $percent% of the pollution is removed in the first $first_time hours: 
@@ -57,11 +58,11 @@ $BR
 \(b)\) How long is it before the pollution is reduced to $reduced% of its original level? \{ans_rule(15)\} hours (Try not to round calculations mid-step)
 $BR
 \(c)\) Plot a graph of pollution against time. Show the results of your calculations on the graph. $BR
-Why might the quantity of pollutant decrease in this way? $BR \{ $radioWhy->buttons() \} 
+Why might the quantity of pollutant decrease in this way? \{ $popupWhy->menu() \} 
 
 END_TEXT
 
 #ANSWERS
-ANS(fun_cmp($percent_left), fun_cmp($how_long), $radioWhy->cmp);
+ANS(fun_cmp($percent_left), fun_cmp($how_long), $popupWhy->cmp);
 
 ENDDOCUMENT();        # This should be the last executable line in the problem.

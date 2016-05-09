@@ -1,0 +1,190 @@
+#DESCRIPTION
+# Number of variables/sample size
+#ENDDESCRIPTION
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"MathObjects.pl",
+"PGauxiliaryFunctions.pl",
+"extraAnswerEvaluators.pl",
+"parserRadioButtons.pl",
+"parserMultiAnswer.pl",
+"parserPopUp.pl",
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;  
+
+$excel_filename = "Module06/MinnesotaHighSchool.xlsx";
+
+Context("Numeric");
+Context()->flags->set(
+  tolerance => 0.02,
+  tolType => "absolute",
+);
+
+@graph_filenames = (
+"high_school_1.png",  # significant, chi sq
+"high_school_2.png",  # not significant, chi sq
+"high_school_3.png",  # significant, t test 
+"high_school_4.png");  # not significant,  t test
+@graph_perm = shuffle(4);
+@inv_graph_perm  = invert(@graph_perm);
+@shuffled_graph_filenames = @graph_filenames[@graph_perm];
+@shuffled_graph_labels = @graph_labels[@graph_perm];
+@graph_number = ("1", "2", "3", "4");
+
+# Differing numeric values 
+$ver = random(1, 4);
+if ($ver == 1) {
+   $variable1 = "HighSchoolRank"; 
+   $value1 = "Lower";
+   $variable2 = "PostGrad"; 
+   $value2 = "Other";
+   $value_count = Compute("64");
+   $df = Compute("6");
+   $test_statistic = Compute("16.33");
+   $chi_critical = Compute("12.59159");
+   $hyp_tag = 0;  # 0=reject Ho,  1=not reject Ho
+   $correct_graph_number = $graph_number[$inv_graph_perm[0]];# significant, chi sq 
+}
+if ($ver == 2) {
+   $variable1 = "HighSchoolRank"; 
+   $value1 = "Middle";
+   $variable2 = "FatherOccupLevel"; 
+   $value2 = "F2";
+   $value_count = Compute("23");
+   $df = Compute("12");
+   $test_statistic = Compute("22.696");
+   $chi_critical = Compute("21.02607");
+   $hyp_tag = 0;  # 0=reject Ho,  1=not reject Ho
+   $correct_graph_number = $graph_number[$inv_graph_perm[0]];# significant, chi sq 
+}
+if ($ver == 3) {
+   $variable1 = "HighSchoolRank"; 
+   $value1 = "Middle";
+   $variable2 = "Sex"; 
+   $value2 = "F";
+   $value_count = Compute("74");
+   $df = Compute("2");
+   $test_statistic = Compute("10.818");
+   $chi_critical = Compute("5.991465");
+   $hyp_tag = 0;  # 0=reject Ho,  1=not reject Ho
+   $correct_graph_number = $graph_number[$inv_graph_perm[0]];# significant, chi sq 
+}
+if ($ver == 4) {
+   $variable1 = "PostGrad"; 
+   $value1 = "NonColEduc";
+   $variable2 = "Sex"; 
+   $value2 = "F";
+   $value_count = Compute("14");
+   $df = Compute("3");
+   $test_statistic = Compute("9.5861");
+   $chi_critical = Compute("7.814728");
+   $hyp_tag = 0;  # 0=reject Ho,  1=not reject Ho
+   $correct_graph_number = $graph_number[$inv_graph_perm[0]];# significant, chi sq 
+}
+
+$popup = PopUp(["?","1","2","3","4"], $correct_graph_number);  
+
+$mc_hyp = new_multiple_choice();
+$mc_hyp -> qa('Ho: $variable1 and $variable2 are:', "independent of each other.");
+$mc_hyp -> extra("related or non-independent of each other.");
+
+$mc = new_multiple_choice();
+@ans = ("Reject \(H_0\).", "Do Not Reject \(H_0\).",
+        "Reject \(H_1\).", "Do Not Reject \(H_1\).");
+$mc -> qa('Your decision for the hypothesis test, at the \(\alpha = 0.05\) level:', $ans[$hyp_tag]);
+$mc -> extra($ans[1-$hyp_tag],$ans[2],$ans[3]);
+
+$mc_scientific_conclusion = new_multiple_choice();
+@ans = (
+"$variable1 and $variable2 are not independent of each other.",
+"$variable1 and $variable2 are independent of each other.",
+);
+$mc_scientific_conclusion -> qa('Select the appropriate scientific conclusion: ', $ans[$hyp_tag]);
+$mc_scientific_conclusion -> extra($ans[1-$hyp_tag]);
+
+Context()->texStrings;
+BEGIN_TEXT 
+
+Download and review the content of this \{ htmlLink("${htmlURL}$excel_filename", "Excel dataset (.xlsx)")\}.
+
+$PAR
+This data describes a sample of high school graduates in Minnesota in 1938.  
+$PAR
+There are 4 variables in the dataset.
+$BR
+- HighSchoolRank - whether the student placed in the class' Lower, Middle or  Upper third in their final marks.
+$BR 
+- PostGrad - post-high-school status;  enrolled in college, enrolled in non-collegiate school, was employed full-time, or other.
+$BR 
+- FatherOccupLevel - father's occupational level, (seven levels, "F1" , "F2" , . . . , "F7", with "F1" being the highest in income).
+$BR 
+- Sex - student's sex (M or F)
+
+$PAR 
+Load the data in R, then use the "table" command to generate a two-way contingency table of 
+$variable1 agains $variable2. 
+
+$PAR
+(a) How many graduates in the sample had both 
+$BR 
+($variable1 = $value1) and ($variable2 = $value2)? \{ans_rule(20) \}
+$PAR
+(b) How many degrees of freedom would a chi-squared test on this table have? \{ans_rule(10)\}
+$BR 
+(c) What would the null hypothesis for the relation between $variable1 and $variable2 be?
+$PAR
+\{ $mc_hyp ->print_q() \} 
+\{ $mc_hyp ->print_a() \}
+$BR 
+(d) Test statistic for the sample data:   \{ans_rule(20)\}
+$PAR
+(e) Critical test statistic with \(\alpha = 0.05\): \{ ans_rule(20) \}
+$PAR 
+(f) Sketch the null chi-squared distribution, and  add \(\chi_{obs}\). Shade in the appropropriate region that represents the probability of interest in a chi-squared test.
+$BR
+Add the critical test statistic, \(\chi^2_{0.05, df}\) to your sketch as well.
+$PAR
+Which of the following graphs most resembles your sketch?  (Click to open a graph in a new window.)
+$BR
+ 1. \{ image( "$shuffled_graph_filenames[0]", width,350 )  \} 2. \{ image( "$shuffled_graph_filenames[1]", width,350 ) \} 
+$BR
+ 3. \{ image( "$shuffled_graph_filenames[2]", width,350 ) \} 4. \{ image( "$shuffled_graph_filenames[3]", width,350 ) \} 
+$BR
+Graph: \{ $popup->menu() \} 
+
+$PAR
+(g) 
+\{ $mc ->print_q() \} 
+\{ $mc ->print_a() \}
+$PAR 
+(h) 
+\{ $mc_scientific_conclusion ->print_q() \} 
+\{ $mc_scientific_conclusion ->print_a() \}
+
+
+END_TEXT
+Context()->normalStrings;
+
+#ANSWERS
+ANS($value_count->cmp());
+ANS($df->cmp());
+ANS(radio_cmp($mc_hyp->correct_ans));
+ANS($test_statistic->cmp());
+ANS($chi_critical->cmp());
+ANS($popup->cmp() );
+ANS(radio_cmp($mc->correct_ans));
+ANS(radio_cmp($mc_scientific_conclusion->correct_ans));
+
+BEGIN_SOLUTION
+
+END_SOLUTION
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

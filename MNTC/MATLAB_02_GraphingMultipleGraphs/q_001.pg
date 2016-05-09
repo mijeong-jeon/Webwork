@@ -1,0 +1,99 @@
+#DESCRIPTION
+# Number of variables/sample size
+#ENDDESCRIPTION
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"MathObjects.pl",
+"PGauxiliaryFunctions.pl",
+"extraAnswerEvaluators.pl",
+"parserRadioButtons.pl",
+"parserMultiAnswer.pl",
+"parserPopUp.pl",
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;  
+
+$excel_filename = "Module06/MinnesotaHighSchool.xlsx";
+
+Context("Numeric");
+Context()->flags->set(
+  tolerance => 0.1,
+  tolType => "absolute",
+);
+
+@graph_perm = shuffle(4);
+@inv_graph_perm  = invert(@graph_perm);
+@shuffled_graph_filenames = @graph_filenames[@graph_perm];
+@shuffled_graph_labels = @graph_labels[@graph_perm];
+@graph_number = ("1", "2", "3", "4");
+
+# The functions
+@functions = (
+'f(x) = 1/x', 
+'f(x) = 1/x^2', 
+'f(x) = -1/x',  
+'f(x) = -1/x^2',
+);
+
+$function_ver = random(1, 4);
+(-1.5, -0.5, 0.5, 1.5);
+
+@x_points = (-1.5, -0.5, 0.5, 1.5);
+$x_point_ver = random(1, 4);
+$x_point = $x_points[$xpoint_ver - 1];
+$xlim1 = $x_point - 0.3;
+$xlim2 = $x_point + 0.3;
+
+$delta_x = list_random(0.1, 0.05, -0.1, -0.05);
+$new_x = $x_point + $delta_x;
+
+$correct_graph_number = $graph_number[$inv_graph_perm[$ver-1]];
+$function = $functions[$ver-1];
+
+@graph_filenames = (
+"q_001_${function_ver}_${xpoint_ver}.png",  # x sin(x)
+"q_001_${function_ver}_${xpoint_ver}.png",  # x^2 sin(x)
+"q_001_${function_ver}_${xpoint_ver}.png",  # x cos(x) 
+"q_001_${function_ver}_${xpoint_ver}.png");  #  x^2 cos(x)
+
+$popup = PopUp(["?","1","2","3","4"], $correct_graph_number);  
+
+Context()->texStrings;
+BEGIN_TEXT
+
+Consider the function \( $function \) over the interval \(x = [-3, 3]\).
+
+(a) By hand, find the formula for the tangent line to \(f(x)\) at the point \(x=$xpoint\);
+
+(b) Use your linearization formula compute an estimate of \(f ($new_x) \).  
+
+(c) Use MATLAB to generate a graph of \( $function \) over the interval \(x = [$xlim1, $xlim2] \).  
+$BR
+  Which of the following graphs matches the MATLAB graph?  (Click to open a graph in a new window.)
+$BR
+ 1. \{ image( "$shuffled_graph_filenames[0]", width,250 )  \} 2. \{ image( "$shuffled_graph_filenames[1]", width,250 ) \} 
+$BR
+ 3. \{ image( "$shuffled_graph_filenames[2]", width,250 ) \} 4. \{ image( "$shuffled_graph_filenames[3]", width,250 ) \} 
+$BR
+Graph: \{ $popup->menu() \}
+
+
+END_TEXT
+Context()->normalStrings;
+
+#ANSWERS
+ANS($popup->cmp() );
+ANS($highest_y->cmp() );
+
+BEGIN_SOLUTION
+
+END_SOLUTION
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

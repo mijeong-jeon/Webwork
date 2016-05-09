@@ -1,0 +1,100 @@
+#DESCRIPTION
+# Number of variables/sample size
+#ENDDESCRIPTION
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"MathObjects.pl",
+"PGauxiliaryFunctions.pl",
+"extraAnswerEvaluators.pl",
+"parserRadioButtons.pl",
+"parserMultiAnswer.pl",
+"parserPopUp.pl",
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;  
+
+$excel_filename = "Module06/MinnesotaHighSchool.xlsx";
+
+Context("Numeric");
+Context()->flags->set(
+  tolerance => 0.1,
+  tolType => "absolute",
+);
+
+@graph_filenames = (
+"q_001_1.png",  # x sin(x)
+"q_001_2.png",  # x^2 sin(x)
+"q_001_3.png",  # x cos(x) 
+"q_001_4.png");  #  x^2 cos(x)
+@graph_perm = shuffle(4);
+@inv_graph_perm  = invert(@graph_perm);
+@shuffled_graph_filenames = @graph_filenames[@graph_perm];
+@shuffled_graph_labels = @graph_labels[@graph_perm];
+@graph_number = ("1", "2", "3", "4");
+
+# The functions
+@functions = (
+'y = x \sin(x)',
+'y = x^2\sin(x)',
+'y = x \cos(x)',
+'y = x^2 \cos(x)',);
+
+@y_values = (
+'1.815',
+'24.01',
+'6.107',
+'39.48',
+);
+
+$ver = random(1, 4);
+$correct_graph_number = $graph_number[$inv_graph_perm[$ver-1]];
+$function = $functions[$ver-1];
+$highest_y  = Compute($y_values[$ver-1]);
+
+$popup = PopUp(["?","1","2","3","4"], $correct_graph_number);  
+
+Context()->texStrings;
+BEGIN_TEXT 
+
+Use MATLAB to generate a graph of \( $function \) over the interval \(x = [-2 \pi, 2 \pi]\).
+
+$PAR
+(a) Which of the following graphs matches the MATLAB graph?  (Click to open a graph in a new window.)
+$BR
+ 1. \{ image( "$shuffled_graph_filenames[0]", width,250 )  \} 2. \{ image( "$shuffled_graph_filenames[1]", width,250 ) \} 
+$BR
+ 3. \{ image( "$shuffled_graph_filenames[2]", width,250 ) \} 4. \{ image( "$shuffled_graph_filenames[3]", width,250 ) \} 
+$BR
+Graph: \{ $popup->menu() \}
+
+$PAR
+
+(b) Use the data viewer in the MATLAB figure window to find the
+highest \(y\) value in the graph.  (On some graphs, two points may be
+equally high.)
+
+$BR
+\{image( "DataViewer.png", width, 217);\}
+$BR
+Report your highest \(y\) to the nearest 0.01: \{ ans_rule(10) \}
+
+
+END_TEXT
+Context()->normalStrings;
+
+#ANSWERS
+ANS($popup->cmp() );
+ANS($highest_y->cmp() );
+
+BEGIN_SOLUTION
+
+END_SOLUTION
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

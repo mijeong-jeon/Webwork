@@ -82,7 +82,7 @@ $popup = PopUp(["?","1","2","3","4"], $correct_graph_number);
 
 Context()->texStrings;
 BEGIN_TEXT
-\{ join(", ", @graph_filenames); \}
+
 $PAR
 Consider the function \( $function \) over the interval \(x = [-3, 3]\).
 

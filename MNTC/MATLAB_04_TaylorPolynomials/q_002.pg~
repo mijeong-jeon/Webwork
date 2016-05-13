@@ -1,0 +1,96 @@
+#DESCRIPTION
+# Number of variables/sample size
+#ENDDESCRIPTION
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"MathObjects.pl",
+"PGauxiliaryFunctions.pl",
+"extraAnswerEvaluators.pl",
+"parserRadioButtons.pl",
+"parserMultiAnswer.pl",
+"parserPopUp.pl",
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;  
+
+$excel_filename = "Module06/MinnesotaHighSchool.xlsx";
+
+Context("Numeric");
+Context()->flags->set(
+  tolerance => 0.1,
+  tolType => "absolute",
+);
+
+
+
+$function = Compute("sqrt(1 + x)");
+
+@x_points = (3, 8, 15);
+@x_widths = (3.7, 6, 8);
+$x_point_ver = random(1, 3);
+$x_point = $x_points[$x_point_ver - 1];
+$xlim1 = $x_point - $x_widths[$x_point_ver - 1];
+$xlim2 = $x_point + $x_widths[$x_point_ver - 1];
+
+@graph_filenames = ();
+for ($i = 1; $i <= 4; $i++) {
+    push(@graph_filenames, "q_001_${x_point_ver}_$i.png");
+}
+@graph_perm = shuffle(4);
+@inv_graph_perm  = invert(@graph_perm);
+@shuffled_graph_filenames = @graph_filenames[@graph_perm];
+@shuffled_graph_labels = @graph_labels[@graph_perm];
+@graph_number = ("1", "2", "3", "4");
+
+$correct_graph_number = $graph_number[$inv_graph_perm[0]];  # _1.png is the correct version.
+
+$taylor = Compute("sqrt(1+$x_point) + (1/2)(1+$x_point)^(-1/2)(x-$x_point) + (-1/4)(1+$x_point)^(-3/2)(x-$x_point)^2");
+
+
+$popup = PopUp(["?","1","2","3","4"], $correct_graph_number);  
+
+Context()->texStrings;
+BEGIN_TEXT
+
+$PAR
+Consider the function \( $function \) over the interval \(x = [$xlim1, $xlim2]\).
+
+$PAR
+(a) By hand, find the formula for the tangent line to \(f(x)\) at the point \(x=$x_point\);
+
+$BR \(L(x) = \)  \{ ans_rule(60) \}
+
+$PAR
+(b) Use MATLAB to generate a graph of \( $function \) over the interval \(x = [$xlim1, $xlim2] \).  
+$BR
+  Which of the following graphs matches the MATLAB graph and the Taylor polynomial approximation you built around \(x = $x_point\)?
+  $BR
+  The <b>function</b> is drawn in <b>blue</b> while the <b>Taylor approximation</b> is drawn in <b>red</b>
+  $BR (Click to open a graph in a new window.)
+$BR
+ 1. \{ image( "$shuffled_graph_filenames[0]", width,350 )  \} 2. \{ image( "$shuffled_graph_filenames[1]", width,350 ) \} 
+$BR
+ 3. \{ image( "$shuffled_graph_filenames[2]", width,350 ) \} 4. \{ image( "$shuffled_graph_filenames[3]", width,350 ) \} 
+$BR
+Graph: \{ $popup->menu() \}
+
+
+END_TEXT
+Context()->normalStrings;
+
+#ANSWERS
+ANS($taylor->cmp() );
+ANS($popup->cmp() );
+
+BEGIN_SOLUTION
+
+END_SOLUTION
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

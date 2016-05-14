@@ -73,7 +73,7 @@ $PAR
 $BR
   Which of the following graphs matches the MATLAB graph and the Taylor polynomial approximation you built around \(x = $x_point_text\)?
   $BR
-  The <b>function</b> is drawn in <b>blue</b> while the <b>Taylor approximation</b> is drawn in <b>red</b>
+  The <b>function</b> is drawn in <b>blue</b> while the <b>Taylor approximation</b> is drawn in <b>red</b>.
   $BR (Click to open a graph in a new window.)
 $BR
  1. \{ image( "$shuffled_graph_filenames[0]", width,400 )  \} 2. \{ image( "$shuffled_graph_filenames[1]", width,400 ) \} 

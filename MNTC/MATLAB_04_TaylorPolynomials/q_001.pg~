@@ -63,9 +63,9 @@ $PAR
 Consider the function \( $function \) over the interval \(x = [$xlim1, $xlim2]\).
 
 $PAR
-(a) By hand, find the formula for the tangent line to \(f(x)\) at the point \(x=$x_point\);
+(a) By hand, find the formula for the second degree Taylor polynomial approximation to \(f(x)\) at the point \(x=$x_point_text\);
 
-$BR \(L(x) = \)  \{ ans_rule(60) \}
+$BR \(P_2(x) = \)  \{ ans_rule(60) \}
 
 $PAR
 (b) Use MATLAB to generate a graph of \( $function \) over the interval \(x = [$xlim1, $xlim2] \).  
@@ -75,9 +75,9 @@ $BR
   The <b>function</b> is drawn in <b>blue</b> while the <b>Taylor approximation</b> is drawn in <b>red</b>
   $BR (Click to open a graph in a new window.)
 $BR
- 1. \{ image( "$shuffled_graph_filenames[0]", width,350 )  \} 2. \{ image( "$shuffled_graph_filenames[1]", width,350 ) \} 
+ 1. \{ image( "$shuffled_graph_filenames[0]", width,400 )  \} 2. \{ image( "$shuffled_graph_filenames[1]", width,400 ) \} 
 $BR
- 3. \{ image( "$shuffled_graph_filenames[2]", width,350 ) \} 4. \{ image( "$shuffled_graph_filenames[3]", width,350 ) \} 
+ 3. \{ image( "$shuffled_graph_filenames[2]", width,400 ) \} 4. \{ image( "$shuffled_graph_filenames[3]", width,400 ) \} 
 $BR
 Graph: \{ $popup->menu() \}
 

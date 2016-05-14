@@ -6,6 +6,7 @@ DOCUMENT();        # This should be the first executable line in the problem.
 
 loadMacros(
 "PG.pl",
+"PGML.pl",
 "PGbasicmacros.pl",
 "PGchoicemacros.pl",
 "PGanswermacros.pl",
@@ -30,18 +31,18 @@ Context()->flags->set(
 
 
 
-$function = Compute("e^(2x)");
+$function = Compute("sqrt(1 + x)");
 
-@x_points = (-2, -1, 1, 2);
-@x_widths = (0.8, 0.8, 0.8, 0.8);
-$x_point_ver = random(1, 4);
+@x_points = (3, 8, 15);
+@x_widths = (3.7, 6, 8);
+$x_point_ver = random(1, 3);
 $x_point = $x_points[$x_point_ver - 1];
 $xlim1 = $x_point - $x_widths[$x_point_ver - 1];
 $xlim2 = $x_point + $x_widths[$x_point_ver - 1];
 
 @graph_filenames = ();
 for ($i = 1; $i <= 4; $i++) {
-    push(@graph_filenames, "q_002_${x_point_ver}_$i.png");
+    push(@graph_filenames, "q_001_${x_point_ver}_$i.png");
 }
 @graph_perm = shuffle(4);
 @inv_graph_perm  = invert(@graph_perm);
@@ -51,7 +52,8 @@ for ($i = 1; $i <= 4; $i++) {
 
 $correct_graph_number = $graph_number[$inv_graph_perm[0]];  # _1.png is the correct version.
 
-$taylor = Compute("e^(2 $x_point) + 2 e^(2 $x_point)(x - $x_point) + 4 e^(2 $x_point)/2 (x-$x_point)^2");
+$taylor = Compute("sqrt(1+$x_point) + (1/2)(1+$x_point)^(-1/2)(x-$x_point) + (-1/4)(1+$x_point)^(-3/2)(x-$x_point)^2");
+
 
 $popup = PopUp(["?","1","2","3","4"], $correct_graph_number);  
 
@@ -62,7 +64,7 @@ $PAR
 Consider the function \( $function \) over the interval \(x = [$xlim1, $xlim2]\).
 
 $PAR
-(a) By hand, find the formula for the second degree Taylor polynomial approximation to \(f(x)\) at the point \(x=$x_point\);
+(a) By hand, find the formula for the second degree Taylor polynomial approximation to \(f(x)\) at the point \(x=$x_point_text\);
 
 $BR \(P_2(x) = \)  \{ ans_rule(60) \}
 
@@ -71,7 +73,7 @@ $PAR
 $BR
   Which of the following graphs matches the MATLAB graph and the Taylor polynomial approximation you built around \(x = $x_point\)?
   $BR
-  The <b>function</b> is drawn in <b>blue</b> while the <b>Taylor approximation</b> is drawn in <b>red</b>.
+  The <b>function</b> is drawn in <b>blue</b> while the <b>Taylor approximation</b> is drawn in <b>red</b>
   $BR (Click to open a graph in a new window.)
 $BR
  1. \{ image( "$shuffled_graph_filenames[0]", width,400 )  \} 2. \{ image( "$shuffled_graph_filenames[1]", width,400 ) \} 
@@ -93,3 +95,12 @@ BEGIN_SOLUTION
 END_SOLUTION
 
 ENDDOCUMENT();        # This should be the last executable line in the problem.
+
+
+
+
+\begin{itemize}
+\item generate a graph of the given function on the domain shown, and
+\item use the \texttt{fminbnd} function to find the global maximum and
+  global minimum of the function on that interval.
+\end{itemize}

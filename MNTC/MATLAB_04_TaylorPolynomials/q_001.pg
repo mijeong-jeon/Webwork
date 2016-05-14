@@ -63,7 +63,7 @@ $PAR
 Consider the function \( $function \) over the interval \(x = [$xlim1, $xlim2]\).
 
 $PAR
-(a) By hand, find the formula for the second degree Taylor polynomial approximation to \(f(x)\) at the point \(x=$x_point_text\);
+(a) By hand, find the formula for the second degree Taylor polynomial approximation to \(f(x)\) at the point \(x=$x_point\);
 
 $BR \(P_2(x) = \)  \{ ans_rule(60) \}
 
@@ -72,7 +72,7 @@ $PAR
 $BR
   Which of the following graphs matches the MATLAB graph and the Taylor polynomial approximation you built around \(x = $x_point\)?
   $BR
-  The <b>function</b> is drawn in <b>blue</b> while the <b>Taylor approximation</b> is drawn in <b>red</b>
+  The <b>function</b> is drawn in <b>blue</b> while the <b>Taylor approximation</b> is drawn in <b>red</b>.
   $BR (Click to open a graph in a new window.)
 $BR
  1. \{ image( "$shuffled_graph_filenames[0]", width,400 )  \} 2. \{ image( "$shuffled_graph_filenames[1]", width,400 ) \} 

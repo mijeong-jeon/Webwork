@@ -1,0 +1,90 @@
+#DESCRIPTION
+# Number of variables/sample size
+#ENDDESCRIPTION
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGML.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"MathObjects.pl",
+"PGauxiliaryFunctions.pl",
+"extraAnswerEvaluators.pl",
+"parserRadioButtons.pl",
+"parserMultiAnswer.pl",
+"parserPopUp.pl",
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;  
+
+$excel_filename = "Module06/MinnesotaHighSchool.xlsx";
+
+Context("Numeric");
+Context()->flags->set(
+  tolerance => 0.01,
+  tolType => "absolute",
+);
+
+$ver = random(1, 4);
+if ($ver == 1) {
+$function = Compute("x cos(x)");
+$xlim1 = 2;
+$xlim2 = 9;
+$min_x = Compute("9.0000");
+$max_x = Compute("6.4373");
+}
+elsif ($ver == 2) {
+$function = Compute("(x-1.5)(x+2.7)(x-0.8)");
+$xlim1 = -4;
+$xlim2 = 3;
+$min_x = Compute("-4.0000");
+$max_x = Compute("-1.4325");
+}
+elsif ($ver == 3) {
+$function = Compute("ln(x) - 0.05 x^2");
+$xlim1 = 1;
+$xlim2 = 10;
+$min_x = Compute("10.0000");
+$max_x = Compute("3.1623");
+}
+elsif ($ver == 4) {
+$function = Compute("e^(-x) + e^(0.5 x)");
+$xlim1 = -3;
+$xlim2 = 3;
+$min_x = Compute("0.4621");
+$max_x = Compute("-3.0000");
+}
+
+$min_fx = $function->eval(x => $min_x);
+$max_fx = $function->eval(x => $max_x);
+
+Context()->texStrings;
+BEGIN_PGML
+
+Consider the function [`f(x) = [$function]`] on the interval \[[@$xlim1@], [@$xlim2 @]\].
+
+* Generate a graph of the given function on the domain shown, and
+* use the [|fminbnd|] function to find the global maximum and
+  global minimum of the function on that interval.
+
+
+Global *minimum* at
+[`x = `] [_________________]{$min_x}, [`f(x) = `] [_________________]{$min_fx}.  
+
+Global *maximum* at
+[`x = `] [_________________]{$max_x}, [`f(x) = `] [_________________]{$max_fx}.  
+
+END_PGML
+
+Context()->normalStrings;
+
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.
+
+
+
+

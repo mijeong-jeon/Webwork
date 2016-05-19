@@ -40,7 +40,7 @@ $PAR
 
 If you use MATLAB, you can simply remove the semicolon from the line that updates
 the estimate to see the values at each step.
-$PAR
+
 \(x_1=\)\{ans_rule()\} $BR
 \(x_2=\)\{ans_rule()\} $BR
 \(x_3=\)\{ans_rule()\} 

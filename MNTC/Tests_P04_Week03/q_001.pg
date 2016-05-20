@@ -1,0 +1,74 @@
+#DESCRIPTION
+# Number of variables/sample size
+#ENDDESCRIPTION
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGML.pl",
+"PGbasicmacros.pl",
+"PGanswermacros.pl",
+"MathObjects.pl",
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;  
+
+Context()->texStrings;
+
+$ver = random(1, 4);
+if ($ver == 1) {
+   $function = Compute("2^x");
+   $xval = Compute(list_random(-3, -2, 2, 3));
+   $xnearby = Compute($xval + list_random(-0.05, -0.02, 0.02, 0.05));
+   $tangent_line = Compute("2^$xval (ln(2)) (x-$xval) + 2^$xval");
+   $f_approx = $tangent_line->eval(x => $xnearby);
+} elsif ($ver == 2) {
+   $function = Compute("ln(5 x)");
+   $xval = Compute(list_random(2, 3, 4));
+   $xnearby = Compute($xval + list_random(-0.5, -0.2, 0.2, 0.5));
+   $tangent_line = Compute("(1/$xval) (x-$xval) + ln(5 $xval)");
+   $f_approx = $tangent_line->eval(x => $xnearby);
+} elsif ($ver == 3) {
+   $function = Compute("cos(3x)");
+   $xval = Compute(list_random(0.5, 1.5, -0.5));
+   $xnearby = Compute($xval + list_random(-0.05, -0.02, 0.02, 0.05));
+   $tangent_line = Compute("-3sin(3 $xval) (x-$xval) + cos(3 $xval)");
+   $f_approx = $tangent_line->eval(x => $xnearby);
+} elsif ($ver == 4) {
+   $function = Compute("sqrt(4 x)");
+   $xval = Compute(list_random(0.5, 1.5, 2.5));
+   $xnearby = Compute($xval + list_random(-0.05, -0.02, 0.02, 0.05));
+   $tangent_line = Compute("(4/2) (1/sqrt(4 $xval) ) (x-$xval) + sqrt(4 $xval)");
+   $f_approx = $tangent_line->eval(x => $xnearby);
+}
+
+
+BEGIN_PGML
+Consider the function [`f(x) = [$function]`].
+
+(a) Find the formula for the tangent line based at [`x = [$xval]`].
+
+[`y = `] [_________________]{$tangent_line}
+
+(b) Use MATLAB to produce a plot of [`f(x) = [$function]`] and the tangent line for
+a reasonable interval around [`x = [$xval]`].
+* no Webwork submission needed, but
+* you should *upload your MATLAB .m script* file when you upload your scanned hand-written work.
+
+(c) Use your tangent line to estimate the value of [`f([$xnearby])`].
+
+[`f([$xnearby]) \approx `] [________________________]{$f_approx}.
+
+
+END_PGML
+
+Context()->normalStrings;
+
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.
+
+
+
+

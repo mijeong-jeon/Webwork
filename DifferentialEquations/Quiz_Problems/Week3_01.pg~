@@ -28,7 +28,7 @@ $y = Formula("$c1 * e^($aa - $aa * t) + $c2 * e^(-$bb * t + $bb)");
 TEXT(beginproblem());
 Context()->texStrings;
 BEGIN_TEXT
-Solve the initial value problem where \( $diffEq \),\(~~\) \( y(1) = 1 \), and
+Solve the initial value problem where \( $diffEq = \), \( y(1) = 1 \), and
 \( y'(1) = 0 \). Use \( t \) as the independent variable.
 $PAR
 \( y = \) \{ans_rule(20) \}

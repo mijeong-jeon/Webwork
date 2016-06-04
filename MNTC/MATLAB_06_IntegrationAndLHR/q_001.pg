@@ -1,0 +1,92 @@
+#DESCRIPTION
+# Number of variables/sample size
+#ENDDESCRIPTION
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGML.pl",
+"PGbasicmacros.pl",
+"PGanswermacros.pl",
+"MathObjects.pl",
+"PGauxiliaryFunctions.pl",
+"extraAnswerEvaluators.pl",
+"parserFormulaUpToConstant.pl",
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;  
+
+$excel_filename = "Module06/MinnesotaHighSchool.xlsx";
+
+Context("Numeric");
+Context()->flags->set(
+  tolerance => 0.0005,
+  tolType => "absolute",
+);
+
+$ver = random(1, 3);
+if ($ver == 1) {
+$function = Compute("e^(-3x)");
+$function_text = $function->TeX();
+$a = 0;
+$b = 2;
+$antideriv_NoC = Compute("(-1/3) e^(-3x)");
+$antideriv = FormulaUpToConstant("(-1/3) e^(-3x)");
+$exact_integral_value = Compute($antideriv_NoC->eval(x => $b) - $antideriv_NoC->eval(x =>$a)) ;
+$LHR = Compute(0.33451);
+}
+elsif ($ver == 2) {
+$function = Compute("cos(7x)");
+$function_text = $function->TeX();
+$a = 0;
+$b = 4;
+$antideriv_NoC = Compute("(1/7) sin(7x)");
+$antideriv = FormulaUpToConstant("(1/7) sin(7x)");
+$exact_integral_value = Compute($antideriv_NoC->eval(x => $b) - $antideriv_NoC->eval(x =>$a)) ;
+$LHR = Compute(0.04654);
+}
+elsif ($ver == 3) {
+$function = Compute("(x-2)^{1/3}");
+$function_text = "(x-2)^{1/3}";
+$a = 4;
+$b = 7;
+$antideriv_NoC = Compute("(3/4) (x-2)^(4/3)");
+$antideriv = FormulaUpToConstant("(3/4) (x-2)^(4/3)");
+$exact_integral_value = Compute($antideriv_NoC->eval(x => $b) - $antideriv_NoC->eval(x =>$a)) ;
+$LHR = Compute(4.52118);
+}
+
+
+
+Context()->texStrings;
+BEGIN_PGML
+
+Consider the function [`f(x) = [$function_text]`] on the interval \[[$a], [$b ]\].
+
+a) Find the indefinite integral of [`f(x)`]:
+
+    [`\displaystyle \int f(x)~dx`] = [_____________________________]{$antideriv}
+
+b) Use your answer from part a) to find the exact value of the integral
+
+    [`\displaystyle \int_[$a]^[$b] f(x)~dx`] = [_____________________________]{$exact_integral_value}
+
+    Report your value to at least 4 digits after the decimal.
+
+c) Use MATLAB with the LEFT(500) sum to estimate the integral.
+
+    [`\displaystyle \int_[$a]^[$b] f(x)~dx`] = [_____________________________]{$LHR}
+
+    Report your value to at least 4 digits after the decimal.
+END_PGML
+
+Context()->normalStrings;
+
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.
+
+
+
+

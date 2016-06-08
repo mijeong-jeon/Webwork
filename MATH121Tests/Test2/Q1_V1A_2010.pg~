@@ -62,7 +62,7 @@ $BR
 \(f(x) \approx \) \{ans_rule(25)\} 
 
 $PAR
-b) Use your answer from part (a) to find a $BBOLD quadratic$EBOLD approximation for \( g(x) =  $g_tex \)
+b) Use your answer from part (a) to find an approximation for \( g(x) =  $g_tex \)
 $BR
 \(g(x) \approx \) \{ans_rule(25)\} 
 

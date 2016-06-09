@@ -1,0 +1,118 @@
+#DESCRIPTION
+# Number of variables/sample size
+#ENDDESCRIPTION
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGML.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"MathObjects.pl",
+"PGauxiliaryFunctions.pl",
+"extraAnswerEvaluators.pl",
+"parserRadioButtons.pl",
+"parserMultiAnswer.pl",
+"parserPopUp.pl",
+"PGgraphmacros.pl",
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 0;  
+
+$excel_filename = "Module06/MinnesotaHighSchool.xlsx";
+
+Context("Numeric");
+Context()->flags->set(
+  tolerance => 1,
+  tolType => "absolute",
+);
+
+# Parameters for the temperature
+$Text = list_random(-10, 0, 10, 20, 30);
+$A = list_random(-25, -15, -5, 5, 10, 15, 25);
+$y0 = $Text + $A;
+$k = list_random(0.2, 0.5, 1, 2);
+$k2 = $k * list_random(0.5, 2);
+
+$ymax = $y0 >= $Text ? $y0 : $Text;
+$ymin = $y0 <= $Text ? $y0 : $Text;
+
+# ***** Image 1
+$gr1 = init_graph(-1,$ymin,10,$ymax,
+axes=>[0,0],
+grid=>[1,5],
+size=>[400,400]
+);
+add_functions($gr1, "($Text + $A*exp(-1*$k*x)) for x in <0,10>" . 
+  " using color:blue and weight:2");
+# ***** Image 2
+$gr2 = init_graph(-1,$ymin,10,$ymax,
+axes=>[0,0],
+grid=>[1,5],
+size=>[400,400]
+);
+add_functions($gr2, "($Text + $A*exp(-1*$k2*x)) for x in <0,10>" . 
+  " using color:blue and weight:2");
+
+$graph_order = random(1, 2);
+if ($graph_order == 1)  {
+   $plot_gr1 = $gr1;
+   $plot_gr2 = $gr2;
+   $correct_graph_number = "1";
+} else {
+   $plot_gr1 = $gr2;
+   $plot_gr2 = $gr1;
+   $correct_graph_number = "2";
+}
+$popup = PopUp(["?","1","2"], $correct_graph_number);
+
+$t_test = list_random(2, 3, 4, 5);
+$y = Compute("$Text + $A*e^(-$k*x)");
+$yt = $y->eval(x => $t_test);
+
+
+Context()->texStrings;
+BEGIN_PGML
+
+*Temperature model*
+
+Newton's Law of Heating and Cooling is given mathematically by the differential equation
+
+[`\displaystyle \frac{dy}{dt} = -k (y - T_{\mbox{ext}}) `]
+
+where
+- [`y`] is the temperature of the object being studied,
+- [`T_{\mbox{ext}}`] is the temperature of the environment, and
+- [`k`] is a constant related to the size, surface area and material of the object, in units of (1/min).
+
+Use MATLAB and ode45 to predict the temperature of the object over time for the scenario where: 
+- the initial temperature of [`y(0) = [$y0]`] degrees,
+- the external temperature of [`T_{\mbox{ext}} = [$Text]`] degrees, and
+- the constant [`k = [$k]`].
+
+
+a) Which of the following graphs is the correct graph of the temperature for this scenario?  The time span shown is 10 minutes.
+
+    1.  [@ image( insertGraph($plot_gr1), width=>300,height=>300,tex_size=>800 ) @]*   2.[@ image( insertGraph($plot_gr2), width=>300,height=>300,tex_size=>800 ) @]*
+
+    (Click on a graph to enlarge it.)
+
+    Graph: [______________]{$popup}
+
+b)  Use the zoom feature on your graph, or any other approach, to estimate the temperature at [`t=[$t_test]`].
+Report your answer to the nearest 0.1 degrees.
+
+    [`y([$t_test]) = `] [______________]{$yt}
+
+
+END_PGML
+Context()->normalStrings;
+
+BEGIN_SOLUTION
+
+END_SOLUTION
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

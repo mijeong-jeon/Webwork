@@ -18,8 +18,6 @@ loadMacros(
 TEXT(beginproblem());
 $showPartialCorrectAnswers = 1;  
 
-$excel_filename = "Module06/MinnesotaHighSchool.xlsx";
-
 Context("Numeric");
 Context()->flags->set(
   tolerance => 0.0005,
@@ -27,35 +25,42 @@ Context()->flags->set(
 );
 
 $ver = random(1, 3);
+$ver = 4;
 if ($ver == 1) {
-$function = Compute("e^(-3x)");
+$function = Compute("x^2 e^(4x)");
 $function_text = $function->TeX();
 $a = 0;
 $b = 2;
-$antideriv_NoC = Compute("(-1/3) e^(-3x)");
-$antideriv = FormulaUpToConstant("(-1/3) e^(-3x)");
-$exact_integral_value = Compute($antideriv_NoC->eval(x => $b) - $antideriv_NoC->eval(x =>$a)) ;
-$LHR = Compute(0.33451);
+$val = 2328.84218;
+$MATLAB_integral_value = Compute($val);
+$average = Compute($val/($b-$a));
 }
 elsif ($ver == 2) {
-$function = Compute("cos(7x)");
-$function_text = $function->TeX();
-$a = 0;
+$function = Compute("x^3 (x+3)^(2/3)");
+$function_text = "x^3 (x+3)^(2/3)";
+$a = 1;
 $b = 4;
-$antideriv_NoC = Compute("(1/7) cos(7x)");
-$antideriv = FormulaUpToConstant("(1/7) cos(7x)");
-$exact_integral_value = Compute($antideriv_NoC->eval(x => $b) - $antideriv_NoC->eval(x =>$a)) ;
-$LHR = Compute(0.04654);
+$val = 11.05722;
+$MATLAB_integral_value = Compute($val);
+$average = Compute($val/($b-$a));
 }
 elsif ($ver == 3) {
-$function = Compute("(x-2)^{1/3}");
-$function_text = "(x-2)^{1/3}";
-$a = 4;
-$b = 7;
-$antideriv_NoC = Compute("(3/4) (x-2)^(4/3)");
-$antideriv = FormulaUpToConstant("(3/4) (x-2)^(4/3)");
-$exact_integral_value = Compute($antideriv_NoC->eval(x => $b) - $antideriv_NoC->eval(x =>$a)) ;
-$LHR = Compute(4.52118);
+$function = Compute("x^2 cos(4x)");
+$function_text = $function->TeX();
+$a = -1;
+$b = 1;
+$val = -0.49451;
+$MATLAB_integral_value = Compute($val);
+$average = Compute($val/($b-$a));
+}
+elsif ($ver == 4) {
+$function = Compute("(1-x^2)^(1/2) x^3");
+$function_text = "x^3 \sqrt{(1-x^2)}";
+$a = 0;
+$b = 0.9; 
+$val = 0.10887;
+$MATLAB_integral_value = Compute($val);
+$average = Compute($val/($b-$a));
 }
 
 
@@ -63,23 +68,22 @@ $LHR = Compute(4.52118);
 Context()->texStrings;
 BEGIN_PGML
 
-Consider the function [`f(x) = [$function_text]`] on the interval \[[$a], [$b ]\].
+Consider the function [` g(x) = [$function_text] `].
 
-a) Find the indefinite integral of [`f(x)`]:
+a) Use the
+:    integrate
+function in MATLAB to evaluate the integral
 
-    [`\displaystyle \int f(x)~dx`] = [_____________________________]{$antideriv}
-
-b) Use your answer from part a) to find the exact value of the integral
-
-    [`\displaystyle \int_[$a]^[$b] f(x)~dx`] = [_____________________________]{$exact_integral_value}
+    [`\displaystyle \int_{[$a]}^{[$b]} g(x)~dx`] = [_____________________________]{$MATLAB_integral_value}
 
     Report your value to at least 4 digits after the decimal.
 
-c) Use MATLAB with the LEFT(500) sum to estimate the integral.
+b) Compute the average value of [`g(x)`] over the interval [`[[$a], [$b]]`]. 
 
-    [`\displaystyle \int_[$a]^[$b] f(x)~dx`] = [_____________________________]{$LHR}
+    Average = [_____________________________]{$average}
 
     Report your value to at least 4 digits after the decimal.
+    
 END_PGML
 
 Context()->normalStrings;

@@ -6,6 +6,7 @@ DOCUMENT();        # This should be the first executable line in the problem.
 
 loadMacros(
 "PG.pl",
+"PGML.pl",
 "PGbasicmacros.pl",
 "PGchoicemacros.pl",
 "PGanswermacros.pl",
@@ -18,7 +19,7 @@ loadMacros(
 );
 
 TEXT(beginproblem());
-$showPartialCorrectAnswers = 1;  
+$showPartialCorrectAnswers = 0;  
 
 $excel_filename = "Module06/MinnesotaHighSchool.xlsx";
 
@@ -29,80 +30,98 @@ Context()->flags->set(
 );
 
 
-# The functions
-@functions = (
-'f(x) = 1/x', 
-'f(x) = 1/x^2', 
-'f(x) = -1/x',  
-'f(x) = -1/x^2',
+# ************** DE Part 1
+@de1_arr = (
+'dy/dt = 4-y',
+'dy/dt = -y',
+'dy/dt = y^2',
+'dy/dt = -(7+y)',
 );
 
-$function_ver = random(1, 4);
+$de1_ver = random(1, 4);
 
-@x_points = (-1.5, -0.5, 0.5, 1.5);
-$x_point_ver = random(1, 4);
-$x_point = $x_points[$x_point_ver - 1];
-$xlim1 = $x_point - 0.3;
-$xlim2 = $x_point + 0.3;
-
-@graph_filenames = ();
+@graph1_filenames = ();
 for ($i = 1; $i <= 4; $i++) {
-    push(@graph_filenames, "q_001_${i}_${x_point_ver}.png");
+    push(@graph1_filenames, "q_001_Part1_${i}.png");
 }
-@graph_perm = shuffle(4);
-@inv_graph_perm  = invert(@graph_perm);
-@shuffled_graph_filenames = @graph_filenames[@graph_perm];
-@shuffled_graph_labels = @graph_labels[@graph_perm];
-@graph_number = ("1", "2", "3", "4");
+@graph1_perm = shuffle(4);
+@inv_graph1_perm  = invert(@graph1_perm);
+@shuffled_graph1_filenames = @graph1_filenames[@graph1_perm];
+@shuffled_graph1_labels = @graph1_labels[@graph1_perm];
+@graph1_number = ("1", "2", "3", "4");
 
-$delta_x = list_random(0.1, 0.05, -0.1, -0.05);
-$new_x = $x_point + $delta_x;
+$correct_graph1_number = $graph1_number[$inv_graph1_perm[$de1_ver - 1]];
+$de1 = $de1_arr[$de1_ver - 1];
 
-$correct_graph_number = $graph_number[$inv_graph_perm[$function_ver - 1]];
-$function = $functions[$function_ver - 1];
+$t10 = 0;
+$t1end = 10;
+$y10 = -1;
 
-if ($function_ver == 1) {
-   $linearization = Compute("(-1)/( $x_point)^2  (x - $x_point) + 1/$x_point");
-   $estimate = Compute("(-1)/($x_point)^2  ($new_x - $x_point) + 1/$x_point");
-} elsif ($function_ver == 2) {
-  $linearization = Compute("(-2)/($x_point)^3  (x - $x_point) + 1/($x_point)^2");
-  $estimate = Compute("-2/($x_point)^3  ($new_x - $x_point) + 1/($x_point)^2");
-} elsif ($function_ver == 3) {
-  $linearization = Compute("1/($x_point)^2  (x - $x_point) - 1/$x_point");
-  $estimate = Compute("1/($x_point)^2  ($new_x - $x_point) - 1/$x_point");
-} elsif ($function_ver == 4) {
-  $linearization = Compute("1/($x_point)^3  (x - $x_point) - 1/($x_point)^2");
-  $estimate = Compute("1/($x_point)^3  ($new_x - $x_point) - 1/($x_point)^2");
+$popup1 = PopUp(["?","1","2","3","4"], $correct_graph1_number);
+
+# ************** DE Part 2
+@de2_arr = (
+'dy/dt + 1/y = \sin(t)',
+'dy/dt - 1/y = \cos(t)',
+'dy/dt - 1/y = \sin(t)',
+'dy/dt + 1/y = \cos(t)',
+);
+
+$de2_ver = random(1, 4);
+
+@graph2_filenames = ();
+for ($i = 1; $i <= 4; $i++) {
+    push(@graph2_filenames, "q_001_Part2_${i}.png");
 }
+@graph2_perm = shuffle(4);
+@inv_graph2_perm  = invert(@graph2_perm);
+@shuffled_graph2_filenames = @graph2_filenames[@graph2_perm];
+@shuffled_graph2_labels = @graph2_labels[@graph2_perm];
+@graph2_number = ("1", "2", "3", "4");
 
+$correct_graph2_number = $graph2_number[$inv_graph2_perm[$de2_ver - 1]];
+$de2 = $de2_arr[$de2_ver - 1];
 
-$popup = PopUp(["?","1","2","3","4"], $correct_graph_number);  
+$t20 = 1;
+$t2end = 4;
+$y20 = 5;
+
+$popup2 = PopUp(["?","1","2","3","4"], $correct_graph2_number);  
 
 Context()->texStrings;
 BEGIN_PGML
 
-Consider the differential equation [` [$de] `], with the initial condition [` y([$t0]) = [$y0] `].
-
-a) Use MATLAB and the
+ a) Consider the differential equation [` [$de1] `], with the initial condition [` y([$t10]) = [$y10] `]. Use MATLAB and the
 :    ode45
-command to generate a graph of the solution to \( $de \) over the interval \(t = [$t0, $tend] \).  
+command to generate a graph of the solution to [` [$de1] `] over the interval [` t = [ [$t10], [$t1end] ] `].  
 
-Which of the following graphs matches the MATLAB graph and its linearization around \(t = $x_point\)?  $BR (Click to open a graph in a new window.)
+Which of the following graphs matches the MATLAB solution?
 
- 1. \{ image( "$shuffled_graph_filenames[0]", width,250 )  \} 2. \{ image( "$shuffled_graph_filenames[1]", width,250 ) \} 
+(Click to open a graph in a new window.)
 
- 3. \{ image( "$shuffled_graph_filenames[2]", width,250 ) \} 4. \{ image( "$shuffled_graph_filenames[3]", width,250 ) \} 
+ 1. [@ image( "$shuffled_graph1_filenames[0]", width,250 )  @]* 2. [@ image( "$shuffled_graph1_filenames[1]", width,250 ) @]* 
 
-Graph: [______________]{$popup}
+ 3. [@ image( "$shuffled_graph1_filenames[2]", width,250 ) @]* 4. [@ image( "$shuffled_graph1_filenames[3]", width,250 ) @]* 
+
+Graph: [______________]{$popup1}
+
+ b) Now consider the differential equation [` [$de2] `], with the initial condition [` y([$t20]) = [$y20] `]. Use MATLAB and the
+:    ode45
+command to generate a graph of the solution to [` [$de2] `] over the interval [` t = [ [$t20], [$t2end] ] `].  
+
+Which of the following graphs matches the MATLAB solution?
+
+(Click to open a graph in a new window.)
+
+ 1. [@ image( "$shuffled_graph2_filenames[0]", width,250 )  @]* 2. [@ image( "$shuffled_graph2_filenames[1]", width,250 ) @]* 
+
+ 3. [@ image( "$shuffled_graph2_filenames[2]", width,250 ) @]* 4. [@ image( "$shuffled_graph2_filenames[3]", width,250 ) @]* 
+
+Graph: [______________]{$popup2}
 
 
 END_PGML
 Context()->normalStrings;
-
-#ANSWERS
-ANS($linearization->cmp() );
-ANS($estimate->cmp() );
-ANS($popup->cmp() );
 
 BEGIN_SOLUTION
 

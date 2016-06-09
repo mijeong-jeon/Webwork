@@ -105,6 +105,8 @@ Which of the following graphs matches the MATLAB solution?
 
 Graph: [______________]{$popup1}
 
+>> ----{75%} <<
+
  b) Now consider the differential equation [` [$de2] `], with the initial condition [` y([$t20]) = [$y20] `]. Use MATLAB and the
 :    ode45
 command to generate a graph of the solution to [` [$de2] `] over the interval [` t = [ [$t20], [$t2end] ] `].  

@@ -87,7 +87,7 @@ $popupOverUnder = PopUp([@over_under_list], $over_under_correct);
 
 BEGIN_TEXT 
 
-The annual rate of global \( \mbox{CO}_2\) emissions
+The annual rate of global\(\mbox{ CO}_2}\) emissions
 \(R(t)\), in $mass_units per year, have risen consistently from
 1930 until the present.
 

@@ -1,0 +1,87 @@
+#DESCRIPTION
+# Number of variables/sample size
+#ENDDESCRIPTION
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"MathObjects.pl",
+"PGauxiliaryFunctions.pl",
+"extraAnswerEvaluators.pl",
+"parserRadioButtons.pl",
+"parserMultiAnswer.pl",
+"parserPopUp.pl",
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;  
+
+$excel_filename = "Module06/MinnesotaHighSchool.xlsx";
+
+Context("Numeric");
+Context()->flags->set(
+  tolerance => 0.1,
+  tolType => "absolute",
+);
+
+
+
+$function = Compute("sin(2x)");
+
+@x_points = ("-2 pi", "-pi", "pi", "2 pi");
+@x_points_text = ("-2 \pi", "-\pi", "\pi", "2\pi");
+@x_widths = ("pi/4", "pi/4", "pi/4", "pi/4");
+$x_point_ver = random(1, 4);
+$x_point = $x_points[$x_point_ver - 1];
+$x_point_text = $x_points_text[$x_point_ver - 1];
+$xlim1 = sprintf("%.2f", Compute("$x_point - $x_widths[$x_point_ver - 1]"));
+$xlim2 = sprintf("%.2f", Compute("$x_point + $x_widths[$x_point_ver - 1]"));
+
+@graph_filenames = ();
+for ($i = 1; $i <= 4; $i++) {
+    push(@graph_filenames, "q_003_${x_point_ver}_$i.png");
+}
+@graph_perm = shuffle(4);
+@inv_graph_perm  = invert(@graph_perm);
+@shuffled_graph_filenames = @graph_filenames[@graph_perm];
+@shuffled_graph_labels = @graph_labels[@graph_perm];
+@graph_number = ("1", "2", "3", "4");
+
+$correct_graph_number = $graph_number[$inv_graph_perm[0]];  # _1.png is the correct version.
+
+$taylor = Compute("sin(2 $x_point) + 2 cos(2 $x_point)(x - $x_point) - 4 sin(2 $x_point)/2 (x-$x_point)^2 - 8 cos(2 $x_point)/6 (x-$x_point)^3");
+
+$popup = PopUp(["?","1","2","3","4"], $correct_graph_number);  
+
+Context()->texStrings;
+BEGIN_TEXT
+
+$PAR
+Consider the function \( $function \), and focus on the interval around \(x = $x_point_text\).
+
+$PAR
+(a) By hand, find the formula for the third degree Taylor polynomial approximation to \(f(x)\) at the point \(x=$x_point_text\);
+
+$BR \(P_2(x) = \)  \{ ans_rule(80) \}
+
+$PAR
+(b) Use MATLAB to generate  plot with a graph of \( $function \) over the interval \(x = [$xlim1, $xlim2] \), and the graph of the Taylor polynomial approximation you found in part (a).
+$BR
+You should upload your MATLAB .m script file when you upload your scanned hand-written work.
+
+END_TEXT
+Context()->normalStrings;
+
+#ANSWERS
+ANS($taylor->cmp() );
+ANS($popup->cmp() );
+
+BEGIN_SOLUTION
+
+END_SOLUTION
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

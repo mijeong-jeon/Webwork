@@ -52,7 +52,7 @@ $BR
 
 $PAR
 b) Evaluate the indefinite integral below.
-$BR \[ \int \frac{(\sqrt{x} + $k)^$n}{\sqrt{x}}~dx \]
+$BR \[ \int \frac{(\sqrt{x} + $k)^$n}{\sqrt{x}} \]
 $BR $BR Integral = \{ans_rule( 30) \}
 $BR
 $BITALIC Note: $EITALIC You can type "sqrt(x)" to enter a square root of \(x\).

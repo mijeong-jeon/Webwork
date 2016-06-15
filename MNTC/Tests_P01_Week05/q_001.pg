@@ -1,0 +1,72 @@
+## DESCRIPTION
+## Calculus: Functions and models
+## ENDDESCRIPTION
+
+## KEYWORDS('calculus', 'differential')
+
+## DBsubject('Calculus')
+## Date('01/22/2011')
+## Author('Alan Ableson')
+## Institution('Queens University')
+
+
+## TitleText1('Calculus')
+## EditionText1('X')
+## AuthorText1('Hughes-Hallett')
+## Section1('XXX')
+## Problem1('XX')
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros("PG.pl",
+"PGbasicmacros.pl",
+"PGanswermacros.pl",
+"PGML.pl",
+"MathObjects.pl",
+"parserFormulaUpToConstant.pl",
+"PGauxiliaryFunctions.pl");
+
+TEXT(beginproblem());
+
+$showPartialCorrectAnswers = 1;
+Context("Numeric");
+Context()->flags->set(
+    tolerance => 0.001,
+    tolType => "absolute",
+);
+
+# Formula requiring substitution: (root(x) pm k)^n/root(x)
+$k = non_zero_random(-4, 4);
+$n = random(3, 5, 1);
+$answer1 = FormulaUpToConstant("(2/($n+1))*(sqrt(x) + $k)^($n+1)");
+
+# By Parts integral: x e^(ax + c)
+$a2 = random(2, 5,1);
+$c2 = random(1, 4, 1);
+# Integrand is  (x e^(a2x + c2))
+# Integral is (x/a) e^(a2x + c2) - (1/a^2) e^(ax + c)
+$answer2 = FormulaUpToConstant("(x/$a2)* e^($a2 x + $c2)- (1/$a2)^2 e^($a2 x + $c2)");
+
+
+Context("Numeric");
+
+Context()->texStrings;
+BEGIN_PGML
+
+a) Evaluate the indefinite integral below.
+
+    [`\displaystyle \int \frac{(\sqrt{x} + [$k])^{[$n]}}{\sqrt{x}}~dx = `] [________________________]{$answer1}
+
+    Note: You can type "sqrt(x)" to enter a square root of [`x`].
+
+b) Evaluate the indefinite integral below.
+
+    [`\displaystyle \int x  e^{[$a2]  x + [$c2]} dx `] = [______________________]{$answer2}
+
+    Note: you can enter base [`e`] exponentials such as [`e^{3x + 1}`] using the syntax "e^(3x+1)".
+
+END_PGML
+Context()->normalStrings;
+
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

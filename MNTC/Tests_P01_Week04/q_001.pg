@@ -1,0 +1,72 @@
+## DESCRIPTION
+## Calculus: Functions and models
+## ENDDESCRIPTION
+
+## KEYWORDS('calculus', 'differential')
+
+## DBsubject('Calculus')
+## Date('01/22/2011')
+## Author('Alan Ableson')
+## Institution('Queens University')
+
+
+## TitleText1('Calculus')
+## EditionText1('X')
+## AuthorText1('Hughes-Hallett')
+## Section1('XXX')
+## Problem1('XX')
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros("PG.pl",
+"PGbasicmacros.pl",
+"PGanswermacros.pl",
+"PGML.pl",
+"MathObjects.pl",
+"parserFormulaUpToConstant.pl",
+"PGauxiliaryFunctions.pl");
+
+TEXT(beginproblem());
+
+$showPartialCorrectAnswers = 1;
+Context("Numeric");
+Context()->flags->set(
+    tolerance => 0.001,
+    tolType => "absolute",
+);
+
+$n = random(2, 5);
+$function = Compute("(x^($n)  + e^x)");
+$integral_function = Compute("(1/($n+1)) x^($n+1)  + e^x");
+$integral_answer = FormulaUpToConstant($integral_function);
+
+$a = random(-3, -1);
+$b = random(1, 3);
+$integral_value = $integral_function->eval('x' => $b) - $integral_function->eval('x' => $a);
+
+# Family of functions
+Context("Numeric");
+
+Context()->texStrings;
+BEGIN_PGML
+
+a) Evaluate the indefinite integral [` \int ([$function])~dx`].
+
+    [`\displaystyle \int ([$function])~dx`] = [_____________________________]{$integral_answer}.
+
+b) Use the Fundamental Theorem of Calculus to evaluate the definite integral
+[`\displaystyle \int_{[$a]}^{[$b]} ([$function])~dx`].  Show your work by hand on your worksheet.
+
+    [`\displaystyle \int_{[$a]}^{[$b]} ([$function])~dx = `] [________________________]{$integral_value}.
+
+c) Use MATLAB's integral function to estimate the value of the integral.  
+
+    MATLAB estimate of [`\displaystyle \int_{[$a]}^{[$b]} ([$function])~dx = `] [________________________]{$integral_value}.
+
+    Upload your MATLAB .m script file when you upload your scanned hand-written work.
+
+END_PGML
+Context()->normalStrings;
+
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

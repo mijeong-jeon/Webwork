@@ -158,7 +158,7 @@ in $m1 is
 \mbox{Avg} = \frac{1}{$d1-$d0} 
   \int_{$d0}^{$d1}\left(12 + 2.4 \sin(0.0172(t-80))\right)\,dt.
 \]
-By integrating and then evaluating at the end points, we obtain
+Using left and right sums with \(n=100\) gives 
 \[
 \mbox{Avg} \approx $ans1r \hbox{ hours.}
 \]
@@ -172,7 +172,7 @@ daylight in $m2 is
 \mbox{Avg} = \frac{1}{$d3-$d2} 
   \int_{$d2}^{$d3}\left(12 + 2.4 \sin(0.0172(t-80))\right)\,dt.
 \]
-By integrating and then evaluating at the end points, we obtain
+Using left and right sums with \(n=100\) gives 
 \[
 \mbox{Avg} \approx $ans2r \hbox{ hours.}
 \]

@@ -70,7 +70,7 @@ $PAR
 $BR \(P_3(x) = \)  \{ ans_rule(80) \}
 
 $PAR
-(b) Use MATLAB to generate  plot with a graph of \( $function \) over the interval \(x = [$xlim1, $xlim2] \), and the graph of the Taylor polynomial approximation you found in part (a).
+(b) Use MATLAB to generate a plot with a graph of \( $function \) over the interval \(x = [$xlim1, $xlim2] \), and the graph of the Taylor polynomial approximation you found in part (a).
 $BR
 You should upload your MATLAB .m script file when you upload your scanned hand-written work.
 

@@ -58,27 +58,25 @@ if ($ver == 1) {
 
 
 $eq = "x^2 + xy + y^2 = $rhs";
-$m1 = Compute("-$x/$y1");
-$m2 = Compute("-$x/$y2");
-$tgt1 = Formula("$m1 * (x-$x) + $y1"); 
-$tgt2 = Formula("$m2 * (x-$x) + $y2"); 
+$m1 = Compute("(-2 $x-$y1)/($x + 2*$y1)");
+$m2 = Compute("(-2 $x-$y2)/($x + 2*$y2)");
 
 BEGIN_TEXT
 
 $PAR
 Consider the ellipse defined by \($eq\)
 $PAR
-Find the equation of the tangent line to the ellipse at the following two points:
+Use implicit differentiation to find the slope of the line tangent to the ellipse at the following two points:
 $BR
-  Tangent line through \( ($x, $y1) \): \(y =\) \{ans_rule(20)\}
+  Slope at \( ($x, $y1) \): \(y' =\) \{ans_rule(20)\}
 $BR
-  Tangent line through \( ($x, $y2) \): \(y =\) \{ans_rule(20)\}
+  Slope at \( ($x, $y2) \): \(y' =\) \{ans_rule(20)\}
 
 $PAR
 
 END_TEXT
 
-ANS($tgt1->cmp()); 
-ANS($tgt2->cmp());
+ANS($m1->cmp()); 
+ANS($m2->cmp());
 
 ENDDOCUMENT();        # This should be the last executable line in the problem.

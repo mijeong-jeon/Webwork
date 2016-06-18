@@ -28,11 +28,8 @@ Context()->flags->set(
   tolType => "absolute",
 );
 
-@graph_perm = shuffle(4);
-@inv_graph_perm  = invert(@graph_perm);
-@shuffled_graph_filenames = @graph_filenames[@graph_perm];
-@shuffled_graph_labels = @graph_labels[@graph_perm];
-@graph_number = ("1", "2", "3", "4");
+
+
 
 # The functions
 @functions = (
@@ -43,40 +40,66 @@ Context()->flags->set(
 );
 
 $function_ver = random(1, 4);
-(-1.5, -0.5, 0.5, 1.5);
 
 @x_points = (-1.5, -0.5, 0.5, 1.5);
 $x_point_ver = random(1, 4);
-$x_point = $x_points[$xpoint_ver - 1];
+$x_point = $x_points[$x_point_ver - 1];
 $xlim1 = $x_point - 0.3;
 $xlim2 = $x_point + 0.3;
+
+@graph_filenames = ();
+for ($i = 1; $i <= 4; $i++) {
+    push(@graph_filenames, "q_001_${i}_${x_point_ver}.png");
+}
+@graph_perm = shuffle(4);
+@inv_graph_perm  = invert(@graph_perm);
+@shuffled_graph_filenames = @graph_filenames[@graph_perm];
+@shuffled_graph_labels = @graph_labels[@graph_perm];
+@graph_number = ("1", "2", "3", "4");
 
 $delta_x = list_random(0.1, 0.05, -0.1, -0.05);
 $new_x = $x_point + $delta_x;
 
-$correct_graph_number = $graph_number[$inv_graph_perm[$ver-1]];
-$function = $functions[$ver-1];
+$correct_graph_number = $graph_number[$inv_graph_perm[$function_ver - 1]];
+$function = $functions[$function_ver - 1];
 
-@graph_filenames = (
-"q_001_${function_ver}_${xpoint_ver}.png",  # x sin(x)
-"q_001_${function_ver}_${xpoint_ver}.png",  # x^2 sin(x)
-"q_001_${function_ver}_${xpoint_ver}.png",  # x cos(x) 
-"q_001_${function_ver}_${xpoint_ver}.png");  #  x^2 cos(x)
+if ($function_ver == 1) {
+   $linearization = Compute("(-1)/( $x_point)^2  (x - $x_point) + 1/$x_point");
+   $estimate = Compute("(-1)/($x_point)^2  ($new_x - $x_point) + 1/$x_point");
+} elsif ($function_ver == 2) {
+  $linearization = Compute("(-2)/($x_point)^3  (x - $x_point) + 1/($x_point)^2");
+  $estimate = Compute("-2/($x_point)^3  ($new_x - $x_point) + 1/($x_point)^2");
+} elsif ($function_ver == 3) {
+  $linearization = Compute("1/($x_point)^2  (x - $x_point) - 1/$x_point");
+  $estimate = Compute("1/($x_point)^2  ($new_x - $x_point) - 1/$x_point");
+} elsif ($function_ver == 4) {
+  $linearization = Compute("1/($x_point)^3  (x - $x_point) - 1/($x_point)^2");
+  $estimate = Compute("1/($x_point)^3  ($new_x - $x_point) - 1/($x_point)^2");
+}
+
 
 $popup = PopUp(["?","1","2","3","4"], $correct_graph_number);  
 
 Context()->texStrings;
 BEGIN_TEXT
 
+$PAR
 Consider the function \( $function \) over the interval \(x = [-3, 3]\).
 
-(a) By hand, find the formula for the tangent line to \(f(x)\) at the point \(x=$xpoint\);
+$PAR
+(a) By hand, find the formula for the tangent line to \(f(x)\) at the point \(x=$x_point\);
 
-(b) Use your linearization formula compute an estimate of \(f ($new_x) \).  
+$BR \(L(x) = \)  \{ ans_rule(20) \}
 
+$PAR
+(b) Use your linearization formula compute a $BBOLD linear estimate $EBOLD of \(f ($new_x) \).
+
+$BR \(f($new_x)  \approx  \) \{ ans_rule(20) \}
+
+$PAR
 (c) Use MATLAB to generate a graph of \( $function \) over the interval \(x = [$xlim1, $xlim2] \).  
 $BR
-  Which of the following graphs matches the MATLAB graph?  (Click to open a graph in a new window.)
+  Which of the following graphs matches the MATLAB graph and its linearization around \(x = $x_point\)?  $BR (Click to open a graph in a new window.)
 $BR
  1. \{ image( "$shuffled_graph_filenames[0]", width,250 )  \} 2. \{ image( "$shuffled_graph_filenames[1]", width,250 ) \} 
 $BR
@@ -89,8 +112,9 @@ END_TEXT
 Context()->normalStrings;
 
 #ANSWERS
+ANS($linearization->cmp() );
+ANS($estimate->cmp() );
 ANS($popup->cmp() );
-ANS($highest_y->cmp() );
 
 BEGIN_SOLUTION
 

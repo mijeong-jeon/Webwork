@@ -1,0 +1,100 @@
+## DESCRIPTION
+## Calculus: Functions and models
+## ENDDESCRIPTION
+
+## KEYWORDS('calculus', 'differential')
+
+## DBsubject('Calculus')
+## Date('01/22/2011')
+## Author('Alan Ableson')
+## Institution('Queens University')
+
+
+## TitleText1('Calculus')
+## EditionText1('X')
+## AuthorText1('Hughes-Hallett')
+## Section1('XXX')
+## Problem1('XX')
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros("PG.pl",
+"PGbasicmacros.pl",
+"PGanswermacros.pl",
+"PGML.pl",
+"MathObjects.pl",
+"parserRadioButtons.pl",
+"PGauxiliaryFunctions.pl");
+
+TEXT(beginproblem());
+
+$showPartialCorrectAnswers = 1;
+Context("Numeric");
+Context()->flags->set(
+    tolerance => 0.0002,
+    tolType => "absolute",
+);
+
+
+Context("Numeric");
+
+@de1_arr = (
+'dy/dt = 8-2y',
+'dy/dt = y-4',
+'dy/dt = -y^2', 
+'dy/dt = y+1',
+);
+
+@de1_long_term_arr = (
+'Converges to a non-zero but finite y value.',
+'Diverges towards positive infinity.', 
+'Converges towards zero y value.',
+'Diverges towards negative infinity.',
+);
+
+@y0_arr = (12, 5, 8, -3);
+
+
+$de1_ver = random(0, 3);
+$de1 = $de1_arr[$de1_ver];
+$long_term = $de1_long_term_arr[$de1_ver];
+$y0 = $y0_arr[$de1_ver];
+
+$radio1 = RadioButtons(
+['Converges to a non-zero but finite y value.',
+'Diverges towards positive infinity.', 
+'Converges towards zero y value.',
+'Diverges towards negative infinity.'],
+  $long_term, # correct answer
+  last => 
+[ 'Converges towards zero y value.',
+'Converges to a non-zero but finite y value.',
+'Diverges towards positive infinity.', 
+'Diverges towards negative infinity.']
+);
+
+
+$t10 = 0;
+$t1end = 10;
+$y10 = -1;
+
+Context()->texStrings;
+BEGIN_PGML
+
+ a) Consider the differential equation [` [$de1] `], with the initial condition [` y([$t10]) = [$y10] `]. Use MATLAB and the
+:    ode45
+    command to generate a graph of the solution to [` [$de1] `] over the interval [` t = [ [$t10], [$t1end] ] `].
+
+    You should upload your MATLAB .m script file when you upload your scanned hand-written work.
+
+ b) Classify the long-term behaviour of the solution.
+
+    [@ $radio1->buttons() @]*
+    
+
+END_PGML
+Context()->normalStrings;
+
+ANS( $radio1->cmp() );
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

@@ -73,8 +73,8 @@ if ($function_ver == 1) {
   $linearization = Compute("1/($x_point)^2  (x - $x_point) - 1/$x_point");
   $estimate = Compute("1/($x_point)^2  ($new_x - $x_point) - 1/$x_point");
 } elsif ($function_ver == 4) {
-  $linearization = Compute("1/($x_point)^3  (x - $x_point) - 1/($x_point)^2");
-  $estimate = Compute("1/($x_point)^3  ($new_x - $x_point) - 1/($x_point)^2");
+  $linearization = Compute("2/($x_point)^3  (x - $x_point) - 1/($x_point)^2");
+  $estimate = Compute("2/($x_point)^3  ($new_x - $x_point) - 1/($x_point)^2");
 }
 
 

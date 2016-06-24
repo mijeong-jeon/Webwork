@@ -1,0 +1,165 @@
+#DESCRIPTION
+# Number of variables/sample size
+#ENDDESCRIPTION
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGML.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"MathObjects.pl",
+"PGauxiliaryFunctions.pl",
+"extraAnswerEvaluators.pl",
+"parserRadioButtons.pl",
+"parserMultiAnswer.pl",
+"parserPopUp.pl",
+"PGgraphmacros.pl",
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;  
+
+Context("Numeric");
+Context()->flags->set(
+  tolerance => 0.01,
+  tolType => "absolute",
+);
+
+$ver = random(1, 4);
+$ver = 3;
+if ($ver == 1) {
+   $in_conc = 15;
+   $VA= 100;
+   $VB= 200;
+   $tank_system_graph = "TankSystem1.png";
+   $dSa_Sa = Compute("-3/$VA");
+   $dSa_Sb = Compute("3/$VB");
+   $dSa_const = Compute("0");
+   
+   $dSb_Sa = Compute("3/$VA");
+   $dSb_Sb = Compute("-9/$VB");
+   $dSb_const = Compute("(6)($in_conc)");
+
+} elsif ($ver == 2) {
+   $in_conc = 9;
+   $VA= 100;
+   $VB= 200;
+   $tank_system_graph = "TankSystem2.png";
+   $dSa_Sa = Compute("-10/$VA");
+   $dSa_Sb = Compute("10/$VB");
+   $dSa_const = Compute("0");
+   
+   $dSb_Sa = Compute("2/$VA");
+   $dSb_Sb = Compute("-10/$VB");
+   $dSb_const = Compute("(8)($in_conc)");
+
+} elsif ($ver == 3) {
+   $in_conc = 10;
+   $VA= 100;
+   $VB= 50;
+   $tank_system_graph = "TankSystem3.png";
+   $dSa_Sa = Compute("-14/$VA");
+   $dSa_Sb = Compute("8/$VB");
+   $dSa_const = Compute("(6) $in_conc");
+   
+   $dSb_Sa = Compute("8/$VA");
+   $dSb_Sb = Compute("-8/$VB");
+   $dSb_const = Compute("0");
+
+} elsif ($ver == 4) {
+   $in_conc = 30;
+   $VA= 100;
+   $VB= 50;
+   $tank_system_graph = "TankSystem4.png";
+   $dSa_Sa = Compute("-21/$VA");
+   $dSa_Sb = Compute("0");
+   $dSa_const = Compute("(6) $in_conc");
+   
+   $dSb_Sa = Compute("15/$VA");
+   $dSb_Sb = Compute("-15/$VB");
+   $dSb_const = Compute("0");
+
+}
+
+$Sa_long_run = Compute("$in_conc $VA");
+$Sb_long_run = Compute("$in_conc $VB");
+
+$dCa_Ca = Compute("$dSa_Sa");
+$dCa_Cb = Compute("$dSa_Sb $VB / $VA");
+$dCa_const = Compute("$dSa_const / $VA");
+   
+$dCb_Ca = Compute("$dSb_Sa $VA/ $VB");
+$dCb_Cb = Compute("$dSb_Sb ");
+$dCb_const = Compute("$dSb_const / $VB");
+
+@graph_filenames = ();
+for ($i = 1; $i <= 4; $i++) {
+    push(@graph_filenames, "q_001_TankSystemSolution_$i.png");
+}
+@graph_perm = shuffle(4);
+@inv_graph_perm  = invert(@graph_perm);
+@shuffled_graph_filenames = @graph_filenames[@graph_perm];
+@shuffled_graph_labels = @graph_labels[@graph_perm];
+@graph_number = ("1", "2", "3", "4");
+$correct_graph_number = $graph_number[$inv_graph_perm[$ver-1]];  
+$popup = PopUp(["?","1","2","3","4"], $correct_graph_number);
+
+BEGIN_PGML
+
+Consider the following system of connected tanks, where water is flowing
+at the indicated rates in L/min, and any given concentrations are indicated in g/L.
+
+[@ image( $tank_system_graph, width=>500,tex_size=>800 ) @]*
+
+(Click on the diagram to open in a new window.)
+
+ a) Complete the coefficients for the system of differential equations
+that describe the rates of change in the *amount* of salt in each tank, [`S_A`] and [`S_B`].
+
+If a coefficient is missing, use the value '0'; if it is negative,
+include the negative sign in your answer.
+
+[`\displaystyle \frac{dS_A}{dt} = `] [______]{$dSa_Sa} [`S_A`] + [_____]{$dSa_Sb} [`S_B`] + [_____]{$dSa_const}
+
+[`\displaystyle \frac{dS_B}{dt} = `] [______]{$dSb_Sa} [`S_A`] + [_____]{$dSb_Sb} [`S_B`] + [______]{$dSb_const}
+
+ b) What will the values of [`S_A`] and [`S_B`] trend towards in the long run?
+
+[`S_A \to `][___________]{$Sa_long_run} g
+
+[`S_B \to `][___________]{$Sb_long_run} g
+
+
+ c) Complete the coefficients for the related system of differential equations that
+describes the rates of change of the *concentrations* of salt in each tank, [`C_A`] and [`C_B`].
+include the negative sign in your answer.
+
+If a coefficient is missing, use the value '0'; if it is negative,
+include the negative sign in your answer.
+
+[`\displaystyle \frac{dC_A}{dt} = `] [______]{$dCa_Ca} [`C_A`] + [_____]{$dCa_Cb} [`C_B`] + [_____]{$dCa_const}
+
+[`\displaystyle \frac{dC_B}{dt} = `] [______]{$dCb_Ca} [`C_A`] + [_____]{$dCb_Cb} [`C_B`] + [______]{$dCb_const}
+
+ d) If both tanks start with zero salt concentration, which of the
+ following graphs shows the concentration in each tank over time?  (Note that the axis labels
+ have been taken off so the inflow concentration is not a give-away to the answer.)
+ 
+ The blue line is Tank A concentration, and the red line is the Tank B concentration.
+
+ All simulations show 100 minutes.
+
+ 1. [@ image( "$shuffled_graph_filenames[0]", width,250 )  @]* 2. [@ image( "$shuffled_graph_filenames[1]", width,250 ) @]* 
+
+ 3. [@ image( "$shuffled_graph_filenames[2]", width,250 ) @]* 4. [@ image( "$shuffled_graph_filenames[3]", width,250 ) @]* 
+
+Graph: [______________]{$popup}
+
+END_PGML
+Context()->normalStrings;
+
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

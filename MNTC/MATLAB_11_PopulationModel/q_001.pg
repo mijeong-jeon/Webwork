@@ -1,0 +1,96 @@
+#DESCRIPTION
+# Number of variables/sample size
+#ENDDESCRIPTION
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGML.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"MathObjects.pl",
+"PGauxiliaryFunctions.pl",
+"extraAnswerEvaluators.pl",
+"parserRadioButtons.pl",
+"parserMultiAnswer.pl",
+"parserPopUp.pl",
+"PGgraphmacros.pl",
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;  
+
+Context("Numeric");
+Context()->flags->set(
+  tolerance => 11, 
+  tolType => "absolute",
+);
+
+# Constant parameters
+$A = 990;
+$P0 = 600;
+
+$ver = random(1, 4);
+if ($ver == 1) {
+  $r = 0.0005;
+  $h = 100;
+} elsif ($ver == 2) {
+  $r = 0.0005;
+  $h = 60;
+} elsif ($ver == 3) {
+  $r = 0.001;
+  $h = 100;
+} elsif ($ver == 4) {
+  $r = 0.001;
+  $h = 170;
+}
+
+$max_h = Compute($r*($A/2)*($A/2));
+
+@graph_filenames = ();
+for ($i = 1; $i <= 4; $i++) {
+    push(@graph_filenames, "q_001_PopulationSolution_$i.png");
+}
+@graph_perm = shuffle(4);
+@inv_graph_perm  = invert(@graph_perm);
+@shuffled_graph_filenames = @graph_filenames[@graph_perm];
+@shuffled_graph_labels = @graph_labels[@graph_perm];
+@graph_number = ("1", "2", "3", "4");
+$correct_graph_number = $graph_number[$inv_graph_perm[$ver-1]];  
+$popup = PopUp(["?","1","2","3","4"], $correct_graph_number);
+
+BEGIN_PGML
+
+Consider the managed population model defined by
+
+[`\displaystyle \frac{dP}{dt} = [$r] P([$A]-P) - h`],
+
+where [`h`] is the annual level of harvesting
+(e.g. fishing/hunting/extraction) for the population.
+
+ a) Which of the following graphs shows the predicted population over time,
+ given a starting population of [`P(0) = [$P0] `], and a harvesting level of [` h = [$h]`]? All simulations are for 20 years.
+
+ 1. [@ image( "$shuffled_graph_filenames[0]", width,400 )  @]* 2. [@ image( "$shuffled_graph_filenames[1]", width,400 ) @]* 
+
+ 3. [@ image( "$shuffled_graph_filenames[2]", width,400 ) @]* 4. [@ image( "$shuffled_graph_filenames[3]", width,400 ) @]* 
+
+Graph: [______________]{$popup}
+
+ b) What is the largest annual harvesting level [`h`] that 
+ does *not* result in the the population reaching zero (or negative values).  Give your harvesting
+ level to the nearest 10.  E.g. [`h = `] 510, or 520.
+
+For this part, simulate over a time span of *100 years*.
+
+Maximum sustainable [`h = `]  [_______________]{$max_h} 
+
+  
+
+END_PGML
+Context()->normalStrings;
+
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

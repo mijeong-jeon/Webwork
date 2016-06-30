@@ -1,0 +1,67 @@
+#DESCRIPTION
+# Number of variables/sample size
+#ENDDESCRIPTION
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGML.pl",
+"PGbasicmacros.pl",
+"PGanswermacros.pl",
+"MathObjects.pl",
+"parserRadioButtons.pl",
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;  
+
+Context("Numeric");
+Context()->flags->set(
+  tolerance => 0.1,
+  tolType => "absolute",
+);
+
+Context("Matrix");
+Context()->flags->set(
+  tolerance => 0.1,
+  tolType => "absolute",
+);
+  
+$a11 = list_random(-1, 1, 2, 3, 4); 
+$a13 = list_random(-1, 1, 2, 3, 4); 
+$a21 = list_random(-1, 1, 2, 3, 4); 
+$a22 = list_random(-1, 1, 2, 3, 4); 
+$a32 = list_random(-1, 1, 2, 3, 4); 
+$a33 = list_random(-1, 1, 2, 3, 4); 
+
+$M = Matrix([[$a11,0, $a13],[$a21, $a22, 0], [0, $a32, $a33]]);
+$MT= $M->transpose;
+$MI= $M->inverse;
+   
+Context()->texStrings;
+
+
+BEGIN_PGML
+Consider the matrix [` M = [$M] `].
+
+(a) Find the *transpose* of the matrix [`M`].
+
+[` M^T `] =   [@ $MT->ans_array @]*
+
+(b) Find the *inverse* of the matrix [`M`].
+
+[` M^{-1} `] =   [@ $MI->ans_array @]*  If any values are decimals, report them to 2 digits after the decimal.
+
+END_PGML
+
+Context()->normalStrings;
+
+ANS( $MT->cmp(  tolType => 'absolute',tolerance => 1) );
+ANS( $MI->cmp(  tolType => 'absolute',tolerance => 1) );
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.
+
+
+
+

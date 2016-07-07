@@ -65,8 +65,8 @@ Consider the matrix [` M = [$M] `].
 
 [` \mbox{diag}(M) `] values =   [___________________]
 
-Report the diagonal values as a comma-separated list. 
-Report values to 2 digits after the decimal.
+- Report the diagonal values as a comma-separated list. 
+- Report values to 2 digits after the decimal.
 
 END_PGML
 

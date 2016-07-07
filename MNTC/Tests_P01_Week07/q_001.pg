@@ -76,12 +76,11 @@ $radio1 = RadioButtons(
 
 $t10 = 0;
 $t1end = 10;
-$y10 = -1;
 
 Context()->texStrings;
 BEGIN_PGML
 
- a) Consider the differential equation [` [$de1] `], with the initial condition [` y([$t10]) = [$y10] `]. Use MATLAB and the
+ a) Consider the differential equation [` [$de1] `], with the initial condition [` y([$t10]) = [$y0] `]. Use MATLAB and the
 :    ode45
     command to generate a graph of the solution to [` [$de1] `] over the interval [` t = [ [$t10], [$t1end] ] `].
 

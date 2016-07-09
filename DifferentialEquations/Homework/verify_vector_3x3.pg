@@ -28,16 +28,18 @@ t=>"Real"
 $y0 = ColumnVector("5*t + 1", "2*t", "4*t + 2");
 $c = ColumnVector("-2*$aa*t - 2*$aa -5*t + 4", "($aa - 2)*(t - 1)", "-7*$aa*t - $aa - 4*t + 2")->reduce;
 $column = random(1,3,1);
-
 if ( $column == 1 ) {
 	$Y = ColumnVector("e^($r2 * t)", "0", "e^($r2 * t)");
-	$Yp = $r2 * $Y;
+	$Yp = ColumnVector("$r2 e^($r2 * t)", "0", "$r2 e^($r2 * t)");
+#	$Yp = $r2 * $Y;
 } elsif( $column == 2 ) {
 	$Y = ColumnVector("-e^($r2 * t)", "e^($r2 * t)", "0");
-	$Yp = $r2 * $Y;
+	$Yp = ColumnVector("-$r2 e^($r2 * t)", "$r2 e^($r2 * t)", "0");
+#	$Yp = $r2 * $Y;
 } else {
 	$Y = ColumnVector("-e^($r1 * t)", "-e^{$r1 * t}", "e^{$r1 * t}");
-	$Yp = $r1 * $Y;
+	$Yp = ColumnVector("$- $r1 e^($r1 * t)", "-$r1 e^{$r1 * t}", "$r1 e^{$r1 * t}");
+#	$Yp = $r1 * $Y;
 }
 
 $y0p = ColumnVector(5, 2, 4);
@@ -57,7 +59,8 @@ $BR
 \{ ans_rule(20) \}
 =
 \{ ans_rule(20) \}.
-\{ AnswerFormatHelp("vectors") \}
+
+$BR Use angle brackets, \(\langle\) and \(\rangle\), to indicate vectors, and separate the components with commas.  E.g. \( \langle e^t, t^2, 2 e^{2t} \rangle\). 
 
 $ITEMSEP
 $ITEM Verify that \( \boldsymbol{\vec{y}}_0 (t) = $y0 \) is a particular 
@@ -69,7 +72,8 @@ $BR
 \{ ans_rule(20) \}
 =
 \{ ans_rule(20) \}
-\{ AnswerFormatHelp("vectors") \}
+
+$BR Use angle brackets, \(\langle\) and \(\rangle\), to indicate vectors, and separate the components with commas.  E.g. \( \langle 3, 3 t^2, 2t + 1\rangle\). 
 END_TEXT
 Context()->normalStrings;
 

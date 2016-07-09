@@ -33,7 +33,7 @@ if ( $column == 1 ) {
 	$Y = ColumnVector("e^($r2 * t)", "0", "e^($r2 * t)");
 	$Yp = $r2 * $Y;
 } elsif( $column == 2 ) {
-	$Y = ColumnVector("-e^($r2 * t)", "e^($r2 * t)", "0");* 
+	$Y = ColumnVector("-e^($r2 * t)", "e^($r2 * t)", "0");
 	$Yp = $r2 * $Y;
 } else {
 	$Y = ColumnVector("-e^($r1 * t)", "-e^{$r1 * t}", "e^{$r1 * t}");

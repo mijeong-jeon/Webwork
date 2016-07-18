@@ -1,0 +1,4 @@
+convert -density 300 TankSystem1.pdf TankSystem1.png
+convert -density 300 TankSystem2.pdf TankSystem2.png
+convert -density 300 TankSystem3.pdf TankSystem3.png
+convert -density 300 TankSystem4.pdf TankSystem4.png

@@ -1,0 +1,91 @@
+# Modified from problem library
+##DESCRIPTION
+##KEYWORDS('integrals', 'exponentials', 'substitution', 'substitution rule')
+##Use the substitution rule to evaluate the integral
+##ENDDESCRIPTION
+
+## DBsubject('Calculus')
+## DBchapter('Integrals')
+## DBsection('Antiderivatives')
+## Date('6/3/2002')
+## Author('')
+## Institution('')
+## TitleText1('Calculus: Early Transcendentals')
+## EditionText1('6')
+## AuthorText1('Stewart')
+## Section1('')
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"PGauxiliaryFunctions.pl",
+"parserFormulaUpToConstant.pl"
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;
+Context("Numeric");
+
+# Formula is $k x^$c
+# Interval is x=$a..($a+$len)
+$k = random(2,6,1);
+$c = random(2,4,1);
+
+$a = random(0, 1.1, 1);
+$len = random(2, 3, 1);
+$b = $a + $len;
+$c_p_1 = $c + 1;
+$f = Formula("$k x^($c_p_1)/$c_p_1");
+$answer1 = Formula($f->substitute(x=>$b) - $f->substitute(x=>$a));
+
+# By Parts integral: x e^(ax + c)
+$a2 = random(2, 5,1);
+$c2 = random(1, 4, 1);
+# Integrand is  (x e^(a2x + c2))
+# Integral is (x/a) e^(a2x + c2) - (1/a^2) e^(ax + c)
+$answer2 = FormulaUpToConstant("(x/$a2)* e^($a2 x + $c2)- (1/$a2)^2 e^($a2 x + $c2)");
+
+# Substitution integral: x / (k + c x^2)  
+$k3 = random(2, 5,1);
+#$c3 = list_random(-4, -3, -2, 2, 3, 4);
+$c3 = list_random(-4, -3, -2);
+$denom = Compute("($c3* x^3) + $k3 ")->reduce;
+$integrand3 = Formula(" x / $denom");
+# Integrand is  x / (k + c x^3)  
+# Integral is   (1/3c) ln(k + c x^3)
+$answer3 = FormulaUpToConstant("1/ (3*$c3) * ln(|$k3 + $c3 x^3|)");
+TEXT(EV2(<<EOT));
+
+$PAR
+a) Evaluate the definite integral below.
+$BR \( \displaystyle \int_{$a}^{$b} $k x^{$c} dx  = \) \{ans_rule( 30) \}
+$BR
+
+$BITALIC Note:$EITALIC you can enter base \(e\) exponentials like \(e^{3x + 1}\) using the syntax "e^(3x+1)".
+$BR
+$BITALIC Note:$EITALIC you can enter absolute values using the \(|\) symbol (usually Shift+Backslash).  E.g. "| 5x^2 + 2|".
+
+$PAR
+b) Evaluate the indefinite integral below.
+$BR \( \displaystyle \int x  e^{$a2  x + $c2} dx =  \) \{ans_rule( 50) \}
+$BR
+
+$PAR
+c) Evaluate the indefinite integral below.
+$BR \( \displaystyle \int \frac{x^2}{$denom}~ dx  =  \) \{ans_rule( 50) \}
+$BR
+
+EOT
+
+ANS($answer1->cmp());
+
+ANS($answer2->cmp());
+
+ANS($answer3->cmp());
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.
+

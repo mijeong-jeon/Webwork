@@ -1,0 +1,86 @@
+#DESCRIPTION
+# Number of variables/sample size
+#ENDDESCRIPTION
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGML.pl",
+"PGbasicmacros.pl",
+"PGanswermacros.pl",
+"MathObjects.pl",
+"parserRadioButtons.pl",
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 1;  
+
+Context()->texStrings;   
+
+Context("Vector");
+
+$v1x = list_random(-3, -2, -1, 1, 2, 3); 
+$v1y = list_random(-3, -2, -1, 1, 2, 3);
+$v1z = list_random(-3, -2, -1, 1, 2, 3);
+
+
+$v2x = list_random(-3, -2, -1, 1, 2, 3); 
+$v2y = list_random(-3, -2, -1, 1, 2, 3);
+
+$ver = random(1, 2);
+if ($ver == 1) {
+  $v2z = (-1/$v1z)*($v1x*$v2x + $v1y*$v2y);  
+  $angle_answer = "Orthogonal";
+} elsif ($ver == 2) {
+  $v2z = (-1/$v1z)*($v1x*$v2x + $v1y*$v2y) + list_random(-1, 1);  
+  $angle_answer = "Not orthogonal";
+}
+$v1 = Vector( $v1x, $v1y, $v1z);
+$v2 = Vector( $v2x, $v2y, $v2z);
+
+$dot_answer = $v1 . $v2;
+
+
+$radio1 = RadioButtons(
+['Orthogonal', 
+'Not orthogonal'],
+  $angle_answer, # correct answer
+);
+
+$l = sqrt($v1x*$v1x + $v1y*$v1y + $v1z*$v1z );
+$unit_vector = Vector( $v1x/$l, $v1y/$l, $v1z/$l);
+
+BEGIN_PGML
+
+(a) Find the dot product of [` [$v1] `] and [` [$v2] `].
+
+[` [$v1] \cdot [$v2] `] =  [_________________]
+
+(b) How are the two vectors related?  
+
+    [@ $radio1->buttons() @]*
+
+(c) Find the unit vector in the direction of [` [$v1] `].  Report your coordinates to 3 digits after the decimal.
+
+[`\mbox{Unit vector in direction of } [$v1]  `] =  [_________________]
+
+Use angle braces around coordinates to indicate a vector.  E.g. "<1, 2, 3>".
+END_PGML
+
+Context()->normalStrings;
+
+ANS( $dot_answer->cmp() );
+
+ANS( $radio1->cmp() );
+
+ANS( $unit_vector->cmp(
+tolType => 'absolute',
+  tolerance => .01,
+  ));
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.
+
+
+
+

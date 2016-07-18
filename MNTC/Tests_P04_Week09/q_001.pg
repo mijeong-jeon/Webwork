@@ -1,0 +1,168 @@
+## DESCRIPTION
+## Calculus: Functions and models
+## ENDDESCRIPTION
+
+## KEYWORDS('calculus', 'integration')
+## Tagged by LD
+
+## DBsubject('Calculus')
+## Date('12/06/2011')
+## Author('Alan Ableson')
+## Institution("Queen's University")
+
+
+## TitleText1('Calculus')
+## EditionText1('X')
+## AuthorText1('Hughes-Hallett')
+## Section1('XXX')
+## Problem1('XX')
+DOCUMENT();
+
+loadMacros(
+"PGstandard.pl",
+"MathObjects.pl",
+"PGgraphmacros.pl",
+"contextPiecewiseFunction.pl",
+);
+TEXT(beginproblem());
+
+# Define the derivative graph as a horizontal line combined with
+# a diagonal line
+$y_horiz = non_zero_random(-3, 3, 1); 
+while ($y_horiz == 1) {  # 1 is too easy
+  $y_horiz = non_zero_random(-3, 3, 1); 
+}
+$horiz_line = Formula($y_horiz);
+
+# Define the end-point of the diagonal on the far side of y=0/opposite
+# sign of y_horiz, so we get a critical point 
+$diag_y_end = -1 * sgn($y_horiz) *non_zero_random(0, 3, 1);   
+$domain_x_length = 4;
+$L_diag = random(1, 3, 1); # interval length before the split
+$L_horiz = $domain_x_length - $L_diag;  # interval length after the split
+$slope = ($y_horiz - $diag_y_end)/$L_diag;
+# round slope to the nearest 1 
+$slope = floor(  $slope + 0.5);
+# Find the new end y value
+$diag_y_end = $y_horiz - ($slope * $L_diag);
+
+# The slope construction assumes that the diagonal line comes first
+$low_y = min(-3, $diag_y_end);
+$high_y = max(3, $diag_y_end);
+$domain_y_length = $high_y - $low_y;
+
+# Define how we're splitting up the interval
+$diag_first = random(0, 1, 1);
+$split_x = non_zero_random(-2, 2, 1);
+if ($diag_first) {
+  $low_x = ($split_x-$L_diag); 
+  $high_x = ($split_x + $L_horiz);
+} else { # horiz line first; need to flip slope
+  $low_x = ($split_x-$L_horiz); 
+  $high_x = ($split_x + $L_diag);
+  $slope = -1 * $slope;
+}
+
+# Represent the slope of the diagonal line. Set the reduceConstants flag of the
+# MathObjects context to 0, so that "$rise/2" is not reduced.
+
+Context()->flags->set(reduceConstants=>0);
+$diag_line = Formula("$slope*(x-$split_x)+$y_horiz");
+
+# *** Build the graph 
+# Size of the graph in pixels.
+$xsize = $domain_x_length*100;
+$ysize = ($domain_y_length+2)*100;
+
+# init_graph returns a graph object that we can then add functions to.
+$graph = init_graph(
+    $low_x, $low_y-1,
+    $high_x, $high_y+1,
+    grid => [$domain_x_length,$domain_y_length+2], 
+    axes => [0,0],
+    size => [$xsize,$ysize]
+);
+
+# Add two functions to the graph. The language used in specifying plots is
+# described in the PGgraphmacros.pl docs. When a MathObject is used in double-
+# quotes, it is stringified into the quasi-TI notation that WeBWorK uses.        
+Context("PiecewiseFunction");
+if ($diag_first) {
+plot_functions($graph,
+    "$diag_line for x in [$low_x,$split_x] using color:red and weight:2",
+    "$horiz_line for x in [$split_x, $high_x] using color:red and weight:2");
+$f = Formula("$diag_line if x <= $split_x else $y_horiz");
+} else { # diagonal first
+  plot_functions($graph,
+    "$horiz_line for x in [$low_x,$split_x] using color:red and weight:2",
+    "$diag_line for x in [$split_x, $high_x] using color:red and weight:2" );
+$f = Formula("$diag_line if x >= $split_x else $y_horiz");
+}
+
+# Build values for the anti-derivative
+$f_at_low_x = non_zero_random(-4, 4, 1); 
+@x_seq = ();
+@deriv_seq = ();        
+for ($x = $low_x; $x <= $high_x; $x++) {
+  push(@x_seq, $x);
+  push(@deriv_seq, $f->eval(x=>$x));
+}
+@f_seq = ($f_at_low_x); 
+$current_f = $f_at_low_x;
+for ($i = 1; $i <= $domain_x_length; $i++) {
+  $x = $low_x + $i;
+  $deriv_1 = $deriv_seq[$i-1];
+  $deriv_2 = $deriv_seq[$i];
+  $integral =  ($deriv_1 + $deriv_2)/2;   # Trapezoidal rule applies, delta x = 1
+$current_f = $current_f + $integral;
+  push(@f_seq, $current_f);
+}
+Context()->texStrings;
+
+
+
+# image(insertGraph($graph) inserts the graph that we generated before. insertGraph() actually generates
+# the image, and it returns the pathname of the image. image() takes that image
+# and actually generates code needed to place the image in the output. These
+# macros are in dangerousMacros.pl, which is always loaded. Documentation at:
+# <http://devel.webwork.rochester.edu/doc/cvs/pg_HEAD/macros/dangerousMacros.pl.html>
+
+BEGIN_TEXT 
+$PAR The graph below shows the $BBOLD derivative $EBOLD of
+the function \( f(x) \) on the 
+interval \( x \in [$low_x, $high_x]\).
+
+$PAR
+\{ image(insertGraph($graph)) \}
+$PAR
+You can click on the graph to see larger version.
+
+
+$PAR
+a) Given the single \(f(x)\) value already shown in the table, complete
+the entries for the rest of the table.
+$BCENTER
+\{ 
+begintable(5)  .
+  row( "\(x = \)", @x_seq).
+  row( "\(f(x) = \)", $f_at_low_x, ans_rule(5), ans_rule(5), ans_rule(5), ans_rule(5) ) .
+endtable(); 
+\}
+$ECENTER
+
+$PAR
+b) $BBOLD On your written sheet$EBOLD, use the values you found in part (a) to sketch the graph of the original function, \(f(x)\). $BR 
+Clearly label and scale the axes.
+
+END_TEXT
+Context()->normalStrings;
+
+$showPartialCorrectAnswers = 1;
+
+foreach $i (1..$domain_x_length) {
+  ANS( $f_seq[$i]->cmp() );
+}
+
+#COMMENT('MathObject version.');
+
+ENDDOCUMENT();

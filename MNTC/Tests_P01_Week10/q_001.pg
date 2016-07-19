@@ -48,7 +48,7 @@ $radio1 = RadioButtons(
   $angle_answer, # correct answer
 );
 
-$l = sqrt($v1x*$v1x + $v1y*$v1y + $v1z*$v1z );
+$l = sqrt($v1x*$v1x + $v1y*$v1y + $v1z*$v1 );
 $unit_vector = Vector( $v1x/$l, $v1y/$l, $v1z/$l);
 
 BEGIN_PGML

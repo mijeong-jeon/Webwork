@@ -1,0 +1,109 @@
+#DESCRIPTION
+# Number of variables/sample size
+#ENDDESCRIPTION
+
+DOCUMENT();        # This should be the first executable line in the problem.
+
+loadMacros(
+"PG.pl",
+"PGML.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"MathObjects.pl",
+"PGauxiliaryFunctions.pl",
+"extraAnswerEvaluators.pl",
+"parserRadioButtons.pl",
+"parserMultiAnswer.pl",
+"parserPopUp.pl",
+);
+
+TEXT(beginproblem());
+$showPartialCorrectAnswers = 0;  
+
+$excel_filename = "Module06/MinnesotaHighSchool.xlsx";
+
+Context("Numeric");
+Context()->flags->set(
+  tolerance => 0.1,
+  tolType => "absolute",
+);
+
+
+# ************** DE Part 1   
+Context()->variables->add(w1 => "Real");
+Context()->variables->add(w2 => "Real");
+Context()->variables->remove("x");
+
+@de1_arr = (
+"y'' -2 y' + y = 2", 
+"y'' +2 y' + y = 2", 
+"5 y'' + y' +5 y = 2", 
+"5 y'' - y' +5 y = 2", 
+);
+@dw2dt_arr = (
+Compute("2 - w1 + 2 w2"), # y'' -2 y' + y = 2", 
+Compute("2 - w1 - 2 w2"), #  "y'' +2 y' + y = 2", 
+Compute("(1/5)(2 - 5 w1 - w2)"), #  "5 y'' + y' +5 y = 2", 
+Compute("(1/5)(2 - 5 w1 + w2)"), #  "5 y'' - y' +5 y = 2", 
+);
+
+
+$de1_ver = random(1, 4);
+
+@graph1_filenames = ();
+for ($i = 1; $i <= 4; $i++) {
+    push(@graph1_filenames, "q_001_Part1_${i}.png");
+}
+@graph1_perm = shuffle(4);
+@inv_graph1_perm  = invert(@graph1_perm);
+@shuffled_graph1_filenames = @graph1_filenames[@graph1_perm];
+@shuffled_graph1_labels = @graph1_labels[@graph1_perm];
+@graph1_number = ("1", "2", "3", "4");
+
+$correct_graph1_number = $graph1_number[$inv_graph1_perm[$de1_ver - 1]];
+$de1 = $de1_arr[$de1_ver - 1];
+$dw2dt = $dw2dt_arr[$de1_ver - 1];
+
+$dw1dt = Compute("w2");
+
+$t0 = 0;
+$tend = 10;
+$y0 = 0;
+$yp0 = 0;
+
+$popup1 = PopUp(["?","1","2","3","4"], $correct_graph1_number);
+
+Context()->texStrings;
+BEGIN_PGML
+
+Consider the differential equation [` [$de1] `], with the initial conditions [` y([$t0]) = [$y0] `] and [` y'([$t0]) = [$yp0] `]. 
+
+ a) Write this higher-order differential equation as a system of two first-order differential equations, using the standard substitutions [`w_1 = y`] and [`w_2 = y' `]. 
+
+Type the expressions 'w1' and 'w2' for [` w_1 `] and [` w_2 `]. 
+
+[` \displaystyle \frac{dw_1}{dt} = `] [_________________________]{$dw1dt}
+
+[` \displaystyle \frac{dw_1}{dt} = `] [_________________________]{$dw2dt}
+
+ b) Use your answer to part (a) with MATLAB and the
+:    ode45
+command to generate a graph of the solution to [` [$de1] `] over the interval [` t = [ [$t0], [$tend] ] `].  
+
+Which of the following graphs matches the MATLAB solution?
+
+(Click to open a graph in a new window.)
+
+ 1. [@ image( "$shuffled_graph1_filenames[0]", width,250 )  @]* 2. [@ image( "$shuffled_graph1_filenames[1]", width,250 ) @]* 
+
+ 3. [@ image( "$shuffled_graph1_filenames[2]", width,250 ) @]* 4. [@ image( "$shuffled_graph1_filenames[3]", width,250 ) @]* 
+
+Graph: [______________]{$popup1}
+
+
+END_PGML
+Context()->normalStrings;
+
+
+ENDDOCUMENT();        # This should be the last executable line in the problem.

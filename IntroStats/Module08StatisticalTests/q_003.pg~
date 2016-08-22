@@ -83,7 +83,7 @@ Every time they have a headache, the volunteers take one of their assigned pills
 - the time in minutes until they felt some level of relief (continuous numerical).
 - the level of stomach discomfort 10 minutes after taking the pill (rating 1-100: continuous numerical).
 
-(a) What kind of study design is this?
+(a) What kind of of experimental study design is this?
 
 [@ $survey_design->buttons() @]*
 

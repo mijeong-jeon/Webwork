@@ -21,8 +21,6 @@ loadMacros(
 TEXT(beginproblem());
 $showPartialCorrectAnswers = 0;  
 
-$excel_filename = "Module06/MinnesotaHighSchool.xlsx";
-
 Context("Numeric");
 Context()->flags->set(
   tolerance => 0.1,
@@ -32,10 +30,10 @@ Context()->flags->set(
 
 # ************** DE Part 1
 @de1_arr = (
-'dy/dt = 4-y',
-'dy/dt = -y',
-'dy/dt = y^2',
-'dy/dt = -(7+y)',
+'y'' + 3y' + 2y = 4'; 
+'5 y'' - 2y' + y = e^{-t}'; 
+'5 y'' - 3y' -2 y = 5';
+'2 y'' + y' +4 y = 2'; 
 );
 
 $de1_ver = random(1, 4);

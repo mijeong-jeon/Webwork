@@ -42,8 +42,8 @@ $function = Compute("cos(7x)");
 $function_text = $function->TeX();
 $a = 0;
 $b = 4;
-$antideriv_NoC = Compute("(1/7) cos(7x)");
-$antideriv = FormulaUpToConstant("(1/7) cos(7x)");
+$antideriv_NoC = Compute("(1/7) sin(7x)");
+$antideriv = FormulaUpToConstant("(1/7) sin(7x)");
 $exact_integral_value = Compute($antideriv_NoC->eval(x => $b) - $antideriv_NoC->eval(x =>$a)) ;
 $LHR = Compute(0.04654);
 }

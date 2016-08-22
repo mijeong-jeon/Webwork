@@ -31,8 +31,8 @@ Context()->flags->set(
 $ver = random(1, 4);
 if ($ver == 1) {
    $in_conc = 25;
-   $VA= 100;
-   $VB= 200;
+   $VA= 50;
+   $VB= 75;
    $tank_system_graph = "TankSystem1.png";
    $dSa_Sa = Compute("-3/$VA");
    $dSa_Sb = Compute("3/$VB");
@@ -43,9 +43,9 @@ if ($ver == 1) {
    $dSb_const = Compute("(6)($in_conc)");
 
 } elsif ($ver == 2) {
-   $in_conc = 9;
-   $VA= 100;
-   $VB= 200;
+   $in_conc = 15;
+   $VA= 50;
+   $VB= 75;
    $tank_system_graph = "TankSystem2.png";
    $dSa_Sa = Compute("-10/$VA");
    $dSa_Sb = Compute("10/$VB");
@@ -56,9 +56,9 @@ if ($ver == 1) {
    $dSb_const = Compute("(8)($in_conc)");
 
 } elsif ($ver == 3) {
-   $in_conc = 10;
-   $VA= 100;
-   $VB= 50;
+   $in_conc = 25;
+   $VA= 200;
+   $VB= 150;
    $tank_system_graph = "TankSystem3.png";
    $dSa_Sa = Compute("-14/$VA");
    $dSa_Sb = Compute("8/$VB");
@@ -69,9 +69,9 @@ if ($ver == 1) {
    $dSb_const = Compute("0");
 
 } elsif ($ver == 4) {
-   $in_conc = 30;
-   $VA= 100;
-   $VB= 50;
+   $in_conc = 100;
+   $VA= 200;
+   $VB= 150;
    $tank_system_graph = "TankSystem4.png";
    $dSa_Sa = Compute("-21/$VA");
    $dSa_Sb = Compute("0");

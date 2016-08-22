@@ -6,11 +6,11 @@ DOCUMENT();        # This should be the first executable line in the problem.
 
 loadMacros(
 "PG.pl",
-"PGML.pl",
 "PGbasicmacros.pl",
 "PGanswermacros.pl",
 "MathObjects.pl",
 "parserRadioButtons.pl",
+"PGML.pl",
 );
 
 TEXT(beginproblem());

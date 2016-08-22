@@ -61,12 +61,12 @@ Consider the matrix [` M = [$M] `].
 
 [` \mbox{det}(M) `] =   [______________]
 
-(b) Find the diagonalization of the matrix [`M`], and report the values on the diagonal.
+(b) Find the diagonalization of the matrix [`M`], and report the values *just on the diagonal*.
 
 [` \mbox{diag}(M) `] values =   [___________________]
 
-- Report the diagonal values as a comma-separated list. 
 - Report values to 2 digits after the decimal.
+- Report the diagonal values as a comma-separated list.  E.g. 5.29, -2.45, 2.75
 
 END_PGML
 

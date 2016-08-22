@@ -8,66 +8,94 @@ loadMacros(
 "PG.pl",
 "PGML.pl",
 "PGbasicmacros.pl",
+"PGchoicemacros.pl",
 "PGanswermacros.pl",
 "MathObjects.pl",
 "PGauxiliaryFunctions.pl",
 "extraAnswerEvaluators.pl",
-"parserFormulaUpToConstant.pl",
+"parserRadioButtons.pl",
+"parserMultiAnswer.pl",
+"parserPopUp.pl",
+"parserRadioButtons.pl",
 );
 
 TEXT(beginproblem());
-$showPartialCorrectAnswers = 1;  
+$showPartialCorrectAnswers = 0;  
 
 Context("Numeric");
-Context()->flags->set(
-  tolerance => 0.0005,
-  tolType => "absolute",
+
+@de_arr = (
+"3y'+ 4y = e^t",
+"7y'' - 2y' = 0",
+"y''' + y = 10 \sin(t)",
+"e^t y'' - e^(-t) y = 10 \sin(t)",
+"y'' + t^2 e^t y  = 0",
+"y' = y - 10", 
+"(y')^2 = \sin(t)",
+"y' = \sqrt{y}",
+"y''' - 3y^3 = 10 + \cos(t)",  
+"y' -(y)(y') = 0",
+"y^(4)  + y = 0",
+"(y')^4  + y = 0",
 );
 
-Context()->variables->add(w1 => "Real");
-Context()->variables->add(w2 => "Real");
-Context()->variables->add(t => "Real");
-Context()->variables->remove("x");
-$variable_names = join(',', Context()->variables->names());
+@de_order = ( 1, 2, 3, 2, 2, 1, 1, 1, 3, 1, 4, 1);
+@de_type = (
+"Linear",
+"Linear",
+"Linear",
+"Linear",
+"Linear",
+"Linear",
+"Non-linear",
+"Non-linear",
+"Non-linear",
+"Non-linear",
+"Non-linear",
+"Linear",
+);
 
-$ver = random(1, 4);
-$ver = 4;
-if ($ver == 1) {
-  $de = "3 x'' - 2x' + 7 x = 4 \cos(t)";
-  $dw1dt = Compute("w2");
-  $dw2dt = Compute("(1/3) (4 cos(t) - 7 w1 +2 w2)");
-}
-elsif ($ver == 2) {
-  $de = "5 x''  + 2 x' + 3 x = 4 e^{2t}";
-  $dw1dt = Compute("w2");
-  $dw2dt = Compute("(1/5) (4 e^{2t} - 2 w2 -3 w1)");
-}
-elsif ($ver == 3) {
-  $de = "2 x''  -4 x' - 6 x = t^2 ";
-  $dw1dt = Compute("w2");
-  $dw2dt = Compute("(1/2) (t^2 + 4 w2 + 6 w1) ");
-}
-elsif ($ver == 4) {
-  $de = "4 x''  +2 x' - x = e^{-3t} ";
-  $dw1dt = Compute("w2");
-  $dw2dt = Compute("(1/4) (e^{-3t} -2w2 +w1)");
-}
+@shuffled = shuffle(scalar(@de_arr));
+$shuffled_text = join(", ", @shuffled);
+
+$eq1 = $shuffled[0];
+$radio1 = RadioButtons(
+  ["Linear","Non-linear"],
+  $de_type[$eq1], # correct answer
+  last => ["Non-linear"],
+);
+$de1 = $de_arr[$eq1];
+$order1 = Compute($de_order[$eq1]);
+
+$eq2 = $shuffled[1];
+$radio2 = RadioButtons(
+  ["Linear","Non-linear"],
+  $de_type[$eq2], # correct answer
+  last => ["Non-linear"],
+);
+$de2 = $de_arr[$eq2];
+$order2 = Compute($de_order[$eq2]);
 
 Context()->texStrings;
 BEGIN_PGML
 
-Consider the second-order differential equation [` [$de] `].  Use the standard substitution
-[`w_1 = x`] and [`w_2 = x' `] to convert this to a system of first-order differential equations.
+a) Classify the differential equation [` [$de1] `].
 
-Note: you can only use the variables [@ $variable_names @]*  in your answer. 
+    [@ $radio1->buttons() @]*
 
-[`\displaystyle \frac{dw_1}{dt} = `] [___________________]{$dw1dt}
+    Order: [_________] (enter a number, e.g. "1" for a first-order DE, "2" for second order, etc.)
+ 
+b) Classify the differential equation [` [$de2] `].
 
-[`\displaystyle \frac{dw_2}{dt} = `] [___________________]{$dw2dt}
-
-
-    
+    [@ $radio2->buttons() @]*
+ 
+    Order: [_________] (enter a number, e.g. "1" for a first-order DE, "2" for second order, etc.)
 END_PGML
+
+ANS( $radio1->cmp() );
+ANS( $order1->cmp() );
+ANS( $radio2->cmp() );
+ANS( $order2->cmp() );
 
 Context()->normalStrings;
 

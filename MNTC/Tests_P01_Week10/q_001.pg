@@ -6,11 +6,11 @@ DOCUMENT();        # This should be the first executable line in the problem.
 
 loadMacros(
 "PG.pl",
-"PGML.pl",
 "PGbasicmacros.pl",
 "PGanswermacros.pl",
 "MathObjects.pl",
 "parserRadioButtons.pl",
+"PGML.pl",
 );
 
 TEXT(beginproblem());
@@ -48,7 +48,7 @@ $radio1 = RadioButtons(
   $angle_answer, # correct answer
 );
 
-$l = sqrt($v1x*$v1x + $v1y*$v1y + $v1z*$v1 );
+$l = sqrt($v1x*$v1x + $v1y*$v1y + $v1z*$v1z );
 $unit_vector = Vector( $v1x/$l, $v1y/$l, $v1z/$l);
 
 BEGIN_PGML

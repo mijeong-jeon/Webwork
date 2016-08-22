@@ -29,7 +29,6 @@ Context()->flags->set(
 );
 
 $ver = random(1, 4);
-$ver = 3;
 if ($ver == 1) {
    $in_conc = 15;
    $VA= 100;

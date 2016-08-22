@@ -16,6 +16,7 @@ loadMacros(
 "parserRadioButtons.pl",
 "parserMultiAnswer.pl",
 "parserPopUp.pl",
+"PGgraphmacros.pl",
 );
 
 TEXT(beginproblem());
@@ -25,101 +26,86 @@ $excel_filename = "Module06/MinnesotaHighSchool.xlsx";
 
 Context("Numeric");
 Context()->flags->set(
-  tolerance => 0.1,
+  tolerance => 1,
   tolType => "absolute",
 );
 
+# Parameters for the temperature
+$Text = list_random(-10, 0, 10, 20, 30);
+$A = list_random(-25, -15, -5, 5, 10, 15, 25);
+$y0 = $Text + $A;
+$k = list_random(0.2, 0.5, 1, 2);
+$k2 = $k * list_random(0.5, 2);
 
-# ************** DE Part 1
-@de1_arr = (
-'dy/dt = 4-y',
-'dy/dt = -y',
-'dy/dt = y^2',
-'dy/dt = -(7+y)',
+$ymax = $y0 >= $Text ? $y0 : $Text;
+$ymin = $y0 <= $Text ? $y0 : $Text;
+
+# ***** Image 1
+$gr1 = init_graph(-1,$ymin,10,$ymax,
+axes=>[0,0],
+grid=>[1,5],
+size=>[400,400]
 );
-
-$de1_ver = random(1, 4);
-
-@graph1_filenames = ();
-for ($i = 1; $i <= 4; $i++) {
-    push(@graph1_filenames, "q_001_Part1_${i}.png");
-}
-@graph1_perm = shuffle(4);
-@inv_graph1_perm  = invert(@graph1_perm);
-@shuffled_graph1_filenames = @graph1_filenames[@graph1_perm];
-@shuffled_graph1_labels = @graph1_labels[@graph1_perm];
-@graph1_number = ("1", "2", "3", "4");
-
-$correct_graph1_number = $graph1_number[$inv_graph1_perm[$de1_ver - 1]];
-$de1 = $de1_arr[$de1_ver - 1];
-
-$t10 = 0;
-$t1end = 10;
-$y10 = -1;
-
-$popup1 = PopUp(["?","1","2","3","4"], $correct_graph1_number);
-
-# ************** DE Part 2
-@de2_arr = (
-'dy/dt + 1/y = \sin(t)',
-'dy/dt - 1/y = \cos(t)',
-'dy/dt - 1/y = \sin(t)',
-'dy/dt + 1/y = \cos(t)',
+add_functions($gr1, "($Text + $A*exp(-1*$k*x)) for x in <0,10>" . 
+  " using color:blue and weight:2");
+# ***** Image 2
+$gr2 = init_graph(-1,$ymin,10,$ymax,
+axes=>[0,0],
+grid=>[1,5],
+size=>[400,400]
 );
+add_functions($gr2, "($Text + $A*exp(-1*$k2*x)) for x in <0,10>" . 
+  " using color:blue and weight:2");
 
-$de2_ver = random(1, 4);
-
-@graph2_filenames = ();
-for ($i = 1; $i <= 4; $i++) {
-    push(@graph2_filenames, "q_001_Part2_${i}.png");
+$graph_order = random(1, 2);
+if ($graph_order == 1)  {
+   $plot_gr1 = $gr1;
+   $plot_gr2 = $gr2;
+   $correct_graph_number = "1";
+} else {
+   $plot_gr1 = $gr2;
+   $plot_gr2 = $gr1;
+   $correct_graph_number = "2";
 }
-@graph2_perm = shuffle(4);
-@inv_graph2_perm  = invert(@graph2_perm);
-@shuffled_graph2_filenames = @graph2_filenames[@graph2_perm];
-@shuffled_graph2_labels = @graph2_labels[@graph2_perm];
-@graph2_number = ("1", "2", "3", "4");
+$popup = PopUp(["?","1","2"], $correct_graph_number);
 
-$correct_graph2_number = $graph2_number[$inv_graph2_perm[$de2_ver - 1]];
-$de2 = $de2_arr[$de2_ver - 1];
+$t_test = list_random(2, 3, 4, 5);
+$y = Compute("$Text + $A*e^(-$k*x)");
+$yt = $y->eval(x => $t_test);
 
-$t20 = 1;
-$t2end = 4;
-$y20 = 5;
-
-$popup2 = PopUp(["?","1","2","3","4"], $correct_graph2_number);  
 
 Context()->texStrings;
 BEGIN_PGML
 
- a) Consider the differential equation [` [$de1] `], with the initial condition [` y([$t10]) = [$y10] `]. Use MATLAB and the
-:    ode45
-command to generate a graph of the solution to [` [$de1] `] over the interval [` t = [ [$t10], [$t1end] ] `].  
+*Temperature model*
 
-Which of the following graphs matches the MATLAB solution?
+Newton's Law of Heating and Cooling is given mathematically by the differential equation
 
-(Click to open a graph in a new window.)
+[`\displaystyle \frac{dy}{dt} = -k (y - T_{\mbox{ext}}) `]
 
- 1. [@ image( "$shuffled_graph1_filenames[0]", width,250 )  @]* 2. [@ image( "$shuffled_graph1_filenames[1]", width,250 ) @]* 
+where
+- [`y`] is the temperature of the object being studied,
+- [`T_{\mbox{ext}}`] is the temperature of the environment, and
+- [`k`] is a constant related to the size, surface area and material of the object, in units of (1/min).
 
- 3. [@ image( "$shuffled_graph1_filenames[2]", width,250 ) @]* 4. [@ image( "$shuffled_graph1_filenames[3]", width,250 ) @]* 
+Use MATLAB and ode45 to predict the temperature of the object over time for the scenario where: 
+- the initial temperature of [`y(0) = [$y0]`] degrees,
+- the external temperature of [`T_{\mbox{ext}} = [$Text]`] degrees, and
+- the constant [`k = [$k]`].
 
-Graph: [______________]{$popup1}
 
->> ----{75%} <<
+a) Which of the following graphs is the correct graph of the temperature for this scenario?  The time span shown is 10 minutes.
 
- b) Now consider the differential equation [` [$de2] `], with the initial condition [` y([$t20]) = [$y20] `]. Use MATLAB and the
-:    ode45
-command to generate a graph of the solution to [` [$de2] `] over the interval [` t = [ [$t20], [$t2end] ] `].  
+    1.  [@ image( insertGraph($plot_gr1), width=>300,height=>300,tex_size=>800 ) @]*   2.[@ image( insertGraph($plot_gr2), width=>300,height=>300,tex_size=>800 ) @]*
 
-Which of the following graphs matches the MATLAB solution?
+    (Click on a graph to enlarge it.)
 
-(Click to open a graph in a new window.)
+    Graph: [______________]{$popup}
 
- 1. [@ image( "$shuffled_graph2_filenames[0]", width,250 )  @]* 2. [@ image( "$shuffled_graph2_filenames[1]", width,250 ) @]* 
+b)  Use the zoom feature on your graph, or any other approach, to estimate the temperature at [`t=[$t_test]`].
+Report your answer to the nearest 0.1 degrees.
 
- 3. [@ image( "$shuffled_graph2_filenames[2]", width,250 ) @]* 4. [@ image( "$shuffled_graph2_filenames[3]", width,250 ) @]* 
-
-Graph: [______________]{$popup2}
+    [`y([$t_test]) = `] [______________]{$yt}
 
 
 END_PGML

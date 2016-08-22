@@ -24,64 +24,48 @@ Context()->flags->set(
   tolType => "absolute",
 );
 
+Context()->variables->add(w1 => "Real");
+Context()->variables->add(w2 => "Real");
+Context()->variables->add(t => "Real");
+Context()->variables->remove("x");
+$variable_names = join(',', Context()->variables->names());
+
 $ver = random(1, 4);
+$ver = 4;
 if ($ver == 1) {
-$function = Compute("x^2 e^(4x)");
-$function_text = $function->TeX();
-$a = 0;
-$b = 2;
-$val = 2328.84218;
-$MATLAB_integral_value = Compute($val);
-$average = Compute($val/($b-$a));
+  $de = "3 x'' - 2x' + 7 x = 4 \cos(t)";
+  $dw1dt = Compute("w2");
+  $dw2dt = Compute("(1/3) (4 cos(t) - 7 w1 +2 w2)");
 }
 elsif ($ver == 2) {
-$function = Compute("x^3 (x+3)^(2/3)");
-$function_text = "x^3 (x+3)^(2/3)";
-$a = 1;
-$b = 4;
-$val = 11.05722;
-$MATLAB_integral_value = Compute($val);
-$average = Compute($val/($b-$a));
+  $de = "5 x''  + 2 x' + 3 x = 4 e^{2t}";
+  $dw1dt = Compute("w2");
+  $dw2dt = Compute("(1/5) (4 e^{2t} - 2 w2 -3 w1)");
 }
 elsif ($ver == 3) {
-$function = Compute("x^2 cos(4x)");
-$function_text = $function->TeX();
-$a = -1;
-$b = 1;
-$val = -0.49451;
-$MATLAB_integral_value = Compute($val);
-$average = Compute($val/($b-$a));
+  $de = "2 x''  -4 x' - 6 x = t^2 ";
+  $dw1dt = Compute("w2");
+  $dw2dt = Compute("(1/2) (t^2 + 4 w2 + 6 w1) ");
 }
 elsif ($ver == 4) {
-$function = Compute("(1-x^2)^(1/2) x^3");
-$function_text = "x^3 \sqrt{(1-x^2)}";
-$a = 0;
-$b = 0.9; 
-$val = 0.10887;
-$MATLAB_integral_value = Compute($val);
-$average = Compute($val/($b-$a));
+  $de = "4 x''  +2 x' - x = e^{-3t} ";
+  $dw1dt = Compute("w2");
+  $dw2dt = Compute("(1/4) (e^{-3t} -2w2 +w1)");
 }
-
-
 
 Context()->texStrings;
 BEGIN_PGML
 
-Consider the function [` g(x) = [$function_text] `].
+Consider the second-order differential equation [` [$de] `].  Use the standard substitution
+[`w_1 = x`] and [`w_2 = x' `] to convert this to a system of first-order differential equations.
 
-a) Use the
-:    integrate
-function in MATLAB to evaluate the integral
+Note: you can only use the variables [@ $variable_names @]*  in your answer. 
 
-    [`\displaystyle \int_{[$a]}^{[$b]} g(x)~dx`] = [_____________________________]{$MATLAB_integral_value}
+[`\displaystyle \frac{dw_1}{dt} = `] [___________________]{$dw1dt}
 
-    Report your value to at least 4 digits after the decimal.
+[`\displaystyle \frac{dw_2}{dt} = `] [___________________]{$dw2dt}
 
-b) Compute the average value of [`g(x)`] over the interval [`[[$a], [$b]]`]. 
 
-    Average = [_____________________________]{$average}
-
-    Report your value to at least 4 digits after the decimal.
     
 END_PGML
 

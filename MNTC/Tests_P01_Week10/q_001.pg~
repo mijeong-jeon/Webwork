@@ -41,29 +41,43 @@ $v2 = Vector( $v2x, $v2y, $v2z);
 
 $dot_answer = $v1 . $v2;
 
+
 $radio1 = RadioButtons(
 ['Orthogonal', 
 'Not orthogonal'],
   $angle_answer, # correct answer
 );
 
+$l = sqrt($v1x*$v1x + $v1y*$v1y + $v1z*$v1 );
+$unit_vector = Vector( $v1x/$l, $v1y/$l, $v1z/$l);
 
 BEGIN_PGML
 
 (a) Find the dot product of [` [$v1] `] and [` [$v2] `].
 
-[` [$v1] \cdot [$v2] `] =  [_________________]{$dot_answer}
+[` [$v1] \cdot [$v2] `] =  [_________________]
 
 (b) How are the two vectors related?  
 
-
     [@ $radio1->buttons() @]*
 
+(c) Find the unit vector in the direction of [` [$v1] `].  Report your coordinates to 3 digits after the decimal.
+
+[`\mbox{Unit vector in direction of } [$v1]  `] =  [_________________]
+
+Use angle braces around coordinates to indicate a vector.  E.g. "<1, 2, 3>".
 END_PGML
 
 Context()->normalStrings;
 
+ANS( $dot_answer->cmp() );
+
 ANS( $radio1->cmp() );
+
+ANS( $unit_vector->cmp(
+tolType => 'absolute',
+  tolerance => .01,
+  ));
 
 ENDDOCUMENT();        # This should be the last executable line in the problem.
 

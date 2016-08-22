@@ -6,7 +6,6 @@ DOCUMENT();        # This should be the first executable line in the problem.
 
 loadMacros(
 "PG.pl",
-"PGML.pl",
 "PGbasicmacros.pl",
 "PGchoicemacros.pl",
 "PGanswermacros.pl",
@@ -17,6 +16,7 @@ loadMacros(
 "parserMultiAnswer.pl",
 "parserPopUp.pl",
 "PGgraphmacros.pl",
+"PGML.pl",
 );
 
 TEXT(beginproblem());
@@ -134,7 +134,6 @@ include the negative sign in your answer.
 
  c) Complete the coefficients for the related system of differential equations that
 describes the rates of change of the *concentrations* of salt in each tank, [`C_A`] and [`C_B`].
-include the negative sign in your answer.
 
 If a coefficient is missing, use the value '0'; if it is negative,
 include the negative sign in your answer.

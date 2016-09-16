@@ -40,14 +40,9 @@ $showPartialCorrectAnswers = 1;
 
 BEGIN_TEXT
 
-A tree of height \(y\) meters has, on average, \(B\) branches, where
-\(B = y-1\). Each branch has, on average, \(n\) leaves where \(n =
-2B^2-B\).
-$BR Find the average number of leaves $BBOLD on a tree$EBOLD as a function of
-height.
-
+A tree of height \(y\) meters has, on average, \(B\) branches, where \(B = y-1\). Each branch has, on average, \(n\) leaves where \(n = 2B^2-B\). Find the average number of leaves of a tree as a function of height. 
 $PAR
-Leaves on the tree\((y) = \) \{ans_rule(20)\} $BR
+\(n(y) = \) \{ans_rule(20)\} $BR
 
 END_TEXT
 

@@ -39,10 +39,6 @@ $a1 = random(1,9,1)**2;
 $a2 = random(2,9,1)**2;
 $b1 = random(2,9,1);
 $b2 = random(2,9,1);
-while(abs($b2/$b1) == sqrt(abs($a2/$a1))) {
-$b1 = random(2,9,1);
-$b2 = random(2,9,1);
-}
 $c1 = $a1**(1/2);
 $c2 = $a2**(1/2);
 $g1 = Formula("$a1 - $a2  x^2")->reduce();

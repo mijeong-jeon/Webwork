@@ -29,7 +29,7 @@ loadMacros(
 
 TEXT(beginproblem());
 
-$showPartialCorrectAnswers = 0;
+$showPartialCorrectAnswers = 1;
 
 #####################################################################
 
@@ -45,8 +45,8 @@ $d = Compute("(1/2)+(1/sqrt(2))");
 
 $an3a = Point(0.5,$c);
 
-$ans1 = Interval("(0,0.5)");
-$ans2 = Interval("(0.5,inf)");
+$ans1 = Interval("[0,0.5]");
+$ans2 = Interval("[0.5,inf)");
 $ans3 = List("$an3a");
 $ans4 = Compute("none");
 $ans5 = Interval("($d,infinity)");

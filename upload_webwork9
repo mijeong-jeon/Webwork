@@ -1,5 +1,6 @@
 # Problem library questions go to the wwadmin's home directory;
 # there are symlinks from there to the courses
+export COLL="MNTC"
 #export COLL="Calculus"
 #export COLL="DifferentialEquations"
 #export COLL="HughesHallett"
@@ -8,7 +9,7 @@
 #export COLL="Rogawksi"
 #export COLL="7.3_Trigonometric_Substitution"
 #export COLL="MATH337"
-export COLL="MATH384"
+#export COLL="MATH384"
 
 export SRC_DIR=$COLL
 export TARGET_DIR="/home/wwadmin/LibraryQueens/$COLL"

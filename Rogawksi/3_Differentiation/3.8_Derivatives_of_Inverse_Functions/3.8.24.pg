@@ -25,11 +25,12 @@ loadMacros("freemanMacros.pl");
 #$con = 3;
 
 #Random Values
-($g, $gprime, $gprimelatex) = @{ list_random( [Formula("tan^-1(x)"), Formula("1/(x^2 +1)"), '\frac{1}{x^2 + 1}'],
-				[Formula("sin^-1(x)"), Formula("1/(1-x^2)^(1/2)"), '\frac{1}{\sqrt{1-x^2}}'],
-				[Formula("cos^-1(x)"), Formula("-1/(1-x^2)^(1/2)"), '-\frac{1}{\sqrt{1-x^2}}'],
-				[Formula("cot^-1(x)"), Formula("-1/(x^2 +1)"), '-\frac{1}{x^2 + 1}']
-					 ) };
+($g, $gprime, $gprimelatex) = @{ list_random( [Formula("arctan(x)"), Formula("1/(x^2 +1)"), '\frac{1}{x^2 + 1}'],
+[Formula("arcsin(x)"), Formula("1/(1-x^2)^(1/2)"), '\frac{1}{\sqrt{1-x^2}}'],
+[Formula("arccos(x)"), Formula("-1/(1-x^2)^(1/2)"), '-\frac{1}{\sqrt{1-x^2}}'],
+[Formula("arccot(x)"), Formula("-1/(x^2 +1)"), '-\frac{1}{x^2 + 1}']
+) };
+
 $constant = random(2, 9);
 $f = $g->substitute(x=>("x/$constant"));
 $gprimeof = $gprime->substitute(x=>("x/$constant"));
@@ -37,8 +38,7 @@ $fprime = Formula("(1/$constant)*$gprimeof");
 
 Context()->texStrings;
 
-BEGIN_TEXT
-\{ beginproblem() \}
+TEXT(beginproblem());
 
 $PAR
 
@@ -51,7 +51,7 @@ $PAR
 
 \( f'(x) = \) \{ans_rule() \}
 
-END_TEXT
+EOT
 
 Context()->normalStrings;
 

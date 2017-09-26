@@ -23,10 +23,10 @@ loadMacros("freemanMacros.pl");
 #$x = 1/2;
 
 #Random Values
-($f, $fprime, $fprimelatex) = @{ list_random( [Formula("arctan(x)"), Formula("1/(x^2 +1)"), '\frac{1}{x^2 + 1}'],
-				[Formula("arcsin(x)"), Formula("1/(1-x^2)^(1/2)"), '\frac{1}{\sqrt{1-x^2}}'],
-				[Formula("arccos(x)"), Formula("-1/(1-x^2)^(1/2)"), '-\frac{1}{\sqrt{1-x^2}}'],
-				[Formula("arccot(x)"), Formula("-1/(x^2 +1)"), '-\frac{1}{x^2 + 1}']
+($f, $fprime, $fprimelatex) = @{ list_random( [Formula("tan^-1(x)"), Formula("1/(x^2 +1)"), '\frac{1}{x^2 + 1}'],
+				[Formula("sin^-1(x)"), Formula("1/(1-x^2)^(1/2)"), '\frac{1}{\sqrt{1-x^2}}'],
+				[Formula("cos^-1(x)"), Formula("-1/(1-x^2)^(1/2)"), '-\frac{1}{\sqrt{1-x^2}}'],
+				[Formula("cot^-1(x)"), Formula("-1/(x^2 +1)"), '-\frac{1}{x^2 + 1}']
  ) };
 $b = list_random( 1/2, 2/5, 3/5, 4/5, 1/4);
 

@@ -1,12 +1,12 @@
 # Problem library questions go to the wwadmin's home directory;
 # there are symlinks from there to the courses
 #export COLL="MNTC"
-export COLL="Calculus"
+#export COLL="Calculus"
 #export COLL="DifferentialEquations"
 #export COLL="HughesHallett"
 #export COLL="MATH121Tests"
 #export COLL="MATH121ProficiencyTest"
-#export COLL="Rogawksi"
+export COLL="Rogawksi"
 #export COLL="7.3_Trigonometric_Substitution"
 #export COLL="MATH337"
 #export COLL="MATH384"

@@ -28,8 +28,8 @@ loadMacros(
 "PGchoicemacros.pl",
 "PGauxiliaryFunctions.pl",
 "PGgraphmacros.pl",
-"parserPopUp.pl","
-unionTables.pl",
+"parserPopUp.pl",
+"unionTables.pl",
 );
 
 TEXT(beginproblem());

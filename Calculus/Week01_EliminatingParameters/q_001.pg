@@ -60,11 +60,11 @@ TEXT(beginproblem());
 BEGIN_TEXT
 Find a Cartesian equation relating \(x\) and \(y\) corresponding to the
 parametric equations
-\[x=e^{$a t} \quad y=e^{-$b t} \]
+\(x=e^{$a t} \quad y=e^{-$b t} \)
 by eliminating the parameter \(t\).
 $PAR
 Write your answer in the form
-\[y=f(x)\]
+\(y=f(x)\)
 $BR
 Answer: \(y=\) \{ans_rule(40)\} 
 END_TEXT

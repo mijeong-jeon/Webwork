@@ -35,8 +35,12 @@ loadMacros(
 
 TEXT(beginproblem());
 $showPartialCorrectAnswers = 1;
+Context()->flags->set(
+  tolerance => 0.3,
+  tolType => "absolute",
+);
 
-$present_year = 2012;
+$present_year = 2018;
 $age = $present_year - 1675;
 $percent_left = ((1/2)**($age/5730))*100;
 

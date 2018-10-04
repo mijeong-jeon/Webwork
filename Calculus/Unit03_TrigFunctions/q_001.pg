@@ -35,9 +35,6 @@
 ## HHSection1('Trigonometric Functions')
 ## HHSection2('Trigonometric Functions')
 
-
-
-
 DOCUMENT();
 loadMacros(
 "PG.pl",

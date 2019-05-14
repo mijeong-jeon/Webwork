@@ -33,7 +33,7 @@ $c=random(1,10,1)*random(-1,1,2);
 BEGIN_TEXT
 
 $PAR
-Differentiate \(y=\sin{x}+$a \tan{x}\). 
+Differentiate \(y=\sin(x)+$a \tan(x)\). 
 
 $PAR
 

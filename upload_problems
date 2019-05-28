@@ -1,13 +1,8 @@
 # Problem library questions go to the wwadmin's home directory;
 # there are symlinks from there to the courses
-#export COLL="MATH121Tests" 
-#export COLL="Rogawksi" 
-#export COLL="HughesHallett" 
-#export COLL="DifferentialEquations" 
-#export COLL="Calculus" 
-export SRC_DIR=$COLL
-export TARGET_DIR="/home/wwadmin/LibraryQueens/$COLL"
-export SERVER="InWebwork8"
+export SRC_DIR="."
+export TARGET_DIR="/home/wwadmin/LibraryQueens"
+export SERVER="ww201905mast"
 rsync -arv --perms --exclude "*~" -e ssh $SRC_DIR/ $SERVER:$TARGET_DIR/
 ssh $SERVER 'chmod -R a+rX' $TARGET_DIR 
 

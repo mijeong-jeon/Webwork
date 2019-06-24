@@ -20,11 +20,14 @@
 
 DOCUMENT();        # This should be the first executable line in the problem.
 
-loadMacros("PG.pl",
-           "PGbasicmacros.pl",
-           "PGanswermacros.pl",
-"MathObjects.pl",
-"PGauxiliaryFunctions.pl");
+loadMacros(
+"PG.pl",
+"PGbasicmacros.pl",
+"PGchoicemacros.pl",
+"PGanswermacros.pl",
+"PGauxiliaryFunctions.pl",
+"MathObjects.pl"
+);
 
 TEXT(beginproblem());
 $showPartialCorrectAnswers = 1;
@@ -52,7 +55,7 @@ BEGIN_TEXT
 
 The population of Circle City is more dense towards its center, and the density gradually thins out towards the city limits.
 $BR
-The population density is given by \(r = $f\) people/\(\mbox{km}^2\), where \(r\) is the distance in km from the center of the city.
+The population density is given by \(r = $f\) people/\(\text{km}^2\), where \(r\) is the distance in km from the center of the city.
 $PAR
 A) Assuming that the population density is zero at the city limits, find the radius of the city.
 $BR

@@ -42,7 +42,7 @@ $V = Compute("pi* $r^2* $h");
 BEGIN_TEXT 
 
 $PAR
-You want to build a closed cylinder (tube, and two circular end pieces) with a total surface area of \($area_const \pi ~\mbox{cm}^2\).  The radius of the cylinder will be \(r \) cm, and the height \( h \) cm. 
+You want to build a closed cylinder (tube, and two circular end pieces) with a total surface area of $area_const \( \pi ~\mbox{cm}^2\).  The radius of the cylinder will be \(r \) cm, and the height \( h \) cm. 
 $PAR
   a) Find the dimensions of such a cylinder for which the $BBOLD volume is maximized $EBOLD.  
 $BR

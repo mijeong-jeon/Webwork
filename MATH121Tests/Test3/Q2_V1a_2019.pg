@@ -54,11 +54,11 @@ $domain_y_length = $high_y - $low_y;
 # Define how we're splitting up the interval
 $diag_first = random(0, 1, 1);
 if ($diag_first) {
-  $split_x = non_zero_random(1, 2, 1);
+  $split_x = non_zero_random(0, 2, 1);
   $low_x = ($split_x-$L_diag); 
   $high_x = ($split_x + $L_horiz);
 } else { # horiz line first; need to flip slope
-  $split_x = non_zero_random(-2, -1, 1);
+  $split_x = non_zero_random(-2, 0, 1);
   $low_x = ($split_x-$L_horiz); 
   $high_x = ($split_x + $L_diag);
   $slope = -1 * $slope;

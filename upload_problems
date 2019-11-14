@@ -2,7 +2,7 @@
 # there are symlinks from there to the courses
 export SRC_DIR="."
 export TARGET_DIR="/home/wwadmin/LibraryQueens"
-export SERVER="ww201905mast"
+export SERVER="InWebwork13"
 rsync -arv --perms --exclude "*~" -e ssh $SRC_DIR/ $SERVER:$TARGET_DIR/
 ssh $SERVER 'chmod -R a+rX' $TARGET_DIR 
 

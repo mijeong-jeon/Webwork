@@ -60,8 +60,8 @@ $PAR
 END_TEXT
 
 
-$simplem = Formula("pi+2*$n*sqrt(3)");
-$simplemx = Formula("$roverthree(3*sqrt(3)*pi+4)+4*$n*$r");
+$simplem = Formula("pi+2*$5*sqrt(3)");
+$simplemx = Formula("$roverthree(3*sqrt(3)*pi+4)+4*$5*$3");
 $ycm = Formula($simplemx/$simplem);
 ANS(num_cmp(0),$ycm->cmp);
 
